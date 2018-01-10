@@ -1,0 +1,12 @@
+language: python
+python:
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.6'
+install:
+- pip install coveralls
+script: coverage run --source nested_diff setup.py test
+sudo: false
+after_success:
+- coveralls
