@@ -21,6 +21,8 @@ https://github.com/mr-mixas/Nested-Diff
 
 """
 
+from __future__ import unicode_literals
+
 
 __all__ = ['diff', 'patch']
 
@@ -31,9 +33,32 @@ __license__ = 'Apache License, Version 2.0'
 
 
 def diff(a, b, **kwargs):
-    return {}
+    if a == b:
+        ret = {'U': a}
+    elif isinstance(a, dict) and isinstance(a, type(b)):
+        ret = {'D': {}}
+
+        for k in set(list(a) + list(b)):
+            if k in a and k in b:
+                if a[k] == b[k]:
+                    ret['D'][k] = {'U': a[k]}
+                else:  # dif subdiff
+                    ret['D'][k] = diff(a[k], b[k], **kwargs)
+
+            elif k in a:  # removed
+                ret['D'][k] = {'R': a[k]}
+
+            elif k in b:  # added
+                ret['D'][k] = {'A': b[k]}
+
+    elif isinstance(a, list) and isinstance(a, type(b)):
+        raise NotImplementedError()
+    else:
+        ret = {'N': b, 'O': a}
+
+    return ret
 
 
 def patch(target, patch):
-    return target
+    raise NotImplementedError()
 
