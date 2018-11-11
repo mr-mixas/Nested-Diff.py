@@ -23,6 +23,9 @@ https://github.com/mr-mixas/Nested-Diff
 
 from __future__ import unicode_literals
 
+from difflib import SequenceMatcher as LCS
+from pickle import dumps
+
 
 __all__ = ['diff', 'patch']
 
@@ -42,7 +45,7 @@ def diff(a, b, **kwargs):
             if k in a and k in b:
                 if a[k] == b[k]:
                     ret['D'][k] = {'U': a[k]}
-                else:  # dif subdiff
+                else:  # dig subdiff
                     ret['D'][k] = diff(a[k], b[k], **kwargs)
 
             elif k in a:  # removed
@@ -52,7 +55,25 @@ def diff(a, b, **kwargs):
                 ret['D'][k] = {'A': b[k]}
 
     elif isinstance(a, list) and isinstance(a, type(b)):
-        raise NotImplementedError()
+        lcs = LCS(None, [dumps(i) for i in a], [dumps(i) for i in b])
+
+        ret = {'D': []}
+        i = j = 0
+
+        for ai, bj, _ in lcs.get_matching_blocks():
+            while i < ai and j < bj:  # dig subdiff
+                ret['D'].append(diff(a[i], b[j], **kwargs))
+                i += 1
+                j += 1
+
+            while i < ai:  # removed
+                ret['D'].append({'R': a[i]})
+                i += 1
+
+            while j < bj:  # added
+                ret['D'].append({'A': b[j]})
+                j += 1
+
     else:
         ret = {'N': b, 'O': a}
 
@@ -61,4 +82,3 @@ def diff(a, b, **kwargs):
 
 def patch(target, patch):
     raise NotImplementedError()
-
