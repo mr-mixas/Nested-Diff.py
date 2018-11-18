@@ -41,51 +41,102 @@ def diff(a, b, **kwargs):
 
     Dicts and lists traversed recursively, all other types compared by values.
 
-    :param a: First (from) object to diff.
-    :param b: Second (to) object to diff.
-    :param **kwargs: Not implemented.
+    :param a: First object to diff.
+    :param b: Second object to diff.
+    :param **kwargs: A, N, O, R, U, when set to False will omit such subdiffs;
+                     trimR when set to True will trin removed data from diff.
 
     """
     if a == b:
-        ret = {'U': a}
+        if 'U' not in kwargs or kwargs['U']:
+            ret = {'U': a}
+        else:
+            ret = {}
+
     elif isinstance(a, dict) and isinstance(a, type(b)):
         ret = {'D': {}}
 
         for k in set(list(a) + list(b)):
             if k in a and k in b:
                 if a[k] == b[k]:
-                    ret['D'][k] = {'U': a[k]}
-                else:  # dig subdiff
-                    ret['D'][k] = diff(a[k], b[k], **kwargs)
+                    if 'U' not in kwargs or kwargs['U']:
+                        ret['D'][k] = {'U': a[k]}
+                else:
+                    subdiff = diff(a[k], b[k], **kwargs)
+                    if subdiff:
+                        ret['D'][k] = subdiff
 
             elif k in a:  # removed
-                ret['D'][k] = {'R': a[k]}
+                if 'R' not in kwargs or kwargs['R']:
+                    if 'trimR' in kwargs and kwargs['trimR']:
+                        ret['D'][k] = {'R': None}
+                    else:
+                        ret['D'][k] = {'R': a[k]}
 
             elif k in b:  # added
-                ret['D'][k] = {'A': b[k]}
+                if 'A' not in kwargs or kwargs['A']:
+                    ret['D'][k] = {'A': b[k]}
+
+        if not ret['D']:
+            del ret['D']
 
     elif isinstance(a, list) and isinstance(a, type(b)):
         lcs = LCS(None, [dumps(i) for i in a], [dumps(i) for i in b])
 
         ret = {'D': []}
         i = j = 0
+        I = False
 
         for ai, bj, _ in lcs.get_matching_blocks():
-            while i < ai and j < bj:  # dig subdiff
-                ret['D'].append(diff(a[i], b[j], **kwargs))
+            while i < ai and j < bj:
+                subdiff = diff(a[i], b[j], **kwargs)
+                if subdiff:
+                    ret['D'].append(subdiff)
+                    if I:
+                        ret['D'][-1]['I'] = i
+                        I = False
+                else:
+                    I = True
+
                 i += 1
                 j += 1
 
             while i < ai:  # removed
-                ret['D'].append({'R': a[i]})
+                if 'R' not in kwargs or kwargs['R']:
+                    if 'trimR' in kwargs and kwargs['trimR']:
+                        ret['D'].append({'R': None})
+                    else:
+                        ret['D'].append({'R': a[i]})
+
+                    if I:
+                        ret['D'][-1]['I'] = i
+                        I = False
+                else:
+                    I = True
+
                 i += 1
 
             while j < bj:  # added
-                ret['D'].append({'A': b[j]})
+                if 'A' not in kwargs or kwargs['A']:
+                    ret['D'].append({'A': b[j]})
+                    if I:
+                        ret['D'][-1]['I'] = i
+                        I = False
+                else:
+                    I = True
+
                 j += 1
 
+        if not ret['D']:
+            del ret['D']
+
     else:
-        ret = {'N': b, 'O': a}
+        ret = {}
+
+        if 'N' not in kwargs or kwargs['N']:
+            ret['N'] = b
+        if 'O' not in kwargs or kwargs['O']:
+            ret['O'] = a
 
     return ret
 
