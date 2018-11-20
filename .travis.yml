@@ -10,3 +10,5 @@ script: coverage run --source nested_diff setup.py test
 sudo: false
 after_success:
 - coveralls
+notifications:
+  email: false
