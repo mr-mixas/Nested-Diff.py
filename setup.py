@@ -1,12 +1,18 @@
 from setuptools import setup
+import nested_diff
 
+
+with open('README.md') as f:
+    long_description = f.read()
 
 setup(
     name='nested_diff',
-    version='0.1',
+    version=nested_diff.__version__,
     description='Recursive diff for nested structures',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
