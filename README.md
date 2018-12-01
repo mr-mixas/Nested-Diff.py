@@ -5,7 +5,7 @@ Recursive diff for nested structures, implementation of [Nested-Diff](https://gi
 Dicts and lists traversed recursively, all other types compared by values.
 
 [![Build Status](https://travis-ci.org/mr-mixas/Nested-Diff.py.svg?branch=master)](https://travis-ci.org/mr-mixas/Nested-Diff.py)
-[![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg?branch=master)](https://coveralls.io/github/mr-mixas/Nested-Diff.py?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 
 ## Status
 
@@ -41,3 +41,9 @@ Alpha, WIP.
 ## License
 
 Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0>).
+
+## See Also
+
+[deepdiff](https://pypi.org/project/deepdiff/),
+[jsonpatch](https://pypi.org/project/jsonpatch/),
+[json-delta](https://pypi.org/project/json-delta/)
