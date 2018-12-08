@@ -23,122 +23,155 @@ https://github.com/mr-mixas/Nested-Diff
 
 from __future__ import unicode_literals
 
-from difflib import SequenceMatcher as LCS
+from difflib import SequenceMatcher
 from pickle import dumps
 
 
-__all__ = ['diff', 'patch']
+__all__ = ['Differ', 'diff', 'patch']
 
-__version__ = '0.2'
+__version__ = '0.3'
 __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
 
 
-def diff(a, b, **kwargs):
+class Differ(object):
     """
-    Return recursive diff for two passed objects.
+    Compute recursive diff for two passed objects.
 
     Dicts and lists traversed recursively, all other types compared by values.
 
-    :param a: First object to diff.
-    :param b: Second object to diff.
-    :param **kwargs: A, N, O, R, U, when set to False will omit such subdiffs;
-                     trimR: when set True will trim removed data in diff.
-
     """
-    if a == b:
-        if 'U' not in kwargs or kwargs['U']:
-            ret = {'U': a}
-        else:
-            ret = {}
+    def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False):
+        self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
-    elif isinstance(a, dict) and isinstance(a, type(b)):
+        self.op_a = A
+        self.op_n = N
+        self.op_o = O
+        self.op_r = R
+        self.op_u = U
+        self.op_trim_r = trimR
+
+    def diff(self, a, b):
+        """
+        Compute diff for two arbitrary objects.
+
+        :param a: First object to diff.
+        :param b: Second object to diff.
+
+        """
+        if a == b:
+            return {'U': a} if self.op_u else {}
+
+        if isinstance(a, dict) and isinstance(a, type(b)):
+            return self.diff_dicts(a, b)
+
+        if isinstance(a, list) and isinstance(a, type(b)):
+            return self.diff_lists(a, b)
+
+        return self.get_default_diff(a, b)
+
+    def diff_dicts(self, a, b):
+        """
+        Compute diff for two dicts.
+
+        :param a: First dict to diff.
+        :param b: Second dict to diff.
+
+        """
         ret = {'D': {}}
 
-        for k in set(list(a) + list(b)):
-            if k in a and k in b:
-                if a[k] == b[k]:
-                    if 'U' not in kwargs or kwargs['U']:
-                        ret['D'][k] = {'U': a[k]}
+        for key in set(list(a) + list(b)):
+            if key in a and key in b:
+                if a[key] == b[key]:
+                    if self.op_u:
+                        ret['D'][key] = {'U': a[key]}
                 else:
-                    subdiff = diff(a[k], b[k], **kwargs)
+                    subdiff = self.diff(a[key], b[key])
                     if subdiff:
-                        ret['D'][k] = subdiff
+                        ret['D'][key] = subdiff
 
-            elif k in a:  # removed
-                if 'R' not in kwargs or kwargs['R']:
-                    if 'trimR' in kwargs and kwargs['trimR']:
-                        ret['D'][k] = {'R': None}
-                    else:
-                        ret['D'][k] = {'R': a[k]}
+            elif key in a:  # removed
+                if self.op_r:
+                    ret['D'][key] = {'R': None if self.op_trim_r else a[key]}
 
-            elif k in b:  # added
-                if 'A' not in kwargs or kwargs['A']:
-                    ret['D'][k] = {'A': b[k]}
+            elif key in b:  # added
+                if self.op_a:
+                    ret['D'][key] = {'A': b[key]}
 
         if not ret['D']:
             del ret['D']
 
-    elif isinstance(a, list) and isinstance(a, type(b)):
-        lcs = LCS(None, [dumps(i) for i in a], [dumps(i) for i in b])
+        return ret
+
+    def diff_lists(self, a, b):
+        """
+        Compute diff for two lists.
+
+        :param a: First list to diff.
+        :param b: Second list to diff.
+
+        """
+        self.lcs.set_seq1([dumps(i) for i in a])
+        self.lcs.set_seq2([dumps(i) for i in b])
 
         ret = {'D': []}
         i = j = 0
-        I = False
+        force_index = False
 
-        for ai, bj, _ in lcs.get_matching_blocks():
+        for ai, bj, _ in self.lcs.get_matching_blocks():
             while i < ai and j < bj:
-                subdiff = diff(a[i], b[j], **kwargs)
+                subdiff = self.diff(a[i], b[j])
                 if subdiff:
                     ret['D'].append(subdiff)
-                    if I:
+                    if force_index:
                         ret['D'][-1]['I'] = i
-                        I = False
+                        force_index = False
                 else:
-                    I = True
+                    force_index = True
 
                 i += 1
                 j += 1
 
             while i < ai:  # removed
-                if 'R' not in kwargs or kwargs['R']:
-                    if 'trimR' in kwargs and kwargs['trimR']:
-                        ret['D'].append({'R': None})
-                    else:
-                        ret['D'].append({'R': a[i]})
-
-                    if I:
+                if self.op_r:
+                    ret['D'].append({'R': None if self.op_trim_r else a[i]})
+                    if force_index:
                         ret['D'][-1]['I'] = i
-                        I = False
+                        force_index = False
                 else:
-                    I = True
+                    force_index = True
 
                 i += 1
 
             while j < bj:  # added
-                if 'A' not in kwargs or kwargs['A']:
+                if self.op_a:
                     ret['D'].append({'A': b[j]})
-                    if I:
+                    if force_index:
                         ret['D'][-1]['I'] = i
-                        I = False
+                        force_index = False
                 else:
-                    I = True
+                    force_index = True
 
                 j += 1
 
         if not ret['D']:
             del ret['D']
 
-    else:
+        return ret
+
+    def get_default_diff(self, a, b):
+        """
+        Return default diff.
+        """
         ret = {}
 
-        if 'N' not in kwargs or kwargs['N']:
+        if self.op_n:
             ret['N'] = b
-        if 'O' not in kwargs or kwargs['O']:
+        if self.op_o:
             ret['O'] = a
 
-    return ret
+        return ret
 
 
 def patch(target, diff):
@@ -184,3 +217,18 @@ def patch(target, diff):
         target = diff['N']
 
     return target
+
+
+def diff(a, b, **kwargs):
+    """
+    Compute recursive diff for two passed objects.
+
+    Just a wrapper around Differ.diff() for backward compatibility.
+
+    :param a: First object to diff.
+    :param b: Second object to diff.
+
+    See Differ class for keywords options.
+
+    """
+    return Differ(**kwargs).diff(a, b)
