@@ -39,10 +39,61 @@ class Differ(object):
     """
     Compute recursive diff for two passed objects.
 
+    Resulting diff is a dict and may contain following keys:
+    `A` stands for 'added', it's value - added item.
+    `D` means 'different' and contains subdiff.
+    `I` index for list item, used only when prior item was omitted.
+    `N` is a new value for changed item.
+    `O` is a changed item's old value.
+    `R` key used for removed item.
+    `U` represent unchanged item.
+
+    Diff metadata alternates with actual data; simple types specified as is,
+    lists and dicts contain subdiffs for their items with native for such types
+    addressing: indexes for lists and keys for dictionaries. Each status type,
+    except `D` and `I`, may be (optionally) omitted during diff computation.
+
+    Example:
+
+    a:  {"one": [5,7]}
+    b:  {"one": [5], "two": 2}
+    opts: U=False  # omit unchanged items
+
+    diff:
+    {"D": {"one": {"D": [{"I": 1, "R": 7}]}, "two": {"A": 2}}}
+    | |   |  |    | |   || |   |   |   |       |    | |   |
+    | |   |  |    | |   || |   |   |   |       |    | |   +- with value 2
+    | |   |  |    | |   || |   |   |   |       |    | +- key 'two' was added
+    | |   |  |    | |   || |   |   |   |       |    +- subdiff for it
+    | |   |  |    | |   || |   |   |   |       +- another key from top-level
+    | |   |  |    | |   || |   |   |   +- what it was (item's value: 7)
+    | |   |  |    | |   || |   |   +- what happened to item (removed)
+    | |   |  |    | |   || |   +- list item's actual index
+    | |   |  |    | |   || +- prior item was omitted
+    | |   |  |    | |   |+- subdiff for list item
+    | |   |  |    | |   +- it's value - list
+    | |   |  |    | +- it is deeply changed
+    | |   |  |    +- subdiff for key 'one'
+    | |   |  +- it has key 'one'
+    | |   +- top-level thing is a dict
+    | +- changes somewhere deeply inside
+    +- diff is always a dict
+
     Dicts and lists traversed recursively, all other types compared by values.
 
     """
     def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False):
+        """
+        Construct Differ.
+
+        Optional arguments:
+        `A`, `N`, `O`, `R`, `U` are toggles for according diff ops and all set
+        to True by default.
+
+        `trimR` when True drops (replaces by `None`) removed data from diff,
+        default is False.
+
+        """
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
         self.op_a = A
@@ -55,6 +106,9 @@ class Differ(object):
     def diff(self, a, b):
         """
         Compute diff for two arbitrary objects.
+
+        This method is a dispatcher and calls `diff_dicts` for dicts,
+        `diff_lists` for lists and so forth.
 
         :param a: First object to diff.
         :param b: Second object to diff.
@@ -77,6 +131,13 @@ class Differ(object):
 
         :param a: First dict to diff.
         :param b: Second dict to diff.
+
+        >>> a = {'one': 1, 'two': 2, 'three': 3}
+        >>> b = {'one': 1, 'two': 42}
+        >>>
+        >>> Differ(O=False, U=False).diff_dicts(a, b)
+        {'D': {'two': {'N': 42}, 'three': {'R': 3}}}
+        >>>
 
         """
         ret = {'D': {}}
@@ -110,6 +171,13 @@ class Differ(object):
 
         :param a: First list to diff.
         :param b: Second list to diff.
+
+        >>> a = [0,1,2,3]
+        >>> b = [  1,2,4,5]
+        >>>
+        >>> Differ(O=False, U=False).diff_lists(a, b)
+        {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]}
+        >>>
 
         """
         self.lcs.set_seq1([dumps(i) for i in a])
@@ -163,6 +231,7 @@ class Differ(object):
     def get_default_diff(self, a, b):
         """
         Return default diff.
+
         """
         ret = {}
 
