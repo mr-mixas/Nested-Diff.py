@@ -180,8 +180,8 @@ class Differ(object):
         >>>
 
         """
-        self.lcs.set_seq1([dumps(i) for i in a])
-        self.lcs.set_seq2([dumps(i) for i in b])
+        self.lcs.set_seq1([dumps(i, -1) for i in a])
+        self.lcs.set_seq2([dumps(i, -1) for i in b])
 
         ret = {'D': []}
         i = j = 0
