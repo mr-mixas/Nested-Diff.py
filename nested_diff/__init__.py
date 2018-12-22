@@ -27,7 +27,7 @@ from difflib import SequenceMatcher
 from pickle import dumps
 
 
-__all__ = ['Differ', 'diff', 'patch']
+__all__ = ['Differ', 'Patcher', 'diff', 'patch']
 
 __version__ = '0.3'
 __author__ = 'Michael Samoglyadov'
@@ -243,49 +243,86 @@ class Differ(object):
         return ret
 
 
-def patch(target, diff):
+class Patcher(object):
     """
-    Return patched object.
-
-    :param target: Object to patch.
-    :param diff: Nested diff.
+    Patch objects using nested diff.
 
     """
+    def patch(self, target, ndiff):
+        """
+        Return patched object.
 
-    if 'D' in diff:
-        if isinstance(diff['D'], dict):
-            for key, subdiff in diff['D'].items():
-                if 'D' in subdiff or 'N' in subdiff:
-                    target[key] = patch(target[key], subdiff)
-                elif 'A' in subdiff:
-                    target[key] = subdiff['A']
-                elif 'R' in subdiff:
-                    del target[key]
+        :param target: Object to patch.
+        :param diff: Nested diff.
 
-        elif isinstance(diff['D'], list):
-            i, j = 0, 0  # index, scatter
+        """
+        if 'D' in ndiff:
+            if isinstance(ndiff['D'], dict):
+                return self.patch_dict(target, ndiff)
 
-            for subdiff in diff['D']:
-                if 'I' in subdiff:
-                    i = subdiff['I'] + j
+            if isinstance(ndiff['D'], list):
+                return self.patch_list(target, ndiff)
 
-                if 'D' in subdiff or 'N' in subdiff:
-                    target[i] = patch(target[i], subdiff)
-                elif 'A' in subdiff:
-                    target.insert(i, subdiff['A'])
-                    j += 1
-                elif 'R' in subdiff:
-                    del target[i]
-                    j -= 1
-                    continue
+            return self.patch_default(target, ndiff)
 
-                i += 1
+        elif 'N' in ndiff:
+            return ndiff['N']
+
         else:
-            raise NotImplementedError("unsupported type for patch")
-    elif 'N' in diff:
-        target = diff['N']
+            return target
 
-    return target
+    def patch_default(self, target, ndiff):
+        """
+        Patch containers without dedicated methods.
+
+        """
+        raise NotImplementedError("unsupported object type")
+
+    def patch_dict(self, target, ndiff):
+        """
+        Return patched dict.
+
+        :param target: dict to patch.
+        :param diff: Nested diff.
+
+        """
+        for key, subdiff in ndiff['D'].items():
+            if 'D' in subdiff or 'N' in subdiff:
+                target[key] = self.patch(target[key], subdiff)
+            elif 'A' in subdiff:
+                target[key] = subdiff['A']
+            elif 'R' in subdiff:
+                del target[key]
+
+        return target
+
+    def patch_list(self, target, ndiff):
+        """
+        Return patched list.
+
+        :param target: list to patch.
+        :param diff: Nested diff.
+
+        """
+        i, j = 0, 0  # index, scatter
+
+        for subdiff in ndiff['D']:
+            if 'I' in subdiff:
+                i = subdiff['I'] + j
+
+            if 'D' in subdiff or 'N' in subdiff:
+                target[i] = self.patch(target[i], subdiff)
+            elif 'A' in subdiff:
+                target.insert(i, subdiff['A'])
+                j += 1
+            elif 'R' in subdiff:
+                del target[i]
+                j -= 1
+                continue
+
+            i += 1
+
+        return target
 
 
 def diff(a, b, **kwargs):
@@ -301,3 +338,16 @@ def diff(a, b, **kwargs):
 
     """
     return Differ(**kwargs).diff(a, b)
+
+
+def patch(target, ndiff):
+    """
+    Return patched object.
+
+    Just a wrapper around Patcher.patch() for backward compatibility.
+
+    :param target: Object to patch.
+    :param diff: Nested diff.
+
+    """
+    return Patcher().patch(target, ndiff)
