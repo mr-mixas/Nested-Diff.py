@@ -16,3 +16,12 @@ def test_type_mismatch():
 def test_unsupported_patch_type():
     with pytest.raises(NotImplementedError):
         patch(None, {'D': set({'A': 1})})
+
+
+def test_patch_tuple():
+    a = (1, 2, 4, 5)
+    b = (0, 1, 2, 3)
+
+    ndiff = {'D': ({'A': 0}, {'I': 2, 'N': 3}, {'R': 5})}
+
+    assert b == patch(a, ndiff)

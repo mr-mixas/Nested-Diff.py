@@ -123,6 +123,9 @@ class Differ(object):
         if isinstance(a, list) and isinstance(a, type(b)):
             return self.diff_lists(a, b)
 
+        if isinstance(a, tuple) and isinstance(a, type(b)):
+            return self.diff_tuples(a, b)
+
         return self.get_default_diff(a, b)
 
     def diff_dicts(self, a, b):
@@ -228,6 +231,29 @@ class Differ(object):
 
         return ret
 
+    def diff_tuples(self, a, b):
+        """
+        Compute diff for two tuples.
+
+        :param a: First tuple to diff.
+        :param b: Second tuple to diff.
+
+        >>> a = (  1,2,4,5)
+        >>> b = (0,1,2,3)
+        >>>
+        >>> Differ(O=False, U=False).diff_tuples(a, b)
+        {'D': ({'A': 0}, {'N': 3, 'I': 2}, {'R': 5})}
+        >>>
+
+        """
+
+        ret = self.diff_lists(a, b)
+
+        if 'D' in ret:
+            ret['D'] = tuple(ret['D'])
+
+        return ret
+
     def get_default_diff(self, a, b):
         """
         Return default diff.
@@ -262,6 +288,9 @@ class Patcher(object):
 
             if isinstance(ndiff['D'], list):
                 return self.patch_list(target, ndiff)
+
+            if isinstance(ndiff['D'], tuple):
+                return self.patch_tuple(target, ndiff)
 
             return self.patch_default(target, ndiff)
 
@@ -323,6 +352,16 @@ class Patcher(object):
             i += 1
 
         return target
+
+    def patch_tuple(self, target, ndiff):
+        """
+        Return patched tuple.
+
+        :param target: tuple to patch.
+        :param diff: Nested diff.
+
+        """
+        return tuple(self.patch_list(list(target), ndiff))
 
 
 def diff(a, b, **kwargs):
