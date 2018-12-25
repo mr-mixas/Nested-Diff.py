@@ -6,12 +6,12 @@ def test_subclassing():
         """
         Diff floats using defined precision
         """
-        def get_default_diff(self, a, b):
+        def diff__default(self, a, b):
             if isinstance(a, float) and isinstance(a, type(b)):
                 if round(a, 1) == round(b, 1):
                     return {'U': a} if self.op_u else {}
 
-            return super(CustomDiffer, self).get_default_diff(a, b)
+            return super(CustomDiffer, self).diff__default(a, b)
 
     differ = CustomDiffer(U=False)
 
