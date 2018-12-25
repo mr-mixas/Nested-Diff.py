@@ -49,9 +49,10 @@ class Differ(object):
     `U` represent unchanged item.
 
     Diff metadata alternates with actual data; simple types specified as is,
-    lists and dicts contain subdiffs for their items with native for such types
-    addressing: indexes for lists and keys for dictionaries. Each status type,
-    except `D` and `I`, may be (optionally) omitted during diff computation.
+    dicts, lists and tuples contain subdiffs for their items with native for
+    such types addressing: indexes for lists and tuples and keys for
+    dictionaries. Each status type, except `D` and `I`, may be (optionally)
+    omitted during diff computation.
 
     Example:
 
@@ -79,7 +80,8 @@ class Differ(object):
     | +- changes somewhere deeply inside
     +- diff is always a dict
 
-    Dicts and lists traversed recursively, all other types compared by values.
+    Dicts, lists and tuples traversed recursively, all other types compared by
+    values.
 
     """
     def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False):
@@ -87,8 +89,8 @@ class Differ(object):
         Construct Differ.
 
         Optional arguments:
-        `A`, `N`, `O`, `R`, `U` are toggles for according diff ops and all set
-        to True by default.
+        `A`, `N`, `O`, `R`, `U` are toggles for according diff ops and all
+        enabled (`True`) by default.
 
         `trimR` when True drops (replaces by `None`) removed data from diff,
         default is False.
@@ -126,7 +128,21 @@ class Differ(object):
         if isinstance(a, tuple) and isinstance(a, type(b)):
             return self.diff_tuples(a, b)
 
-        return self.get_default_diff(a, b)
+        return self.diff__default(a, b)
+
+    def diff__default(self, a, b):
+        """
+        Return default diff.
+
+        """
+        ret = {}
+
+        if self.op_n:
+            ret['N'] = b
+        if self.op_o:
+            ret['O'] = a
+
+        return ret
 
     def diff_dicts(self, a, b):
         """
@@ -159,7 +175,7 @@ class Differ(object):
                 if self.op_r:
                     ret['D'][key] = {'R': None if self.op_trim_r else a[key]}
 
-            elif key in b:  # added
+            else:  # added
                 if self.op_a:
                     ret['D'][key] = {'A': b[key]}
 
@@ -246,25 +262,10 @@ class Differ(object):
         >>>
 
         """
-
         ret = self.diff_lists(a, b)
 
         if 'D' in ret:
             ret['D'] = tuple(ret['D'])
-
-        return ret
-
-    def get_default_diff(self, a, b):
-        """
-        Return default diff.
-
-        """
-        ret = {}
-
-        if self.op_n:
-            ret['N'] = b
-        if self.op_o:
-            ret['O'] = a
 
         return ret
 
@@ -277,6 +278,9 @@ class Patcher(object):
     def patch(self, target, ndiff):
         """
         Return patched object.
+
+        This method is a dispatcher and calls `patch_dict` for dicts,
+        `patch_list` for lists and so forth.
 
         :param target: Object to patch.
         :param diff: Nested diff.
@@ -292,7 +296,7 @@ class Patcher(object):
             if isinstance(ndiff['D'], tuple):
                 return self.patch_tuple(target, ndiff)
 
-            return self.patch_default(target, ndiff)
+            return self.patch__default(target, ndiff)
 
         elif 'N' in ndiff:
             return ndiff['N']
@@ -300,7 +304,7 @@ class Patcher(object):
         else:
             return target
 
-    def patch_default(self, target, ndiff):
+    def patch__default(self, target, ndiff):
         """
         Patch containers without dedicated methods.
 
@@ -373,7 +377,7 @@ def diff(a, b, **kwargs):
     :param a: First object to diff.
     :param b: Second object to diff.
 
-    See Differ class for keywords options.
+    See Differ class for kwargs description.
 
     """
     return Differ(**kwargs).diff(a, b)
