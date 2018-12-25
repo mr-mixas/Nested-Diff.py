@@ -4,6 +4,8 @@ python:
 - '3.4'
 - '3.5'
 - '3.6'
+- 'pypy'
+- 'pypy3'
 install:
 - pip install coveralls
 script: coverage run --source nested_diff setup.py test
