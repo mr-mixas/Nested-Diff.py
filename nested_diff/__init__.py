@@ -125,6 +125,9 @@ class Differ(object):
         if isinstance(a, list) and isinstance(a, type(b)):
             return self.diff_lists(a, b)
 
+        if isinstance(a, set) and isinstance(a, type(b)):
+            return self.diff_sets(a, b)
+
         if isinstance(a, tuple) and isinstance(a, type(b)):
             return self.diff_tuples(a, b)
 
@@ -247,6 +250,41 @@ class Differ(object):
 
         return ret
 
+    def diff_sets(self, a, b):
+        """
+        Compute diff for two sets.
+
+        :param a: First set to diff.
+        :param b: Second set to diff.
+
+        >>> a = {1, 2}
+        >>> b = {2, 3}
+        >>>
+        >>> Differ(U=False).diff_sets(a, b)
+        {'D': {{'R': 1}, {'A': 3}}}
+        >>>
+
+        """
+        ret = {'D': set()}
+
+        for i in a.union(b):
+            if i in a and i in b:
+                if self.op_u:
+                    ret['D'].add(_hdict('U', i))
+
+            elif i in a:  # removed
+                if self.op_r:
+                    ret['D'].add(_hdict('R', None if self.op_trim_r else i))
+
+            else:  # added
+                if self.op_a:
+                    ret['D'].add(_hdict('A', i))
+
+        if not ret['D']:
+            del ret['D']
+
+        return ret
+
     def diff_tuples(self, a, b):
         """
         Compute diff for two tuples.
@@ -268,6 +306,19 @@ class Differ(object):
             ret['D'] = tuple(ret['D'])
 
         return ret
+
+
+class _hdict(dict):
+    """
+    Hashable dict, for internal use only.
+    """
+    def __init__(self, op, val):
+        dict.__init__(self)
+        self[op] = val
+        self.__hash = hash((op, val))
+
+    def __hash__(self):
+        return self.__hash
 
 
 class Patcher(object):
@@ -292,6 +343,9 @@ class Patcher(object):
 
             if isinstance(ndiff['D'], list):
                 return self.patch_list(target, ndiff)
+
+            if isinstance(ndiff['D'], set):
+                return self.patch_set(target, ndiff)
 
             if isinstance(ndiff['D'], tuple):
                 return self.patch_tuple(target, ndiff)
@@ -354,6 +408,22 @@ class Patcher(object):
                 continue
 
             i += 1
+
+        return target
+
+    def patch_set(self, target, ndiff):
+        """
+        Return patched set.
+
+        :param target: set to patch.
+        :param diff: Nested diff.
+
+        """
+        for subdiff in ndiff['D']:
+            if 'A' in subdiff:
+                target.add(subdiff['A'])
+            elif 'R' in subdiff:
+                target.remove(subdiff['R'])
 
         return target
 

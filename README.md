@@ -2,7 +2,7 @@
 
 Recursive diff for nested structures, implementation of [Nested-Diff](https://github.com/mr-mixas/Nested-Diff)
 
-Dicts and lists traversed recursively, all other types compared by values.
+Builtin containers traversed recursively, all other types compared by values.
 
 [![Build Status](https://travis-ci.org/mr-mixas/Nested-Diff.py.svg?branch=master)](https://travis-ci.org/mr-mixas/Nested-Diff.py)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
@@ -35,6 +35,13 @@ Alpha, WIP.
 >>>
 >>> c = patch(c, diff(c, d))
 >>> assert c == d
+>>>
+>>>
+>>> a = {   1, 2, 4, 5}
+>>> b = {0, 1, 2, 3}
+>>>
+>>> Differ(U=False).diff_sets(a, b)
+{'D': {{'A': 0}, {'R': 4}, {'A': 3}, {'R': 5}}}
 >>>
 ```
 

@@ -1,7 +1,71 @@
-from nested_diff import diff
+from nested_diff import diff, _hdict
 
 
 ## Test what doesn't covered by external (JSON based) tests
+
+def test_sets_diff():
+    a = {1, 2}
+    b = {2, 3}
+
+    expected = {
+        'D': set((
+            _hdict('R', 1),
+            _hdict('U', 2),
+            _hdict('A', 3),
+        ))
+    }
+
+    assert expected == diff(a, b)
+
+
+def test_sets_diff_noAR():
+    a = {1, 2}
+    b = {2, 3}
+
+    expected = {
+        'D': set((
+            _hdict('U', 2),
+        ))
+    }
+
+    assert expected == diff(a, b, A=False, R=False)
+
+
+def test_sets_diff_noU():
+    a = {1, 2}
+    b = {2, 3}
+
+    expected = {
+        'D': set((
+            _hdict('R', 1),
+            _hdict('A', 3),
+        ))
+    }
+
+    assert expected == diff(a, b, U=False)
+
+
+def test_sets_diff_trimR():
+    a = {1, 2}
+    b = {2, 3}
+
+    expected = {
+        'D': set((
+            _hdict('R', None),
+            _hdict('U', 2),
+            _hdict('A', 3),
+        ))
+    }
+
+    assert expected == diff(a, b, trimR=True)
+
+
+def test_sets_diff_empty_diff():
+    a = {1, 2}
+    b = {1, 2, 3}
+
+    assert {} == diff(a, b, A=False, U=False)
+
 
 def test_tuples_diff():
     a = (1, 2, 4, 5)

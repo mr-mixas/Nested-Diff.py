@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import patch
+from nested_diff import patch, _hdict
 
 
 def test_incorrect_diff_type():
@@ -14,8 +14,29 @@ def test_type_mismatch():
 
 
 def test_unsupported_patch_type():
+    class Foo(object):
+        pass
+
     with pytest.raises(NotImplementedError):
-        patch(None, {'D': set({'A': 1})})
+        patch(None, {'D': Foo()})
+
+
+def test_patch_set():
+    a = {1, 2, 4, 5}
+    b = {0, 1, 2, 3}
+
+    ndiff = {
+        'D': set((
+            _hdict('A', 0),
+            _hdict('U', 1),
+            _hdict('U', 2),
+            _hdict('A', 3),
+            _hdict('R', 4),
+            _hdict('R', 5),
+        ))
+    }
+
+    assert b == patch(a, ndiff)
 
 
 def test_patch_tuple():
