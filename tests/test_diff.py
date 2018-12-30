@@ -3,6 +3,21 @@ from nested_diff import diff, _hdict
 
 ## Test what doesn't covered by external (JSON based) tests
 
+def test_frozensets_diff():
+    a = frozenset((1, 2))
+    b = frozenset((2, 3))
+
+    expected = {
+        'D': frozenset((
+            _hdict('R', 1),
+            _hdict('U', 2),
+            _hdict('A', 3),
+        ))
+    }
+
+    assert expected == diff(a, b)
+
+
 def test_sets_diff():
     a = {1, 2}
     b = {2, 3}

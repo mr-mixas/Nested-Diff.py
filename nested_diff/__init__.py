@@ -131,6 +131,9 @@ class Differ(object):
         if isinstance(a, tuple) and isinstance(a, type(b)):
             return self.diff_tuples(a, b)
 
+        if isinstance(a, frozenset) and isinstance(a, type(b)):
+            return self.diff_frozensets(a, b)
+
         return self.diff__default(a, b)
 
     def diff__default(self, a, b):
@@ -285,6 +288,28 @@ class Differ(object):
 
         return ret
 
+    def diff_frozensets(self, a, b):
+        """
+        Compute diff for two frozen sets.
+
+        :param a: First frozen set to diff.
+        :param b: Second frozen set to diff.
+
+        >>> a = frozenset((1, 2))
+        >>> b = frozenset((2, 3))
+        >>>
+        >>> Differ(U=False).diff_frozensets(a, b)
+        {'D': frozenset({{'R': 1}, {'A': 3}})}
+        >>>
+
+        """
+        ret = self.diff_sets(a, b)
+
+        if 'D' in ret:
+            ret['D'] = frozenset(ret['D'])
+
+        return ret
+
     def diff_tuples(self, a, b):
         """
         Compute diff for two tuples.
@@ -349,6 +374,9 @@ class Patcher(object):
 
             if isinstance(ndiff['D'], tuple):
                 return self.patch_tuple(target, ndiff)
+
+            if isinstance(ndiff['D'], frozenset):
+                return self.patch_frozenset(target, ndiff)
 
             return self.patch__default(target, ndiff)
 
@@ -436,6 +464,16 @@ class Patcher(object):
 
         """
         return tuple(self.patch_list(list(target), ndiff))
+
+    def patch_frozenset(self, target, ndiff):
+        """
+        Return patched frozenset.
+
+        :param target: frozenset to patch.
+        :param diff: Nested diff.
+
+        """
+        return frozenset(self.patch_set(set(target), ndiff))
 
 
 def diff(a, b, **kwargs):

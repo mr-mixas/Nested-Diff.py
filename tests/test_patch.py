@@ -39,6 +39,21 @@ def test_patch_set():
     assert b == patch(a, ndiff)
 
 
+def test_patch_frozenset():
+    a = frozenset((1, 2))
+    b = frozenset((2, 3))
+
+    ndiff = {
+        'D': frozenset((
+            _hdict('R', 1),
+            _hdict('U', 2),
+            _hdict('A', 3),
+        ))
+    }
+
+    assert b == patch(a, ndiff)
+
+
 def test_patch_tuple():
     a = (1, 2, 4, 5)
     b = (0, 1, 2, 3)
