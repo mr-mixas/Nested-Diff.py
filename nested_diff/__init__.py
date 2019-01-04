@@ -42,17 +42,17 @@ class Differ(object):
     Resulting diff is a dict and may contain following keys:
     `A` stands for 'added', it's value - added item.
     `D` means 'different' and contains subdiff.
-    `I` index for list item, used only when prior item was omitted.
+    `I` index for sequence item, used only when prior item was omitted.
     `N` is a new value for changed item.
     `O` is a changed item's old value.
     `R` key used for removed item.
     `U` represent unchanged item.
 
     Diff metadata alternates with actual data; simple types specified as is,
-    dicts, lists and tuples contain subdiffs for their items with native for
-    such types addressing: indexes for lists and tuples and keys for
-    dictionaries. Each status type, except `D` and `I`, may be (optionally)
-    omitted during diff computation.
+    dicts, lists, sets and tuples contain subdiffs for their items with native
+    for such types addressing: indexes for lists and tuples and keys for
+    dictionaries. Each status type, except `D` and `I`, may be omitted during
+    diff computation.
 
     Example:
 
@@ -80,8 +80,8 @@ class Differ(object):
     | +- changes somewhere deeply inside
     +- diff is always a dict
 
-    Dicts, lists and tuples traversed recursively, all other types compared by
-    values.
+    Dicts, lists, sets and tuples traversed recursively, all other types
+    compared by values.
 
     """
     def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False):
@@ -92,8 +92,8 @@ class Differ(object):
         `A`, `N`, `O`, `R`, `U` are toggles for according diff ops and all
         enabled (`True`) by default.
 
-        `trimR` when True drops (replaces by `None`) removed data from diff,
-        default is False.
+        `trimR` when True will drop (replace by `None`) removed data from diff;
+        default is `False`.
 
         """
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
@@ -292,8 +292,8 @@ class Differ(object):
         """
         Compute diff for two frozen sets.
 
-        :param a: First frozen set to diff.
-        :param b: Second frozen set to diff.
+        :param a: First frozenset to diff.
+        :param b: Second frozenset to diff.
 
         >>> a = frozenset((1, 2))
         >>> b = frozenset((2, 3))
@@ -359,7 +359,7 @@ class Patcher(object):
         `patch_list` for lists and so forth.
 
         :param target: Object to patch.
-        :param diff: Nested diff.
+        :param ndiff: Nested diff.
 
         """
         if 'D' in ndiff:
@@ -398,7 +398,7 @@ class Patcher(object):
         Return patched dict.
 
         :param target: dict to patch.
-        :param diff: Nested diff.
+        :param ndiff: Nested diff.
 
         """
         for key, subdiff in ndiff['D'].items():
@@ -416,7 +416,7 @@ class Patcher(object):
         Return patched list.
 
         :param target: list to patch.
-        :param diff: Nested diff.
+        :param ndiff: Nested diff.
 
         """
         i, j = 0, 0  # index, scatter
@@ -444,7 +444,7 @@ class Patcher(object):
         Return patched set.
 
         :param target: set to patch.
-        :param diff: Nested diff.
+        :param ndiff: Nested diff.
 
         """
         for subdiff in ndiff['D']:
@@ -460,7 +460,7 @@ class Patcher(object):
         Return patched tuple.
 
         :param target: tuple to patch.
-        :param diff: Nested diff.
+        :param ndiff: Nested diff.
 
         """
         return tuple(self.patch_list(list(target), ndiff))
@@ -470,7 +470,7 @@ class Patcher(object):
         Return patched frozenset.
 
         :param target: frozenset to patch.
-        :param diff: Nested diff.
+        :param ndiff: Nested diff.
 
         """
         return frozenset(self.patch_set(set(target), ndiff))
@@ -480,12 +480,12 @@ def diff(a, b, **kwargs):
     """
     Compute recursive diff for two passed objects.
 
-    Just a wrapper around Differ.diff() for backward compatibility.
+    Wrapper around Differ.diff() for backward compatibility.
 
     :param a: First object to diff.
     :param b: Second object to diff.
 
-    See Differ class for kwargs description.
+    See `__init__` in Differ class for kwargs specification.
 
     """
     return Differ(**kwargs).diff(a, b)
@@ -495,10 +495,10 @@ def patch(target, ndiff):
     """
     Return patched object.
 
-    Just a wrapper around Patcher.patch() for backward compatibility.
+    Wrapper around Patcher.patch() for backward compatibility.
 
     :param target: Object to patch.
-    :param diff: Nested diff.
+    :param ndiff: Nested diff.
 
     """
     return Patcher().patch(target, ndiff)

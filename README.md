@@ -7,10 +7,6 @@ Builtin containers traversed recursively, all other types compared by values.
 [![Build Status](https://travis-ci.org/mr-mixas/Nested-Diff.py.svg?branch=master)](https://travis-ci.org/mr-mixas/Nested-Diff.py)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 
-## Status
-
-Alpha, WIP.
-
 ## Examples
 
 ```
