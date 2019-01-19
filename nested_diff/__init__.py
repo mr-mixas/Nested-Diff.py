@@ -29,7 +29,7 @@ from pickle import dumps
 
 __all__ = ['Differ', 'Patcher', 'diff', 'patch']
 
-__version__ = '0.3'
+__version__ = '0.4'
 __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
@@ -84,7 +84,8 @@ class Differ(object):
     compared by values.
 
     """
-    def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False):
+    def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False,
+                 diff_method=None):
         """
         Construct Differ.
 
@@ -95,7 +96,13 @@ class Differ(object):
         `trimR` when True will drop (replace by `None`) removed data from diff;
         default is `False`.
 
+        `diff_method` method with such name (if object have one) from first
+        diffed object will be called for diff. Second diffed object and all
+        Differ opts will be passed as arguments, diff expected for output.
+        Disabled (`None`) by default.
+
         """
+        self.__diff_method = diff_method
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
         self.op_a = A
@@ -116,6 +123,18 @@ class Differ(object):
         :param b: Second object to diff.
 
         """
+        if self.__diff_method is not None and hasattr(a, self.__diff_method):
+            return getattr(a, self.__diff_method)(
+                b,
+                A=self.op_a,
+                N=self.op_n,
+                O=self.op_o,
+                R=self.op_r,
+                U=self.op_u,
+                trimR=self.op_trim_r,
+                diff_method=self.__diff_method,
+            )
+
         if a == b:
             return {'U': a} if self.op_u else {}
 
