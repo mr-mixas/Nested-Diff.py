@@ -370,6 +370,18 @@ class Patcher(object):
     Patch objects using nested diff.
 
     """
+    def __init__(self, patch_method=None):
+        """
+        Construct Patcher.
+
+        Optional arguments:
+        `patch_method` method with such name, if patched object have one, will
+        be called with patch as argument. Patched object expected for output.
+        Disabled (`None`) by default.
+
+        """
+        self.__patch_method = patch_method
+
     def patch(self, target, ndiff):
         """
         Return patched object.
@@ -381,6 +393,10 @@ class Patcher(object):
         :param ndiff: Nested diff.
 
         """
+        if self.__patch_method is not None and \
+           hasattr(target, self.__patch_method):
+            return getattr(target, self.__patch_method)(ndiff)
+
         if 'D' in ndiff:
             if isinstance(ndiff['D'], dict):
                 return self.patch_dict(target, ndiff)
@@ -510,7 +526,7 @@ def diff(a, b, **kwargs):
     return Differ(**kwargs).diff(a, b)
 
 
-def patch(target, ndiff):
+def patch(target, ndiff, **kwargs):
     """
     Return patched object.
 
@@ -519,5 +535,7 @@ def patch(target, ndiff):
     :param target: Object to patch.
     :param ndiff: Nested diff.
 
+    See `__init__` in Patcher class for kwargs specification.
+
     """
-    return Patcher().patch(target, ndiff)
+    return Patcher(**kwargs).patch(target, ndiff)

@@ -1,4 +1,4 @@
-from nested_diff import diff
+from nested_diff import diff, patch
 
 
 class Custom(object):
@@ -14,6 +14,16 @@ class Custom(object):
             ret = {'D': self.__class__(ret)}
 
         return ret
+
+    def __patch__(self, ndiff):
+        print(ndiff)
+        if 'N' in ndiff:
+            return ndiff['N']
+
+        if 'D' in ndiff:
+            self.value = ndiff['D'].value['N']
+
+        return self
 
 
 def test_diff_different():
@@ -45,3 +55,25 @@ def test_diff_equal():
     b = Custom(value=[0])
 
     assert {'U': a} == diff(a, b, diff_method='__diff__')
+
+
+def test_patch_with_diff_method():
+    a = Custom(value=0)
+    b = Custom(value=1)
+
+    diff_ = diff(a, b, diff_method='__diff__')
+    a = patch(a, diff_, patch_method='__patch__')
+
+    assert isinstance(a, Custom)
+    assert 1 == a.value
+
+
+def test_patch_without_diff_method():
+    a = Custom(value=0)
+    b = Custom(value=1)
+
+    diff_ = diff(a, b)
+    a = patch(a, diff_, patch_method='__patch__')
+
+    assert isinstance(a, Custom)
+    assert 1 == a.value
