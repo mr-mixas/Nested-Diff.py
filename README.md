@@ -1,11 +1,59 @@
 # Nested-Diff.py
 
-Recursive diff for nested structures, implementation of [Nested-Diff](https://github.com/mr-mixas/Nested-Diff)
+Recursive diff for python nested structures, implementation of
+[Nested-Diff](https://github.com/mr-mixas/Nested-Diff)
 
 Builtin containers traversed recursively, all other types compared by values.
 
 [![Build Status](https://travis-ci.org/mr-mixas/Nested-Diff.py.svg?branch=master)](https://travis-ci.org/mr-mixas/Nested-Diff.py)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
+[![License](https://img.shields.io/pypi/l/nested_diff.svg)](https://pypi.org/project/nested_diff/)
+
+## Diff format
+
+Diff is a dict and may contain following keys:
+
+* `A` stands for 'added', it's value - added item.
+* `D` means 'different' and contains subdiff.
+* `I` index for sequence item, used only when prior item was omitted.
+* `N` is a new value for changed item.
+* `O` is a changed item's old value.
+* `R` key used for removed item.
+* `U` represent unchanged item.
+
+Diff metadata alternates with actual data; simple types specified as is, dicts,
+lists, sets and tuples contain subdiffs for their items with native for such
+types addressing: indexes for lists and tuples and keys for dictionaries. Each
+status type, except `D` and `I`, may be omitted during diff computation.
+
+Annotated example:
+
+```
+a:  {"one": [5,7]}
+b:  {"one": [5], "two": 2}
+opts: U=False  # omit unchanged items
+
+diff:
+{"D": {"one": {"D": [{"I": 1, "R": 7}]}, "two": {"A": 2}}}
+| |   |  |    | |   || |   |   |   |       |    | |   |
+| |   |  |    | |   || |   |   |   |       |    | |   +- with value 2
+| |   |  |    | |   || |   |   |   |       |    | +- key 'two' was added
+| |   |  |    | |   || |   |   |   |       |    +- subdiff for it
+| |   |  |    | |   || |   |   |   |       +- another key from top-level
+| |   |  |    | |   || |   |   |   +- what it was (item's value: 7)
+| |   |  |    | |   || |   |   +- what happened to item (removed)
+| |   |  |    | |   || |   +- list item's actual index
+| |   |  |    | |   || +- prior item was omitted
+| |   |  |    | |   |+- subdiff for list item
+| |   |  |    | |   +- it's value - list
+| |   |  |    | +- it is deeply changed
+| |   |  |    +- subdiff for key 'one'
+| |   |  +- it has key 'one'
+| |   +- top-level thing is a dict
+| +- changes somewhere deeply inside
++- diff is always a dict
+```
 
 ## Examples
 
