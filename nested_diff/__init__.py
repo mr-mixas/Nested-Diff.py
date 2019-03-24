@@ -112,12 +112,21 @@ class Differ(object):
         self.op_u = U
         self.op_trim_r = trimR
 
+        self.__differs = {
+            dict: self.diff_dict,
+            frozenset: self.diff_frozenset,
+            list: self.diff_list,
+            set: self.diff_set,
+            tuple: self.diff_tuple,
+        }
+
     def diff(self, a, b):
         """
         Compute diff for two arbitrary objects.
 
-        This method is a dispatcher and calls `diff_dicts` for dicts,
-        `diff_lists` for lists and so forth.
+        This method is a dispatcher and calls registered diff method for each
+        diffed values pair according to their type. `diff__default` called for
+        non-registered types. Args and kwargs passed to called method as is.
 
         :param a: First object to diff.
         :param b: Second object to diff.
@@ -135,23 +144,11 @@ class Differ(object):
                 diff_method=self.__diff_method,
             )
 
-        if a == b:
-            return {'U': a} if self.op_u else {}
-
-        if isinstance(a, dict) and isinstance(a, type(b)):
-            return self.diff_dicts(a, b)
-
-        if isinstance(a, list) and isinstance(a, type(b)):
-            return self.diff_lists(a, b)
-
-        if isinstance(a, set) and isinstance(a, type(b)):
-            return self.diff_sets(a, b)
-
-        if isinstance(a, tuple) and isinstance(a, type(b)):
-            return self.diff_tuples(a, b)
-
-        if isinstance(a, frozenset) and isinstance(a, type(b)):
-            return self.diff_frozensets(a, b)
+        if a.__class__ is b.__class__:
+            if a == b:
+                return {'U': a} if self.op_u else {}
+            else:
+                return self.get_differ(a.__class__)(a, b)
 
         return self.diff__default(a, b)
 
@@ -169,7 +166,7 @@ class Differ(object):
 
         return ret
 
-    def diff_dicts(self, a, b):
+    def diff_dict(self, a, b):
         """
         Compute diff for two dicts.
 
@@ -209,7 +206,7 @@ class Differ(object):
 
         return ret
 
-    def diff_lists(self, a, b):
+    def diff_list(self, a, b):
         """
         Compute diff for two lists.
 
@@ -272,7 +269,7 @@ class Differ(object):
 
         return ret
 
-    def diff_sets(self, a, b):
+    def diff_set(self, a, b):
         """
         Compute diff for two sets.
 
@@ -307,7 +304,7 @@ class Differ(object):
 
         return ret
 
-    def diff_frozensets(self, a, b):
+    def diff_frozenset(self, a, b):
         """
         Compute diff for two frozen sets.
 
@@ -322,14 +319,14 @@ class Differ(object):
         >>>
 
         """
-        ret = self.diff_sets(a, b)
+        ret = self.diff_set(a, b)
 
         if 'D' in ret:
             ret['D'] = frozenset(ret['D'])
 
         return ret
 
-    def diff_tuples(self, a, b):
+    def diff_tuple(self, a, b):
         """
         Compute diff for two tuples.
 
@@ -344,12 +341,34 @@ class Differ(object):
         >>>
 
         """
-        ret = self.diff_lists(a, b)
+        ret = self.diff_list(a, b)
 
         if 'D' in ret:
             ret['D'] = tuple(ret['D'])
 
         return ret
+
+    def get_differ(self, cls):
+        """
+        Return diff method for specified type.
+
+        :param cls: diffed object type.
+
+        """
+        try:
+            return self.__differs[cls]
+        except KeyError:
+            return self.diff__default
+
+    def set_differ(self, cls, method):
+        """
+        Set differ for specified data type.
+
+        :param cls: diffed object type.
+        :param method: diff method.
+
+        """
+        self.__differs[cls] = method
 
 
 class _hdict(dict):
@@ -382,12 +401,33 @@ class Patcher(object):
         """
         self.__patch_method = patch_method
 
+        self.__patchers = {
+            dict: self.patch_dict,
+            frozenset: self.patch_frozenset,
+            list: self.patch_list,
+            set: self.patch_set,
+            tuple: self.patch_tuple,
+        }
+
+    def get_patcher(self, cls):
+        """
+        Return patch method for specified type.
+
+        :param cls: patched object type.
+
+        """
+        try:
+            return self.__patchers[cls]
+        except KeyError:
+            raise NotImplementedError("unsupported object type")
+
     def patch(self, target, ndiff):
         """
         Return patched object.
 
-        This method is a dispatcher and calls `patch_dict` for dicts,
-        `patch_list` for lists and so forth.
+        This method is a dispatcher and calls registered patch method for each
+        patched value according to it's type. `patch__default` called for
+        non-registered types. Args and kwargs passed to called method as is.
 
         :param target: Object to patch.
         :param ndiff: Nested diff.
@@ -398,35 +438,11 @@ class Patcher(object):
             return getattr(target, self.__patch_method)(ndiff)
 
         if 'D' in ndiff:
-            if isinstance(ndiff['D'], dict):
-                return self.patch_dict(target, ndiff)
-
-            if isinstance(ndiff['D'], list):
-                return self.patch_list(target, ndiff)
-
-            if isinstance(ndiff['D'], set):
-                return self.patch_set(target, ndiff)
-
-            if isinstance(ndiff['D'], tuple):
-                return self.patch_tuple(target, ndiff)
-
-            if isinstance(ndiff['D'], frozenset):
-                return self.patch_frozenset(target, ndiff)
-
-            return self.patch__default(target, ndiff)
-
+            return self.get_patcher(ndiff['D'].__class__)(target, ndiff)
         elif 'N' in ndiff:
             return ndiff['N']
-
         else:
             return target
-
-    def patch__default(self, target, ndiff):
-        """
-        Patch containers without dedicated methods.
-
-        """
-        raise NotImplementedError("unsupported object type")
 
     def patch_dict(self, target, ndiff):
         """
@@ -509,6 +525,16 @@ class Patcher(object):
 
         """
         return frozenset(self.patch_set(set(target), ndiff))
+
+    def set_patcher(self, cls, method):
+        """
+        Set patcher for specified data type.
+
+        :param cls: patched object type.
+        :param method: patch method.
+
+        """
+        self.__patchers[cls] = method
 
 
 def diff(a, b, **kwargs):

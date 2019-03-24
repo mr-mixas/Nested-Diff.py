@@ -1,15 +1,19 @@
 from nested_diff import Differ
 
 
-def test_subclassing():
+def test_subclassing2():
     class CustomDiffer(Differ):
         """
-        Diff floats using defined precision
+        Use custom precision for floats.
+
         """
-        def diff__default(self, a, b):
-            if isinstance(a, float) and isinstance(a, type(b)):
-                if round(a, 1) == round(b, 1):
-                    return {'U': a} if self.op_u else {}
+        def __init__(self, *args, **kwargs):
+            super(CustomDiffer, self).__init__(*args, **kwargs)
+            self.set_differ(float, self.diff_float)
+
+        def diff_float(self, a, b):
+            if round(a, 1) == round(b, 1):
+                return {'U': a} if self.op_u else {}
 
             return super(CustomDiffer, self).diff__default(a, b)
 
