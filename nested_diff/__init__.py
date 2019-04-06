@@ -181,28 +181,26 @@ class Differ(object):
         >>>
 
         """
-        ret = {'D': {}}
+        ret = {}
 
         for key in set(list(a) + list(b)):
             if key in a and key in b:
                 if a[key] == b[key]:
                     if self.op_u:
-                        ret['D'][key] = {'U': a[key]}
+                        ret.setdefault('D', {})[key] = {'U': a[key]}
                 else:
                     subdiff = self.diff(a[key], b[key])
                     if subdiff:
-                        ret['D'][key] = subdiff
+                        ret.setdefault('D', {})[key] = subdiff
 
             elif key in a:  # removed
                 if self.op_r:
-                    ret['D'][key] = {'R': None if self.op_trim_r else a[key]}
+                    ret.setdefault('D', {})[key] = {
+                        'R': None if self.op_trim_r else a[key]}
 
             else:  # added
                 if self.op_a:
-                    ret['D'][key] = {'A': b[key]}
-
-        if not ret['D']:
-            del ret['D']
+                    ret.setdefault('D', {})[key] = {'A': b[key]}
 
         return ret
 
@@ -221,10 +219,10 @@ class Differ(object):
         >>>
 
         """
-        self.lcs.set_seq1([dumps(i, -1) for i in a])
-        self.lcs.set_seq2([dumps(i, -1) for i in b])
+        self.lcs.set_seq1(tuple(dumps(i, -1) for i in a))
+        self.lcs.set_seq2(tuple(dumps(i, -1) for i in b))
 
-        ret = {'D': []}
+        ret = {}
         i = j = 0
         force_index = False
 
@@ -232,7 +230,7 @@ class Differ(object):
             while i < ai and j < bj:
                 subdiff = self.diff(a[i], b[j])
                 if subdiff:
-                    ret['D'].append(subdiff)
+                    ret.setdefault('D', []).append(subdiff)
                     if force_index:
                         ret['D'][-1]['I'] = i
                         force_index = False
@@ -244,7 +242,8 @@ class Differ(object):
 
             while i < ai:  # removed
                 if self.op_r:
-                    ret['D'].append({'R': None if self.op_trim_r else a[i]})
+                    ret.setdefault('D', []).append(
+                        {'R': None if self.op_trim_r else a[i]})
                     if force_index:
                         ret['D'][-1]['I'] = i
                         force_index = False
@@ -255,7 +254,7 @@ class Differ(object):
 
             while j < bj:  # added
                 if self.op_a:
-                    ret['D'].append({'A': b[j]})
+                    ret.setdefault('D', []).append({'A': b[j]})
                     if force_index:
                         ret['D'][-1]['I'] = i
                         force_index = False
@@ -263,9 +262,6 @@ class Differ(object):
                     force_index = True
 
                 j += 1
-
-        if not ret['D']:
-            del ret['D']
 
         return ret
 
@@ -284,23 +280,21 @@ class Differ(object):
         >>>
 
         """
-        ret = {'D': set()}
+        ret = {}
 
         for i in a.union(b):
             if i in a and i in b:
                 if self.op_u:
-                    ret['D'].add(_hdict('U', i))
+                    ret.setdefault('D', set()).add(_hdict('U', i))
 
             elif i in a:  # removed
                 if self.op_r:
-                    ret['D'].add(_hdict('R', None if self.op_trim_r else i))
+                    ret.setdefault('D', set()).add(
+                        _hdict('R', None if self.op_trim_r else i))
 
             else:  # added
                 if self.op_a:
-                    ret['D'].add(_hdict('A', i))
-
-        if not ret['D']:
-            del ret['D']
+                    ret.setdefault('D', set()).add(_hdict('A', i))
 
         return ret
 
@@ -490,7 +484,8 @@ class Patcher(object):
 
         return target
 
-    def patch_set(self, target, ndiff):
+    @staticmethod
+    def patch_set(target, ndiff):
         """
         Return patched set.
 
