@@ -27,7 +27,7 @@ from difflib import SequenceMatcher
 from pickle import dumps
 
 
-__all__ = ['Differ', 'Patcher', 'diff', 'patch']
+__all__ = ['Differ', 'Patcher', 'Walker', 'diff', 'patch']
 
 __version__ = '0.4'
 __author__ = 'Michael Samoglyadov'
@@ -530,6 +530,89 @@ class Patcher(object):
 
         """
         self.__patchers[cls] = method
+
+
+class Walker(object):
+    """
+    Nested diff iterator.
+
+    """
+    def __init__(self, sort_keys=False):
+        """
+        Construct Walker.
+
+        If `sort_keys` is `True`, then the output of dictionaries will be
+        sorted by key. Disabled (Flase) by default.
+
+        """
+        self.sort_keys = sort_keys
+
+        self.__iter_makers = {
+            dict: self.make_iter_mapping,
+            frozenset: self.make_iter_set,
+            list: self.make_iter_sequence,
+            set: self.make_iter_set,
+            tuple: self.make_iter_sequence,
+        }
+
+    def get_iterator(self, value):
+        try:
+            make_iter = self.__iter_makers[value.__class__]
+        except KeyError:
+            raise NotImplementedError
+
+        return make_iter(value)
+
+    def make_iter_mapping(self, value):
+        items = sorted(value.items()) if self.sort_keys else value.items()
+        for key, val in items:
+            yield key, val
+
+    @staticmethod
+    def make_iter_sequence(value):
+        idx = 0
+        for item in value:
+            yield idx, item
+            idx += 1
+
+    @staticmethod
+    def make_iter_set(value):
+        for item in value:
+            yield None, item
+
+    def set_iter_maker(self, type_, method):
+        """
+        Set generator for specified data type.
+
+        :param type_: data type.
+        :param method: method.
+
+        """
+        self.__iter_makers[type_] = method
+
+    def walk(self, ndiff):
+        """
+        Return tuple with depth, pointer and diff body for each nested subdiff.
+
+        :param ndiff: Nested diff.
+
+        """
+        depth = 0
+        stack = [((None, _) for _ in (ndiff,))]
+
+        while stack:
+            try:
+                pointer, ndiff = next(stack[-1])
+            except StopIteration:
+                stack.pop()
+                depth -= 1
+                continue
+
+            yield depth, pointer, ndiff
+
+            if 'D' in ndiff:
+                stack.append(self.get_iterator(ndiff['D']))
+                depth += 1
 
 
 def diff(a, b, **kwargs):
