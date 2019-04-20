@@ -37,6 +37,11 @@ setup(
     test_suite='tests',
     setup_requires=["pytest-runner"],
     tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'ndiff=nested_diff.ndiff:cli',
+        ],
+    },
     include_package_data=True,
     zip_safe=False
 )
