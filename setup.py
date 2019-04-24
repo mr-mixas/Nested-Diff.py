@@ -36,7 +36,7 @@ setup(
     packages=['nested_diff'],
     test_suite='tests',
     setup_requires=["pytest-runner"],
-    tests_require=['pytest'],
+    tests_require=['pytest', 'pyyaml'],
     entry_points={
         'console_scripts': [
             'ndiff=nested_diff.ndiff:cli',
