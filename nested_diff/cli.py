@@ -134,6 +134,7 @@ class Dumper(object):
 
     def dump(self, file_, data):
         file_.write(self.encode(data))
+        file_.flush()
 
 
 class Loader(object):
