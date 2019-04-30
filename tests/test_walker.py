@@ -1,9 +1,9 @@
-from nested_diff import Walker, diff
+from nested_diff import Walker, diff, _hdict
 
 
 def test_walk_dict():
-    a = {'1': 1, '2': {'9': 9, '10': 10}, '3': 3,}
-    b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4,}
+    a = {'1': 1, '2': {'9': 9, '10': 10}, '3': 3}
+    b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4}
 
     expected = [
         (0, None, {'D': {'1': {'U': 1}, '3': {'R': 3}, '2': {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, '4': {'A': 4}}}),
@@ -24,8 +24,8 @@ def test_walk_dict():
 
 
 def test_walk_dict_keys_sorted():
-    a = {'1': 1, '2': {'9': 9, '10': 10}, '3': 3,}
-    b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4,}
+    a = {'1': 1, '2': {'9': 9, '10': 10}, '3': 3}
+    b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4}
 
     expected = [
         (0, None, {'D': {'1': {'U': 1}, '3': {'R': 3}, '2': {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, '4': {'A': 4}}}),
@@ -43,7 +43,7 @@ def test_walk_dict_keys_sorted():
 
 
 def test_walk_list():
-    a = [0, [1],    3]
+    a = [0, [1], 3]
     b = [0, [1, 2], 3]
 
     expected = [
@@ -58,3 +58,16 @@ def test_walk_list():
     got = list(Walker().walk(diff(a, b)))
 
     assert expected == got
+
+
+def test_walk_set():
+    a = {0, 1}
+    b = {0, 2}
+
+    got = list(Walker().walk(diff(a, b)))
+
+    assert len(got) == 4
+    assert got[0] == (0, None, {'D': {_hdict('R', 1), _hdict('A', 2), _hdict('U', 0)}})
+    assert (1, None, {'R': 1}) in got
+    assert (1, None, {'A': 2}) in got
+    assert (1, None, {'U': 0}) in got

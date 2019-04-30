@@ -1,7 +1,7 @@
 from nested_diff import diff, _hdict
 
 
-## Test what doesn't covered by external (JSON based) tests
+# Test what doesn't covered by external (JSON based) tests
 
 def test_frozensets_diff():
     a = frozenset((1, 2))
