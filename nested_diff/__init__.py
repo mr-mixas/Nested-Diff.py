@@ -578,7 +578,11 @@ class Walker(object):
     def make_iter_sequence(value):
         idx = 0
         for item in value:
+            if 'I' in item:
+                idx = item['I']
+
             yield idx, item
+
             idx += 1
 
     @staticmethod

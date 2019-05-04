@@ -60,6 +60,21 @@ def test_walk_list():
     assert expected == got
 
 
+def test_walk_list_noU():
+    a = [0, [1], 3]
+    b = [0, [1, 2], 3]
+
+    expected = [
+        (0, None, {'D': [{'D': [{'A': 2, 'I': 1}], 'I': 1}]}),
+        (1, 1, {'D': [{'A': 2, 'I': 1}], 'I': 1}),
+        (2, 1, {'A': 2, 'I': 1}),
+    ]
+
+    got = list(Walker().walk(diff(a, b, U=False)))
+
+    assert expected == got
+
+
 def test_walk_set():
     a = {0, 1}
     b = {0, 2}
