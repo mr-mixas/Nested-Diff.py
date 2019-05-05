@@ -125,6 +125,8 @@ class Dumper(object):
     Base class for data dumpers
 
     """
+    tty_final_new_line = True
+
     def encode(self, data):
         raise NotImplementedError
 
@@ -134,6 +136,10 @@ class Dumper(object):
 
     def dump(self, file_, data):
         file_.write(self.encode(data))
+
+        if self.tty_final_new_line and file_.isatty():
+            file_.write('\n')
+
         file_.flush()
 
 
@@ -198,6 +204,8 @@ class YamlDumper(Dumper):
     `default_flow_style` is set to `False` if absent in kwargs
 
     """
+    tty_final_new_line = False
+
     def __init__(self, **kwargs):
         import yaml
         self.codec = yaml
