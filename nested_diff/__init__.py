@@ -572,7 +572,7 @@ class Walker(object):
     def make_iter_mapping(self, value):
         items = sorted(value.items()) if self.sort_keys else value.items()
         for key, val in items:
-            yield key, val
+            yield key, val, True
 
     @staticmethod
     def make_iter_sequence(value):
@@ -581,14 +581,14 @@ class Walker(object):
             if 'I' in item:
                 idx = item['I']
 
-            yield idx, item
+            yield idx, item, True
 
             idx += 1
 
     @staticmethod
     def make_iter_set(value):
         for item in value:
-            yield None, item
+            yield None, item, False
 
     def set_iter_maker(self, type_, method):
         """
@@ -597,28 +597,32 @@ class Walker(object):
         :param type_: data type.
         :param method: method.
 
+        Generator should yield tuples with three items: `pointer`, `value` and
+        boolean flag `is_pointed`.
+
         """
         self.__iter_makers[type_] = method
 
     def walk(self, ndiff):
         """
-        Return tuple with depth, pointer and diff body for each nested subdiff.
+        Return tuples with depth, pointer, subdiff and `is_pointed` boolean
+        flag for each nested subdiff.
 
         :param ndiff: Nested diff.
 
         """
         depth = 0
-        stack = [((None, _) for _ in (ndiff,))]
+        stack = [((None, _, False) for _ in (ndiff,))]
 
         while stack:
             try:
-                pointer, ndiff = next(stack[-1])
+                pointer, ndiff, is_pointed = next(stack[-1])
             except StopIteration:
                 stack.pop()
                 depth -= 1
                 continue
 
-            yield depth, pointer, ndiff
+            yield depth, pointer, ndiff, is_pointed
 
             if 'D' in ndiff:
                 stack.append(self.get_iterator(ndiff['D']))
