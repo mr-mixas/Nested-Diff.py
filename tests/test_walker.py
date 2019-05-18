@@ -1,4 +1,16 @@
+import pytest
+
 from nested_diff import Walker, diff, _hdict
+
+
+def test_walk_scalar():
+    a = 0
+    b = 1
+
+    expected = [(0, None, {'N': 1, 'O': 0}, False)]
+    got = list(Walker().walk(diff(a, b)))
+
+    assert expected == got
 
 
 def test_walk_dict():
@@ -86,3 +98,32 @@ def test_walk_set():
     assert (1, None, {'R': 1}, False) in got
     assert (1, None, {'A': 2}, False) in got
     assert (1, None, {'U': 0}, False) in got
+
+
+def test_custom_containers():
+    class custom_container(tuple):
+        pass
+
+    diff = {'D': custom_container([{'O': 0, 'N': 1}])}
+
+    walker = Walker()
+    walker.set_iter_maker(custom_container, walker.make_iter_sequence)
+
+    expected = [
+        (0, None, {'D': ({'N': 1, 'O': 0},)}, False),
+        (1, 0, {'N': 1, 'O': 0}, True)
+    ]
+
+    got = list(walker.walk(diff))
+
+    assert expected == got
+
+
+def test_unknown_containers():
+    class unknown_container(tuple):
+        pass
+
+    diff = {'D': unknown_container([{'O': 0, 'N': 1}])}
+
+    with pytest.raises(NotImplementedError):
+        got = list(Walker().walk(diff))
