@@ -2,6 +2,13 @@ import os
 import pytest
 import sys
 
+IS_PY2 = sys.version[0] == '2'
+
+if IS_PY2:
+    import StringIO
+else:
+    from io import StringIO
+
 
 def get_testfile_name(request, suffix='dat', shared=False):
     if shared:
@@ -16,7 +23,7 @@ def get_testfile_name(request, suffix='dat', shared=False):
 
 @pytest.fixture
 def PY2():
-    return sys.version[0] == '2'
+    return IS_PY2
 
 
 @pytest.fixture
@@ -42,3 +49,18 @@ def testfile(request):
             return f.read()
 
     return _content_getter
+
+
+@pytest.fixture
+def stringio():
+    return StringIO()
+
+
+class _StringIOTTY(StringIO):
+    def isatty(self):
+        return True
+
+
+@pytest.fixture
+def stringio_tty():
+    return _StringIOTTY()

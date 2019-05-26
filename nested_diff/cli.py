@@ -125,7 +125,7 @@ class Dumper(object):
     Base class for data dumpers
 
     """
-    tty_final_new_line = True
+    tty_final_new_line = False
 
     def encode(self, data):
         raise NotImplementedError
@@ -167,6 +167,8 @@ class JsonDumper(Dumper):
     `indent` is set to 3 and `sort_keys` to `True` if absent in kwargs
 
     """
+    tty_final_new_line = True
+
     def __init__(self, **kwargs):
         import json
         self.encoder = json.JSONEncoder(**self.get_opts(kwargs))
@@ -204,8 +206,6 @@ class YamlDumper(Dumper):
     `default_flow_style` is set to `False` if absent in kwargs
 
     """
-    tty_final_new_line = False
-
     def __init__(self, **kwargs):
         import yaml
         self.codec = yaml
