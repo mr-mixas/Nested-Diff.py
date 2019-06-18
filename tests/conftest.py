@@ -5,7 +5,7 @@ import sys
 IS_PY2 = sys.version[0] == '2'
 
 if IS_PY2:
-    import StringIO
+    from StringIO import StringIO
 else:
     from io import StringIO
 
