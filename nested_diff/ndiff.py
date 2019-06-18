@@ -52,6 +52,14 @@ class App(nested_diff.cli.App):
         parser.add_argument('file2', type=argparse.FileType())
 
         parser.add_argument(
+            '--ofmt',
+            type=str,
+            default='json',
+            choices=('json', 'text', 'yaml'),
+            help='output files format; "text" used by default',
+        )
+
+        parser.add_argument(
             '--out',
             default=sys.stdout,
             metavar='FILE',
@@ -61,6 +69,12 @@ class App(nested_diff.cli.App):
 
         return parser
 
+    def get_dumper(self, fmt, **kwargs):
+        if fmt == 'text':
+            return TextDumper(**kwargs)
+
+        return super(App, self).get_dumper(fmt, **kwargs)
+
     def run(self):
         diff = self.diff(
             self.load(self.args.file1),
@@ -68,6 +82,22 @@ class App(nested_diff.cli.App):
         )
 
         self.dump(self.args.out, diff)
+
+
+class TextDumper(nested_diff.cli.Dumper):
+    def __init__(self, **kwargs):
+        super(TextDumper, self).__init__()
+
+        import nested_diff.fmt
+        self.encoder = nested_diff.fmt.TextFormatter(**self.get_opts(kwargs))
+
+    def encode(self, data):
+        return self.encoder.format(data)
+
+    @staticmethod
+    def get_opts(opts):
+        opts.setdefault('sort_keys', True)
+        return opts
 
 
 def cli():
