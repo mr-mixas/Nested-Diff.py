@@ -85,7 +85,7 @@ class AbstractFormatter(object):
 
     def get_key_prefix(self, tag, depth):
         """
-        Return key prefix: diff sign (if any) and indent
+        Return key prefix: diff token (if any) and indent
 
         """
         return self.diff_tokens[tag] + self.indent * depth
@@ -99,7 +99,7 @@ class AbstractFormatter(object):
 
     def get_value_prefix(self, tag, depth):
         """
-        Return value prefix: diff sign (if any) and indent
+        Return value prefix: diff token (if any) and indent
 
         """
         return self.diff_tokens[tag] + self.indent * depth
@@ -208,3 +208,57 @@ class TextFormatter(AbstractFormatter):
                     yield self.get_value_prefix(tag, depth)
                     yield self.repr_value(diff[tag])
                     yield self.get_value_suffix()
+
+
+class TermFormatter(TextFormatter):
+    """
+    Same as TextFormatter but with term colors.
+
+    """
+    def __init__(self, *args, **kwargs):
+        super(TermFormatter, self).__init__(*args, **kwargs)
+
+        self.diff_key_tokens = {
+            'A': '\033[1;32m+ ',
+            'D': '  ',
+            'N': '\033[1;32m+ ',
+            'O': '\033[1;31m- ',
+            'R': '\033[1;31m- ',
+            'U': '  ',
+        }
+        self.diff_value_tokens = {
+            'A': '\033[32m+ ',
+            'D': '  ',
+            'N': '\033[32m+ ',
+            'O': '\033[31m- ',
+            'R': '\033[31m- ',
+            'U': '  ',
+        }
+
+    def get_key_prefix(self, tag, depth):
+        """
+        Return key prefix: diff token (if any) and indent
+
+        """
+        return self.diff_key_tokens[tag] + self.indent * depth
+
+    def get_key_suffix(self):
+        """
+        Return key suffix
+
+        """
+        return '\033[0m' + self.line_separator
+
+    def get_value_prefix(self, tag, depth):
+        """
+        Return value prefix: diff token (if any) and indent
+
+        """
+        return self.diff_value_tokens[tag] + self.indent * depth
+
+    def get_value_suffix(self):
+        """
+        Return value suffix
+
+        """
+        return '\033[0m' + self.line_separator
