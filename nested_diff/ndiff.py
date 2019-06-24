@@ -55,8 +55,8 @@ class App(nested_diff.cli.App):
             '--ofmt',
             type=str,
             default='json',
-            choices=('json', 'text', 'yaml'),
-            help='output files format; "text" used by default',
+            choices=('json', 'term', 'text', 'yaml'),
+            help='output format',
         )
 
         parser.add_argument(
@@ -70,7 +70,9 @@ class App(nested_diff.cli.App):
         return parser
 
     def get_dumper(self, fmt, **kwargs):
-        if fmt == 'text':
+        if fmt == 'term':
+            return TermDumper(**kwargs)
+        elif fmt == 'text':
             return TextDumper(**kwargs)
 
         return super(App, self).get_dumper(fmt, **kwargs)
@@ -84,12 +86,10 @@ class App(nested_diff.cli.App):
         self.dump(self.args.out, diff)
 
 
-class TextDumper(nested_diff.cli.Dumper):
+class AbstractFmtDumper(nested_diff.cli.Dumper):
     def __init__(self, **kwargs):
-        super(TextDumper, self).__init__()
-
+        super(AbstractFmtDumper, self).__init__()
         import nested_diff.fmt
-        self.encoder = nested_diff.fmt.TextFormatter(**self.get_opts(kwargs))
 
     def encode(self, data):
         return self.encoder.format(data)
@@ -98,6 +98,18 @@ class TextDumper(nested_diff.cli.Dumper):
     def get_opts(opts):
         opts.setdefault('sort_keys', True)
         return opts
+
+
+class TermDumper(AbstractFmtDumper):
+    def __init__(self, **kwargs):
+        super(TermDumper, self).__init__()
+        self.encoder = nested_diff.fmt.TermFormatter(**self.get_opts(kwargs))
+
+
+class TextDumper(AbstractFmtDumper):
+    def __init__(self, **kwargs):
+        super(TextDumper, self).__init__()
+        self.encoder = nested_diff.fmt.TextFormatter(**self.get_opts(kwargs))
 
 
 def cli():

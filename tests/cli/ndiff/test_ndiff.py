@@ -60,6 +60,19 @@ def test_text_ofmt(capsys, expected, fullname):
     assert '' == captured.err
     assert expected == captured.out
 
+
+def test_term_ofmt(capsys, expected, fullname):
+    DiffApp(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.json', shared=True),
+        '--ofmt', 'term',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
 def test_yaml_ifmt(capsys, expected, fullname, PY2):
     DiffApp(args=(
         fullname('lists.a.yaml', shared=True),
