@@ -21,7 +21,7 @@ Formatters for Nested Diff.
 
 from __future__ import unicode_literals
 
-from nested_diff import Walker
+from nested_diff import Iterator
 
 
 class AbstractFormatter(object):
@@ -34,11 +34,15 @@ class AbstractFormatter(object):
         indent='  ',
         line_separator='\n',
         sort_keys=False,
-        walker=None
+        iterator=None
     ):
         self.indent = indent
         self.line_separator = line_separator
-        self.walker = Walker(sort_keys=sort_keys) if walker is None else walker
+
+        if iterator is None:
+            self.iterator = Iterator(sort_keys=sort_keys)
+        else:
+            self.iterator = iterator
 
         self.open_tokens = {
             dict: '{',
@@ -169,7 +173,7 @@ class TextFormatter(AbstractFormatter):
         is_new_subdiff = False
         key_tag = 'U'
 
-        for depth, pointer, diff, is_pointed in self.walker.walk(diff):
+        for depth, pointer, diff, is_pointed in self.iterator.iterate(diff):
             if 'D' in diff:
                 is_new_subdiff = True
                 container_type = diff['D'].__class__

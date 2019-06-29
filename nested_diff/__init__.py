@@ -27,7 +27,7 @@ from difflib import SequenceMatcher
 from pickle import dumps
 
 
-__all__ = ['Differ', 'Patcher', 'Walker', 'diff', 'patch']
+__all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
 __version__ = '0.4'
 __author__ = 'Michael Samoglyadov'
@@ -538,44 +538,60 @@ class Patcher(object):
         self.__patchers[cls] = method
 
 
-class Walker(object):
+class Iterator(object):
     """
     Nested diff iterator.
 
     """
     def __init__(self, sort_keys=False):
         """
-        Construct Walker.
+        Construct iterator.
 
-        If `sort_keys` is `True`, then the output of dictionaries will be
-        sorted by key. Disabled (Flase) by default.
+        If `sort_keys` is `True`, then the output for mappings will be
+        sorted by key. Disabled by default.
 
         """
         self.sort_keys = sort_keys
 
-        self.__iter_makers = {
-            dict: self.make_iter_mapping,
-            frozenset: self.make_iter_set,
-            list: self.make_iter_sequence,
-            set: self.make_iter_set,
-            tuple: self.make_iter_sequence,
+        self.__iters = {
+            dict: self.iter_mapping,
+            frozenset: self.iter_set,
+            list: self.iter_sequence,
+            set: self.iter_set,
+            tuple: self.iter_sequence,
         }
 
-    def get_iterator(self, value):
+    def get_iter(self, value):
+        """
+        Return apropriate iterator for passed value.
+
+        """
         try:
-            make_iter = self.__iter_makers[value.__class__]
+            make_iter = self.__iters[value.__class__]
         except KeyError:
             raise NotImplementedError
 
         return make_iter(value)
 
-    def make_iter_mapping(self, value):
+    def iter_mapping(self, value):
+        """
+        Iterate over dict-like objects.
+
+        :param value: mapping.
+
+        """
         items = sorted(value.items()) if self.sort_keys else value.items()
         for key, val in items:
             yield key, val, True
 
     @staticmethod
-    def make_iter_sequence(value):
+    def iter_sequence(value):
+        """
+        Iterate over lists, tuples and other sequences.
+
+        :param value: sequence.
+
+        """
         idx = 0
         for item in value:
             if 'I' in item:
@@ -586,11 +602,17 @@ class Walker(object):
             idx += 1
 
     @staticmethod
-    def make_iter_set(value):
+    def iter_set(value):
+        """
+        Iterate over set-like objects.
+
+        :param value: set-like object.
+
+        """
         for item in value:
             yield None, item, False
 
-    def set_iter_maker(self, type_, method):
+    def set_iter(self, type_, method):
         """
         Set generator for specified data type.
 
@@ -601,9 +623,9 @@ class Walker(object):
         boolean flag `is_pointed`.
 
         """
-        self.__iter_makers[type_] = method
+        self.__iters[type_] = method
 
-    def walk(self, ndiff):
+    def iterate(self, ndiff):
         """
         Return tuples with depth, pointer, subdiff and `is_pointed` boolean
         flag for each nested subdiff.
@@ -614,18 +636,22 @@ class Walker(object):
         depth = 0
         stack = [((None, _, False) for _ in (ndiff,))]
 
-        while stack:
+        while True:
             try:
                 pointer, ndiff, is_pointed = next(stack[-1])
             except StopIteration:
                 stack.pop()
-                depth -= 1
-                continue
+
+                if stack:
+                    depth -= 1
+                    continue
+                else:
+                    break
 
             yield depth, pointer, ndiff, is_pointed
 
             if 'D' in ndiff:
-                stack.append(self.get_iterator(ndiff['D']))
+                stack.append(self.get_iter(ndiff['D']))
                 depth += 1
 
 
