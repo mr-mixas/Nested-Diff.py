@@ -21,10 +21,10 @@ Formatters for Nested Diff.
 
 from __future__ import unicode_literals
 
-from nested_diff import Iterator
+import nested_diff
 
 
-class AbstractFormatter(object):
+class AbstractFormatter(nested_diff.Iterator):
     """
     Base class for nested diff formatters
 
@@ -33,16 +33,12 @@ class AbstractFormatter(object):
         self,
         indent='  ',
         line_separator='\n',
-        sort_keys=False,
-        iterator=None
+        **kwargs
     ):
+        super(AbstractFormatter, self).__init__(**kwargs)
+
         self.indent = indent
         self.line_separator = line_separator
-
-        if iterator is None:
-            self.iterator = Iterator(sort_keys=sort_keys)
-        else:
-            self.iterator = iterator
 
         self.open_tokens = {
             dict: '{',
@@ -78,11 +74,11 @@ class AbstractFormatter(object):
         Return completely formatted diff
 
         """
-        return ''.join(self.iter_chunks(diff))
+        return ''.join(self.iterate(diff))
 
-    def iter_chunks(self, diff):
+    def iterate(self, diff):
         """
-        Yield diff chunk by chunk
+        Yield diff token by token
 
         """
         raise NotImplementedError
@@ -165,16 +161,30 @@ class TextFormatter(AbstractFormatter):
     Produce human friendly text diff representation with indenting formatting.
 
     """
-    def iter_chunks(self, diff):
+    def iterate(self, diff):
         """
-        Yield diff chunk by chunk
+        Yield diff token by token
 
         """
+        depth = 0
         is_new_subdiff = False
         key_tag = 'U'
+        stack = [((None, _, False) for _ in (diff,))]
 
-        for depth, pointer, diff, is_pointed in self.iterator.iterate(diff):
+        while True:
+            try:
+                pointer, diff, is_pointed = next(stack[-1])
+            except StopIteration:
+                stack.pop()
+                if stack:
+                    depth -= 1
+                    continue
+                else:
+                    break
+
             if 'D' in diff:
+                stack.append(self.get_iter(diff['D']))
+
                 is_new_subdiff = True
                 container_type = diff['D'].__class__
                 if is_pointed:
@@ -183,6 +193,8 @@ class TextFormatter(AbstractFormatter):
                     yield self.repr_key(pointer)
                     yield self.get_close_token(container_type)
                     yield self.get_key_suffix()
+
+                depth += 1
                 continue
 
             if is_pointed:
