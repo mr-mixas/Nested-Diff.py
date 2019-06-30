@@ -113,7 +113,7 @@ def test_substructures_repr():
     assert expected == got
 
 
-def itest_dicts_diff():
+def test_dicts_diff():
     a = {'one': 1, 'three': 3, 'four': {'forty\ttwo': 42}, 'five': 5}
     b = {'two': 2, 'three': 3, 'four': {'forty\ntwo': 42}, 'five': 7}
 
@@ -201,3 +201,22 @@ def test_frozensets_diff():
     }
 
     assert got in expected
+
+
+def test_mixed_structures_diff():
+    a = {'one': [{'two': 2}, 3]}
+    b = {'one': [{'two': 0}, 4]}
+
+    got = TextFormatter().format(diff(a, b))
+    expected = """\
+  {'one'}
+    [0]
+      {'two'}
+-       2
++       0
+    [1]
+-     3
++     4
+"""
+
+    assert expected == got

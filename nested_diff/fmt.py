@@ -170,23 +170,23 @@ class TextFormatter(AbstractFormatter):
         is_new_subdiff = False
         key_tag = 'U'
         stack = [((None, _, False) for _ in (diff,))]
+        path_types = [None]  # even with stack
 
         while True:
             try:
                 pointer, diff, is_pointed = next(stack[-1])
             except StopIteration:
                 stack.pop()
+
                 if stack:
                     depth -= 1
+                    path_types.pop()
+                    container_type = path_types[-1]
                     continue
                 else:
                     break
 
             if 'D' in diff:
-                stack.append(self.get_iter(diff['D']))
-
-                is_new_subdiff = True
-                container_type = diff['D'].__class__
                 if is_pointed:
                     yield self.get_key_prefix('D', depth - 1)
                     yield self.get_open_token(container_type)
@@ -194,6 +194,10 @@ class TextFormatter(AbstractFormatter):
                     yield self.get_close_token(container_type)
                     yield self.get_key_suffix()
 
+                stack.append(self.get_iter(diff['D']))
+                container_type = diff['D'].__class__
+                path_types.append(container_type)
+                is_new_subdiff = True
                 depth += 1
                 continue
 
