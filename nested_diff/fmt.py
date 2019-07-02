@@ -53,7 +53,7 @@ class AbstractFormatter(nested_diff.Iterator):
             tuple: ')',
         }
 
-        self.diff_tokens = {
+        self.diff_key_tokens = {
             'A': '+ ',
             'D': '  ',
             'N': '+ ',
@@ -61,6 +61,8 @@ class AbstractFormatter(nested_diff.Iterator):
             'R': '- ',
             'U': '  ',
         }
+        self.diff_value_tokens = self.diff_key_tokens.copy()
+
         self.tags = (  # diff tags to format, sequence is important
             'R',
             'O',
@@ -82,34 +84,6 @@ class AbstractFormatter(nested_diff.Iterator):
 
         """
         raise NotImplementedError
-
-    def get_key_prefix(self, tag, depth):
-        """
-        Return key prefix: diff token (if any) and indent
-
-        """
-        return self.diff_tokens[tag] + self.indent * depth
-
-    def get_key_suffix(self):
-        """
-        Return key suffix
-
-        """
-        return self.line_separator
-
-    def get_value_prefix(self, tag, depth):
-        """
-        Return value prefix: diff token (if any) and indent
-
-        """
-        return self.diff_tokens[tag] + self.indent * depth
-
-    def get_value_suffix(self):
-        """
-        Return value suffix
-
-        """
-        return self.line_separator
 
     def get_open_token(self, type_):
         """
@@ -167,7 +141,7 @@ class TextFormatter(AbstractFormatter):
 
         """
         depth = 0
-        is_new_subdiff = False
+        emit_container_preamble = False
         key_tag = 'U'
         stack = [((None, _, False) for _ in (diff,))]
         path_types = [None]  # even with stack
@@ -188,46 +162,49 @@ class TextFormatter(AbstractFormatter):
 
             if 'D' in diff:
                 if is_pointed:
-                    yield self.get_key_prefix('D', depth - 1)
+                    yield self.diff_key_tokens['D']
+                    yield self.indent * (depth - 1)
                     yield self.get_open_token(container_type)
                     yield self.repr_key(pointer)
                     yield self.get_close_token(container_type)
-                    yield self.get_key_suffix()
+                    yield self.line_separator
 
                 stack.append(self.get_iter(diff['D']))
                 container_type = diff['D'].__class__
                 path_types.append(container_type)
-                is_new_subdiff = True
+                emit_container_preamble = True
                 depth += 1
                 continue
 
             if is_pointed:
                 key_tag = None
-            elif is_new_subdiff:
+            elif emit_container_preamble:  # for keyless collections like set
                 key_tag = 'U'
-                is_new_subdiff = False
-                # preamble for collections without pointers such as set
-                yield self.get_key_prefix(key_tag, depth - 1)
+                emit_container_preamble = False
+                yield self.diff_key_tokens[key_tag]
+                yield self.indent * (depth - 1)
                 yield '<'
                 yield container_type.__name__
                 yield '>'
-                yield self.get_key_suffix()
+                yield self.line_separator
 
             for tag in self.tags:
                 if tag in diff:
                     if key_tag is None:
                         # key/index
                         key_tag = tag if tag == 'A' or tag == 'R' else 'U'
-                        yield self.get_key_prefix(key_tag, depth - 1)
+                        yield self.diff_key_tokens[key_tag]
+                        yield self.indent * (depth - 1)
                         yield self.get_open_token(container_type)
                         yield self.repr_key(pointer)
                         yield self.get_close_token(container_type)
-                        yield self.get_key_suffix()
+                        yield self.line_separator
 
                     # value
-                    yield self.get_value_prefix(tag, depth)
+                    yield self.diff_value_tokens[tag]
+                    yield self.indent * depth
                     yield self.repr_value(diff[tag])
-                    yield self.get_value_suffix()
+                    yield self.line_separator
 
 
 class TermFormatter(TextFormatter):
@@ -237,6 +214,8 @@ class TermFormatter(TextFormatter):
     """
     def __init__(self, *args, **kwargs):
         super(TermFormatter, self).__init__(*args, **kwargs)
+
+        self.line_separator = '\033[0m' + self.line_separator
 
         self.diff_key_tokens = {
             'A': '\033[1;32m+ ',
@@ -254,31 +233,3 @@ class TermFormatter(TextFormatter):
             'R': '\033[31m- ',
             'U': '  ',
         }
-
-    def get_key_prefix(self, tag, depth):
-        """
-        Return key prefix: diff token (if any) and indent
-
-        """
-        return self.diff_key_tokens[tag] + self.indent * depth
-
-    def get_key_suffix(self):
-        """
-        Return key suffix
-
-        """
-        return '\033[0m' + self.line_separator
-
-    def get_value_prefix(self, tag, depth):
-        """
-        Return value prefix: diff token (if any) and indent
-
-        """
-        return self.diff_value_tokens[tag] + self.indent * depth
-
-    def get_value_suffix(self):
-        """
-        Return value suffix
-
-        """
-        return '\033[0m' + self.line_separator
