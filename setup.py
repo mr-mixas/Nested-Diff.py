@@ -39,7 +39,7 @@ setup(
     tests_require=['pytest', 'pyyaml'],
     entry_points={
         'console_scripts': [
-            'ndiff=nested_diff.ndiff:cli',
+            'nested_diff=nested_diff.diff_tool:cli',
         ],
     },
     include_package_data=True,

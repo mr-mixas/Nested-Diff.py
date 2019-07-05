@@ -8,7 +8,7 @@ try:
 except ImportError:
     import mock
 
-from nested_diff.ndiff import App as DiffApp
+from nested_diff.diff_tool import App as DiffApp
 
 
 def test_default_diff(capsys, expected, fullname):
