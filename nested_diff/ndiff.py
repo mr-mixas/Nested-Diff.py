@@ -54,8 +54,8 @@ class App(nested_diff.cli.App):
         parser.add_argument(
             '--ofmt',
             type=str,
-            default='json',
-            choices=('json', 'term', 'text', 'yaml'),
+            default='auto',
+            choices=('auto', 'json', 'term', 'text', 'yaml'),
             help='output format',
         )
 
@@ -70,6 +70,12 @@ class App(nested_diff.cli.App):
         return parser
 
     def get_dumper(self, fmt, **kwargs):
+        if fmt == 'auto':
+            if self.args.out.isatty():
+                fmt = 'term'
+            else:
+                fmt = 'text'
+
         if fmt == 'term':
             return TermDumper(**kwargs)
         elif fmt == 'text':

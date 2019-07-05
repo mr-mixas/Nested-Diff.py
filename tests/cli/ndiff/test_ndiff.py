@@ -1,11 +1,17 @@
 import json
 import os
 import pytest
+import sys
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 from nested_diff.ndiff import App as DiffApp
 
 
-def test_default_diff(capsys, expected, fullname, PY2):
+def test_default_diff(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
@@ -14,16 +20,27 @@ def test_default_diff(capsys, expected, fullname, PY2):
     captured = capsys.readouterr()
     assert '' == captured.err
 
-    if PY2:  # json in python2 emit trailing spaces
-        assert json.loads(expected) == json.loads(captured.out)
-    else:
-        assert expected == captured.out
+    assert expected == captured.out
+
+
+def test_default_diff_with_tty(capsys, expected, fullname, stringio_tty):
+    with mock.patch('sys.stdout.isatty', return_value=True):
+        DiffApp(args=(
+            fullname('lists.a.json', shared=True),
+            fullname('lists.b.json', shared=True),
+        )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+
+    assert expected == captured.out
 
 
 def test_output_file(capsys, expected, fullname, testfile):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
+        '--ofmt', 'json',
         '--out', fullname('out'),
     )).run()
 
@@ -38,6 +55,7 @@ def test_json_ofmt_opts(capsys, expected, fullname, PY2):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
+        '--ofmt', 'json',
         '--ofmt-opts', '{"indent": null}',
     )).run()
 
@@ -78,6 +96,7 @@ def test_yaml_ifmt(capsys, expected, fullname, PY2):
         fullname('lists.a.yaml', shared=True),
         fullname('lists.b.yaml', shared=True),
         '--ifmt', 'yaml',
+        '--ofmt', 'json',
     )).run()
 
     captured = capsys.readouterr()
