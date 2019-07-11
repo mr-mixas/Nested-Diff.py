@@ -27,6 +27,15 @@ def PY2():
 
 
 @pytest.fixture
+def content():
+    def _reader(filename):
+        with open(filename) as f:
+            return f.read()
+
+    return _reader
+
+
+@pytest.fixture
 def expected(request):
     name = get_testfile_name(request, suffix='exp')
     with open(name) as f:

@@ -40,6 +40,7 @@ setup(
     entry_points={
         'console_scripts': [
             'nested_diff=nested_diff.diff_tool:cli',
+            'nested_patch=nested_diff.patch_tool:cli',
         ],
     },
     include_package_data=True,
