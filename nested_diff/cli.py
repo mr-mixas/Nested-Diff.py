@@ -51,6 +51,17 @@ class App(object):
         import json
         return json.loads(opts)
 
+    @staticmethod
+    def decode_bool_arg(string):
+        string = string.lower()
+
+        if string in {'true', 'yes', 't', 'y', '1'}:
+            return True
+        elif string in {'false', 'no', 'f', 'n', '0'}:
+            return False
+
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
     def dump(self, file_, data):
         self.dumper.dump(file_, data)
 

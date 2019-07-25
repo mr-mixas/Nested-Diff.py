@@ -38,7 +38,14 @@ class App(nested_diff.cli.App):
         :param b: Second object to diff.
 
         """
-        return nested_diff.diff(a, b, U=False)
+        return nested_diff.diff(
+            a, b,
+            A=self.args.A,
+            N=self.args.N,
+            O=self.args.O,
+            R=self.args.R,
+            U=self.args.U,
+        )
 
     def get_argparser(self, description=None):
         parent = super(App, self).get_argparser()
@@ -66,6 +73,17 @@ class App(nested_diff.cli.App):
             type=argparse.FileType('w'),
             help='output file; STDERR is used if omitted',
         )
+
+        parser.add_argument('-A', '--A', type=self.decode_bool_arg, nargs='?',
+            const=True, default=True, help="Show added items")
+        parser.add_argument('-N', '--N', type=self.decode_bool_arg, nargs='?',
+            const=True, default=True, help="Show item's new values")
+        parser.add_argument('-O', '--O', type=self.decode_bool_arg, nargs='?',
+            const=True, default=True, help="Show item's old values")
+        parser.add_argument('-R', '--R', type=self.decode_bool_arg, nargs='?',
+            const=True, default=True, help="Show removed items")
+        parser.add_argument('-U', '--U', type=self.decode_bool_arg, nargs='?',
+            const=True, default=False, help="Show unchanged items")
 
         return parser
 

@@ -36,6 +36,23 @@ def test_default_diff_with_tty(capsys, expected, fullname, stringio_tty):
     assert expected == captured.out
 
 
+def test_enable_U_ops(capsys, expected, fullname, PY2):
+    DiffApp(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.json', shared=True),
+        '--ofmt', 'json',
+        '-U', '-U=1', '--U', '--U=1', '--U', '1',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+
+    if PY2:  # json in python2 emit trailing spaces
+        assert json.loads(expected) == json.loads(captured.out)
+    else:
+        assert expected == captured.out
+
+
 def test_output_file(capsys, expected, fullname, testfile):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
