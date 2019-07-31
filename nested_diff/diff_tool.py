@@ -59,6 +59,14 @@ class App(nested_diff.cli.App):
         parser.add_argument('file2', type=argparse.FileType())
 
         parser.add_argument(
+            '--ifmt',
+            type=str,
+            default='json',
+            choices=('ini', 'json', 'yaml'),
+            help='input files format; "json" used by default',
+        )
+
+        parser.add_argument(
             '--ofmt',
             type=str,
             default='auto',
@@ -100,6 +108,12 @@ class App(nested_diff.cli.App):
             return TextDumper(**kwargs)
 
         return super(App, self).get_dumper(fmt, **kwargs)
+
+    def get_loader(self, fmt, **kwargs):
+        if fmt == 'ini':
+            return nested_diff.cli.IniLoader(**kwargs)
+
+        return super(App, self).get_loader(fmt, **kwargs)
 
     def run(self):
         diff = self.diff(

@@ -19,6 +19,7 @@ Common stuff for cli tools.
 
 """
 import argparse
+import sys
 
 import nested_diff
 
@@ -211,6 +212,44 @@ class JsonLoader(Loader):
 
     def decode(self, data):
         return self.decoder.decode(data)
+
+
+class IniLoader(Loader):
+    """
+    INI loader
+
+    """
+    def __init__(self, **kwargs):
+        super(IniLoader, self).__init__()
+
+        if sys.version[0] == '2':
+            from ConfigParser import ConfigParser
+
+            class Py2ConfigParserWrapper(ConfigParser):
+                # old ConfigParser has no method read_string
+                def read_string(self, data):
+                    from StringIO import StringIO
+                    sio = StringIO(data)
+                    return ConfigParser.readfp(self, sio)
+
+            self.decoder = Py2ConfigParserWrapper(**kwargs)
+        else:
+            from configparser import ConfigParser
+            self.decoder = ConfigParser(**kwargs)
+
+    def decode(self, data):
+        self.decoder.read_string(data)
+
+        out = {}
+        for section in self.decoder.sections():
+            out[section] = {}
+            for option in self.decoder.options(section):
+                out[section][option] = self.decoder.get(section, option)
+
+            # cleanup (parser accumulates all readed confs)
+            self.decoder.remove_section(section)
+
+        return out
 
 
 class YamlDumper(Dumper):

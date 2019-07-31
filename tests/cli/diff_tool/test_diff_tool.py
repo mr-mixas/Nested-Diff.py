@@ -84,6 +84,24 @@ def test_json_ofmt_opts(capsys, expected, fullname, PY2):
     else:
         assert expected == captured.out
 
+
+def test_ini_ifmt(capsys, expected, fullname, PY2):
+    DiffApp(args=(
+        fullname('lists.a.ini', shared=True),
+        fullname('lists.b.ini', shared=True),
+        '--ifmt', 'ini',
+        '--ofmt', 'json',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+
+    if PY2:  # json in python2 emit trailing spaces
+        assert json.loads(expected) == json.loads(captured.out)
+    else:
+        assert expected == captured.out
+
+
 def test_text_ofmt(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
