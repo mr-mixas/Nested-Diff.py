@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import Iterator, diff, _hdict
+from nested_diff import Iterator, diff
 
 
 def test_scalar_diff():
@@ -94,7 +94,7 @@ def test_set_diff():
     got = list(Iterator().iterate(diff(a, b)))
 
     assert len(got) == 4
-    assert got[0] == (0, None, {'D': {_hdict('R', 1), _hdict('A', 2), _hdict('U', 0)}}, False)
+    assert got[0] == (0, None, {'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': set()}, False)
     assert (1, None, {'R': 1}, False) in got
     assert (1, None, {'A': 2}, False) in got
     assert (1, None, {'U': 0}, False) in got

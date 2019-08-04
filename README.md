@@ -16,6 +16,7 @@ Diff is a dict and may contain following keys:
 
 * `A` stands for 'added', it's value - added item.
 * `D` means 'different' and contains subdiff.
+* `E` diffed entity (optional), value - empty instance of entity's class.
 * `I` index for sequence item, used only when prior item was omitted.
 * `N` is a new value for changed item.
 * `O` is a changed item's old value.
@@ -23,9 +24,11 @@ Diff is a dict and may contain following keys:
 * `U` represent unchanged item.
 
 Diff metadata alternates with actual data; simple types specified as is, dicts,
-lists, sets and tuples contain subdiffs for their items with native for such
-types addressing: indexes for lists and tuples and keys for dictionaries. Each
-status type, except `D` and `I`, may be omitted during diff computation.
+lists and tuples contain subdiffs for their items with native for such types
+addressing: indexes for lists and tuples and keys for dictionaries. Each status
+type, except `D`. `E` and `I`, may be omitted during diff computation. `E` tag
+is used with `D` when entity unable to contain diff by itself (set, frozenset);
+`D` contain a list of subdiffs in this case.
 
 Annotated example:
 

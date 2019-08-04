@@ -42,6 +42,7 @@ class Differ(object):
     Resulting diff is a dict and may contain following keys:
     `A` stands for 'added', it's value - added item.
     `D` means 'different' and contains subdiff.
+    `E` diffed entity (optional), value - empty instance of entity's class.
     `I` index for sequence item, used only when prior item was omitted.
     `N` is a new value for changed item.
     `O` is a changed item's old value.
@@ -49,10 +50,12 @@ class Differ(object):
     `U` represent unchanged item.
 
     Diff metadata alternates with actual data; simple types specified as is,
-    dicts, lists, sets and tuples contain subdiffs for their items with native
-    for such types addressing: indexes for lists and tuples and keys for
-    dictionaries. Each status type, except `D` and `I`, may be omitted during
-    diff computation.
+    dicts, lists and tuples contain subdiffs for their items with native for
+    such types addressing: indexes for lists and tuples and keys for
+    dictionaries. Each status type, except `D`. `E` and `I`, may be omitted
+    during diff computation. `E` tag is used with `D` when entity unable to
+    contain diff by itself (set, frozenset); `D` contain a list of subdiffs
+    in this case.
 
     Example:
 
@@ -114,7 +117,7 @@ class Differ(object):
 
         self.__differs = {
             dict: self.diff_dict,
-            frozenset: self.diff_frozenset,
+            frozenset: self.diff_set,
             list: self.diff_list,
             set: self.diff_set,
             tuple: self.diff_tuple,
@@ -271,7 +274,7 @@ class Differ(object):
 
     def diff_set(self, a, b):
         """
-        Compute diff for two sets.
+        Compute diff for two [frozen]sets.
 
         :param a: First set to diff.
         :param b: Second set to diff.
@@ -280,51 +283,29 @@ class Differ(object):
         >>> b = {2, 3}
         >>>
         >>> Differ(U=False).diff_sets(a, b)
-        {'D': {{'R': 1}, {'A': 3}}}
+        {'D': [{'R': 1}, {'A': 3}], 'E': set()}
         >>>
 
         """
-        dif = set()
+        dif = []
 
         for i in a.union(b):
             if i in a and i in b:
                 if self.op_u:
-                    dif.add(_hdict('U', i))
+                    dif.append({'U': i})
 
             elif i in a:  # removed
                 if self.op_r:
-                    dif.add(_hdict('R', None if self.op_trim_r else i))
+                    dif.append({'R': None if self.op_trim_r else i})
 
             else:  # added
                 if self.op_a:
-                    dif.add(_hdict('A', i))
+                    dif.append({'A': i})
 
         if dif:
-            return {'D': dif}
+            return {'D': dif, 'E': a.__class__()}
 
         return {}
-
-    def diff_frozenset(self, a, b):
-        """
-        Compute diff for two frozen sets.
-
-        :param a: First frozenset to diff.
-        :param b: Second frozenset to diff.
-
-        >>> a = frozenset((1, 2))
-        >>> b = frozenset((2, 3))
-        >>>
-        >>> Differ(U=False).diff_frozensets(a, b)
-        {'D': frozenset({{'R': 1}, {'A': 3}})}
-        >>>
-
-        """
-        ret = self.diff_set(a, b)
-
-        if 'D' in ret:
-            ret['D'] = frozenset(ret['D'])
-
-        return ret
 
     def diff_tuple(self, a, b):
         """
@@ -369,19 +350,6 @@ class Differ(object):
 
         """
         self.__differs[cls] = method
-
-
-class _hdict(dict):
-    """
-    Hashable dict, for internal use only.
-    """
-    def __init__(self, op, val):
-        dict.__init__(self)
-        self[op] = val
-        self.__hash = hash((op, val))
-
-    def __hash__(self):
-        return self.__hash
 
 
 class Patcher(object):
@@ -438,7 +406,9 @@ class Patcher(object):
             return getattr(target, self.__patch_method)(ndiff)
 
         if 'D' in ndiff:
-            return self.get_patcher(ndiff['D'].__class__)(target, ndiff)
+            return self.get_patcher(
+                ndiff.get('E', ndiff['D']).__class__
+            )(target, ndiff)
         elif 'N' in ndiff:
             return ndiff['N']
         else:
@@ -561,13 +531,13 @@ class Iterator(object):
             tuple: self.iter_sequence,
         }
 
-    def get_iter(self, value):
+    def get_iter(self, type_, value):
         """
         Return apropriate iterator for passed value.
 
         """
         try:
-            make_iter = self.__iters[value.__class__]
+            make_iter = self.__iters[type_]
         except KeyError:
             raise NotImplementedError
 
@@ -651,7 +621,12 @@ class Iterator(object):
             yield depth, pointer, ndiff, is_pointed
 
             if 'D' in ndiff:
-                stack.append(self.get_iter(ndiff['D']))
+                stack.append(
+                    self.get_iter(
+                        (ndiff['E'] if 'E' in ndiff else ndiff['D']).__class__,
+                        ndiff['D'],
+                    )
+                )
                 depth += 1
 
 

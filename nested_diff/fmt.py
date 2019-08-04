@@ -169,8 +169,8 @@ class TextFormatter(AbstractFormatter):
                     yield self.get_close_token(container_type)
                     yield self.line_separator
 
-                stack.append(self.get_iter(diff['D']))
-                container_type = diff['D'].__class__
+                container_type = diff['E' if 'E' in diff else 'D'].__class__
+                stack.append(self.get_iter(container_type, diff['D']))
                 path_types.append(container_type)
                 emit_container_preamble = True
                 depth += 1

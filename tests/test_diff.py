@@ -1,4 +1,4 @@
-from nested_diff import diff, _hdict
+from nested_diff import diff
 
 
 # Test what doesn't covered by external (JSON based) tests
@@ -8,11 +8,12 @@ def test_frozensets_diff():
     b = frozenset((2, 3))
 
     expected = {
-        'D': frozenset((
-            _hdict('R', 1),
-            _hdict('U', 2),
-            _hdict('A', 3),
-        ))
+        'D': [
+            {'R': 1},
+            {'U': 2},
+            {'A': 3},
+        ],
+        'E': frozenset(),
     }
 
     assert expected == diff(a, b)
@@ -23,11 +24,12 @@ def test_sets_diff():
     b = {2, 3}
 
     expected = {
-        'D': set((
-            _hdict('R', 1),
-            _hdict('U', 2),
-            _hdict('A', 3),
-        ))
+        'D': [
+            {'R': 1},
+            {'U': 2},
+            {'A': 3},
+        ],
+        'E': set(),
     }
 
     assert expected == diff(a, b)
@@ -38,9 +40,10 @@ def test_sets_diff_noAR():
     b = {2, 3}
 
     expected = {
-        'D': set((
-            _hdict('U', 2),
-        ))
+        'D': [
+            {'U': 2},
+        ],
+        'E': set(),
     }
 
     assert expected == diff(a, b, A=False, R=False)
@@ -51,10 +54,11 @@ def test_sets_diff_noU():
     b = {2, 3}
 
     expected = {
-        'D': set((
-            _hdict('R', 1),
-            _hdict('A', 3),
-        ))
+        'D': [
+            {'R': 1},
+            {'A': 3},
+        ],
+        'E': set(),
     }
 
     assert expected == diff(a, b, U=False)
@@ -65,11 +69,12 @@ def test_sets_diff_trimR():
     b = {2, 3}
 
     expected = {
-        'D': set((
-            _hdict('R', None),
-            _hdict('U', 2),
-            _hdict('A', 3),
-        ))
+        'D': [
+            {'R': None},
+            {'U': 2},
+            {'A': 3},
+        ],
+        'E': set(),
     }
 
     assert expected == diff(a, b, trimR=True)

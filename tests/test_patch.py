@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import patch, _hdict
+from nested_diff import patch
 
 
 def test_incorrect_diff_type():
@@ -26,14 +26,15 @@ def test_patch_set():
     b = {0, 1, 2, 3}
 
     ndiff = {
-        'D': set((
-            _hdict('A', 0),
-            _hdict('U', 1),
-            _hdict('U', 2),
-            _hdict('A', 3),
-            _hdict('R', 4),
-            _hdict('R', 5),
-        ))
+        'D': [
+            {'A': 0},
+            {'U': 1},
+            {'U': 2},
+            {'A': 3},
+            {'R': 4},
+            {'R': 5},
+        ],
+        'E': set(),
     }
 
     assert b == patch(a, ndiff)
@@ -44,11 +45,12 @@ def test_patch_frozenset():
     b = frozenset((2, 3))
 
     ndiff = {
-        'D': frozenset((
-            _hdict('R', 1),
-            _hdict('U', 2),
-            _hdict('A', 3),
-        ))
+        'D': [
+            {'R': 1},
+            {'U': 2},
+            {'A': 3},
+        ],
+        'E': frozenset()
     }
 
     assert b == patch(a, ndiff)
