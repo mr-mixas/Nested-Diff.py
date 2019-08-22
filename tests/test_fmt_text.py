@@ -1,3 +1,5 @@
+import pytest
+
 from nested_diff import diff
 from nested_diff.fmt import TextFormatter
 
@@ -161,11 +163,14 @@ def test_dicts_diff_noU():
 """
 
     assert expected == got
+
+
 def test_sets_diff():
     a = {'a',}
     b = {'a', 'b'}
 
     got = TextFormatter().format(diff(a, b))
+
     expected = {
 """\
   <set>
@@ -204,8 +209,8 @@ def test_frozensets_diff():
 
 
 def test_mixed_structures_diff():
-    a = {'one': [{'two': 2}, 3]}
-    b = {'one': [{'two': 0}, 4]}
+    a = {'one': [{'two': 2}, 3, set()]}
+    b = {'one': [{'two': 0}, 4, {True}]}
 
     got = TextFormatter().format(diff(a, b))
     expected = """\
@@ -217,6 +222,14 @@ def test_mixed_structures_diff():
     [1]
 -     3
 +     4
+    [2]
+      <set>
++       True
 """
 
     assert expected == got
+
+
+def test_emitter_absent():
+    with pytest.raises(NotImplementedError):
+        TextFormatter().format({'D': [], 'E': None})

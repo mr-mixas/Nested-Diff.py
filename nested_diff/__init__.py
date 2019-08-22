@@ -524,26 +524,12 @@ class Iterator(object):
         self.sort_keys = sort_keys
 
         self.__iters = {
-            dict: self.iter_mapping,
-            frozenset: self.iter_set,
-            list: self.iter_sequence,
-            set: self.iter_set,
-            tuple: self.iter_sequence,
+            dict: self._iter_mapping,
+            list: self._iter_sequence,
+            tuple: self._iter_sequence,
         }
 
-    def get_iter(self, type_, value):
-        """
-        Return apropriate iterator for passed value.
-
-        """
-        try:
-            make_iter = self.__iters[type_]
-        except KeyError:
-            raise NotImplementedError
-
-        return make_iter(value)
-
-    def iter_mapping(self, value):
+    def _iter_mapping(self, value):
         """
         Iterate over dict-like objects.
 
@@ -552,10 +538,10 @@ class Iterator(object):
         """
         items = sorted(value.items()) if self.sort_keys else value.items()
         for key, val in items:
-            yield key, val, True
+            yield value.__class__, key, val
 
     @staticmethod
-    def iter_sequence(value):
+    def _iter_sequence(value):
         """
         Iterate over lists, tuples and other sequences.
 
@@ -567,20 +553,19 @@ class Iterator(object):
             if 'I' in item:
                 idx = item['I']
 
-            yield idx, item, True
+            yield value.__class__, idx, item
 
             idx += 1
 
-    @staticmethod
-    def iter_set(value):
+    def get_iter(self, value):
         """
-        Iterate over set-like objects.
-
-        :param value: set-like object.
+        Return apropriate iterator for passed diff value.
 
         """
-        for item in value:
-            yield None, item, False
+        try:
+            return self.__iters[value.__class__](value)
+        except KeyError:
+            raise NotImplementedError
 
     def set_iter(self, type_, method):
         """
@@ -589,26 +574,25 @@ class Iterator(object):
         :param type_: data type.
         :param method: method.
 
-        Generator should yield tuples with three items: `pointer`, `value` and
-        boolean flag `is_pointed`.
+        Generator should yield tuples with three items: container_type, pointer
+        and subdiff.
 
         """
         self.__iters[type_] = method
 
-    def iterate(self, ndiff):
+    def iterate(self, ndiff, depth=0):
         """
-        Return tuples with depth, pointer, subdiff and `is_pointed` boolean
-        flag for each nested subdiff.
+        Return tuples with depth, container_type, pointer and subdiff for each
+        nested diff.
 
         :param ndiff: Nested diff.
 
         """
-        depth = 0
-        stack = [((None, _, False) for _ in (ndiff,))]
+        stack = [((None, None, _) for _ in (ndiff,))]
 
         while True:
             try:
-                pointer, ndiff, is_pointed = next(stack[-1])
+                container_type, pointer, subdiff = next(stack[-1])
             except StopIteration:
                 stack.pop()
 
@@ -618,16 +602,12 @@ class Iterator(object):
                 else:
                     break
 
-            yield depth, pointer, ndiff, is_pointed
+            yield depth, container_type, pointer, subdiff
 
-            if 'D' in ndiff:
-                stack.append(
-                    self.get_iter(
-                        (ndiff['E'] if 'E' in ndiff else ndiff['D']).__class__,
-                        ndiff['D'],
-                    )
-                )
-                depth += 1
+            if 'D' in subdiff:
+                if 'E' not in subdiff:
+                    stack.append(self.get_iter(subdiff['D']))
+                    depth += 1
 
 
 def diff(a, b, **kwargs):

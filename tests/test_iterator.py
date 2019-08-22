@@ -7,7 +7,7 @@ def test_scalar_diff():
     a = 0
     b = 1
 
-    expected = [(0, None, {'N': 1, 'O': 0}, False)]
+    expected = [(0, None, None, {'N': 1, 'O': 0})]
     got = list(Iterator().iterate(diff(a, b)))
 
     assert expected == got
@@ -18,13 +18,13 @@ def test_dict_diff():
     b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4}
 
     expected = [
-        (0, None, {'D': {'1': {'U': 1}, '3': {'R': 3}, '2': {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, '4': {'A': 4}}}, False),
-        (1, '1', {'U': 1}, True),
-        (1, '2', {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, True),
-        (2, '10', {'U': 10}, True),
-        (2, '9', {'N': 8, 'O': 9}, True),
-        (1, '3', {'R': 3}, True),
-        (1, '4', {'A': 4}, True),
+        (0, None, None, {'D': {'1': {'U': 1}, '3': {'R': 3}, '2': {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, '4': {'A': 4}}}),
+        (1, dict, '1', {'U': 1}),
+        (1, dict, '2', {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}),
+        (2, dict, '10', {'U': 10}),
+        (2, dict, '9', {'N': 8, 'O': 9}),
+        (1, dict, '3', {'R': 3}),
+        (1, dict, '4', {'A': 4}),
     ]
 
     got = list(Iterator().iterate(diff(a, b)))
@@ -40,13 +40,13 @@ def test_dict_diff_keys_sorted():
     b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4}
 
     expected = [
-        (0, None, {'D': {'1': {'U': 1}, '3': {'R': 3}, '2': {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, '4': {'A': 4}}}, False),
-        (1, '1', {'U': 1}, True),
-        (1, '2', {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, True),
-        (2, '10', {'U': 10}, True),
-        (2, '9', {'N': 8, 'O': 9}, True),
-        (1, '3', {'R': 3}, True),
-        (1, '4', {'A': 4}, True),
+        (0, None, None, {'D': {'1': {'U': 1}, '3': {'R': 3}, '2': {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}, '4': {'A': 4}}}),
+        (1, dict, '1', {'U': 1}),
+        (1, dict, '2', {'D': {'9': {'N': 8, 'O': 9}, '10': {'U': 10}}}),
+        (2, dict, '10', {'U': 10}),
+        (2, dict, '9', {'N': 8, 'O': 9}),
+        (1, dict, '3', {'R': 3}),
+        (1, dict, '4', {'A': 4}),
     ]
 
     got = list(Iterator(sort_keys=True).iterate(diff(a, b)))
@@ -59,12 +59,12 @@ def test_list_diff():
     b = [0, [1, 2], 3]
 
     expected = [
-        (0, None, {'D': [{'U': 0}, {'D': [{'U': 1}, {'A': 2}]}, {'U': 3}]}, False),
-        (1, 0, {'U': 0}, True),
-        (1, 1, {'D': [{'U': 1}, {'A': 2}]}, True),
-        (2, 0, {'U': 1}, True),
-        (2, 1, {'A': 2}, True),
-        (1, 2, {'U': 3}, True),
+        (0, None, None, {'D': [{'U': 0}, {'D': [{'U': 1}, {'A': 2}]}, {'U': 3}]}),
+        (1, list, 0, {'U': 0}),
+        (1, list, 1, {'D': [{'U': 1}, {'A': 2}]}),
+        (2, list, 0, {'U': 1}),
+        (2, list, 1, {'A': 2}),
+        (1, list, 2, {'U': 3}),
     ]
 
     got = list(Iterator().iterate(diff(a, b)))
@@ -77,9 +77,9 @@ def test_list_diff_noU():
     b = [0, [1, 2], 3]
 
     expected = [
-        (0, None, {'D': [{'D': [{'A': 2, 'I': 1}], 'I': 1}]}, False),
-        (1, 1, {'D': [{'A': 2, 'I': 1}], 'I': 1}, True),
-        (2, 1, {'A': 2, 'I': 1}, True),
+        (0, None, None, {'D': [{'D': [{'A': 2, 'I': 1}], 'I': 1}]}),
+        (1, list, 1, {'D': [{'A': 2, 'I': 1}], 'I': 1}),
+        (2, list, 1, {'A': 2, 'I': 1}),
     ]
 
     got = list(Iterator().iterate(diff(a, b, U=False)))
@@ -93,11 +93,7 @@ def test_set_diff():
 
     got = list(Iterator().iterate(diff(a, b)))
 
-    assert len(got) == 4
-    assert got[0] == (0, None, {'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': set()}, False)
-    assert (1, None, {'R': 1}, False) in got
-    assert (1, None, {'A': 2}, False) in got
-    assert (1, None, {'U': 0}, False) in got
+    assert [(0, None, None, {'E': set(), 'D': [{'U': 0}, {'R': 1}, {'A': 2}]})] == got
 
 
 def test_custom_containers():
@@ -107,11 +103,11 @@ def test_custom_containers():
     diff = {'D': custom_container([{'O': 0, 'N': 1}])}
 
     it = Iterator()
-    it.set_iter(custom_container, it.iter_sequence)
+    it.set_iter(custom_container, it._iter_sequence)
 
     expected = [
-        (0, None, {'D': ({'N': 1, 'O': 0},)}, False),
-        (1, 0, {'N': 1, 'O': 0}, True)
+        (0, None, None, {'D': ({'N': 1, 'O': 0},)}),
+        (1, custom_container, 0, {'N': 1, 'O': 0})
     ]
 
     got = list(it.iterate(diff))

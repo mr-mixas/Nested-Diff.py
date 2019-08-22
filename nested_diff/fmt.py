@@ -43,13 +43,11 @@ class AbstractFormatter(nested_diff.Iterator):
         self.open_tokens = {
             dict: '{',
             list: '[',
-            set: '{',
             tuple: '(',
         }
         self.close_tokens = {
             dict: '}',
             list: ']',
-            set: '}',
             tuple: ')',
         }
 
@@ -64,6 +62,7 @@ class AbstractFormatter(nested_diff.Iterator):
         self.diff_value_tokens = self.diff_key_tokens.copy()
 
         self.tags = (  # diff tags to format, sequence is important
+            'D',
             'R',
             'O',
             'N',
@@ -76,14 +75,7 @@ class AbstractFormatter(nested_diff.Iterator):
         Return completely formatted diff
 
         """
-        return ''.join(self.iterate(diff))
-
-    def iterate(self, diff):
-        """
-        Yield diff token by token
-
-        """
-        raise NotImplementedError
+        return ''.join(self.emit_tokens(diff))
 
     def get_open_token(self, type_):
         """
@@ -135,64 +127,58 @@ class TextFormatter(AbstractFormatter):
     Produce human friendly text diff representation with indenting formatting.
 
     """
-    def iterate(self, diff):
+    def __init__(self, *args, **kwargs):
+        super(TextFormatter, self).__init__(*args, **kwargs)
+
+        self.__emitters = {
+            frozenset: self.emit_set_tokens,
+            set: self.emit_set_tokens,
+        }
+
+    def emit_set_tokens(self, diff, depth=0):
+        yield self.diff_key_tokens['D']
+        yield self.indent * depth
+        yield '<'
+        yield diff['E'].__class__.__name__
+        yield '>'
+        yield self.line_separator
+
+        depth += 1
+
+        for subdiff in diff['D']:
+            for tag in ('R', 'A', 'U'):
+                if tag in subdiff:
+                    yield self.diff_value_tokens[tag]
+                    yield self.indent * depth
+                    yield self.repr_value(subdiff[tag])
+                    yield self.line_separator
+                    break
+
+    def get_emitter(self, diff, depth=0):
+        """
+        Return apropriate tokens emitter for diff extention.
+
+        """
+        try:
+            return self.__emitters[diff['E'].__class__](diff, depth=depth)
+        except KeyError:
+            raise NotImplementedError
+
+    def emit_tokens(self, diff, depth=0):
         """
         Yield diff token by token
 
         """
-        depth = 0
-        emit_container_preamble = False
-        key_tag = 'U'
-        stack = [((None, _, False) for _ in (diff,))]
-        path_types = [None]  # even with stack
+        key_tag = 'D'
 
-        while True:
-            try:
-                pointer, diff, is_pointed = next(stack[-1])
-            except StopIteration:
-                stack.pop()
-
-                if stack:
-                    depth -= 1
-                    path_types.pop()
-                    container_type = path_types[-1]
-                    continue
-                else:
-                    break
-
-            if 'D' in diff:
-                if is_pointed:
-                    yield self.diff_key_tokens['D']
-                    yield self.indent * (depth - 1)
-                    yield self.get_open_token(container_type)
-                    yield self.repr_key(pointer)
-                    yield self.get_close_token(container_type)
-                    yield self.line_separator
-
-                container_type = diff['E' if 'E' in diff else 'D'].__class__
-                stack.append(self.get_iter(container_type, diff['D']))
-                path_types.append(container_type)
-                emit_container_preamble = True
-                depth += 1
-                continue
-
-            if is_pointed:
-                key_tag = None
-            elif emit_container_preamble:  # for keyless collections like set
-                key_tag = 'U'
-                emit_container_preamble = False
-                yield self.diff_key_tokens[key_tag]
-                yield self.indent * (depth - 1)
-                yield '<'
-                yield container_type.__name__
-                yield '>'
-                yield self.line_separator
+        for depth, container_type, pointer, diff in self.iterate(
+                diff, depth=depth):
 
             for tag in self.tags:
                 if tag in diff:
+                    # key/index
                     if key_tag is None:
-                        # key/index
-                        key_tag = tag if tag == 'A' or tag == 'R' else 'U'
+                        key_tag = 'D' if tag in ('O', 'N') else tag
                         yield self.diff_key_tokens[key_tag]
                         yield self.indent * (depth - 1)
                         yield self.get_open_token(container_type)
@@ -201,10 +187,18 @@ class TextFormatter(AbstractFormatter):
                         yield self.line_separator
 
                     # value
+                    if tag == 'D':
+                        if 'E' in diff:
+                            for i in self.get_emitter(diff, depth=depth):
+                                yield i
+                        break
+
                     yield self.diff_value_tokens[tag]
                     yield self.indent * depth
                     yield self.repr_value(diff[tag])
                     yield self.line_separator
+
+            key_tag = None
 
 
 class TermFormatter(TextFormatter):
