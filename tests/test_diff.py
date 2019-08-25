@@ -87,6 +87,34 @@ def test_sets_diff_empty_diff():
     assert {} == diff(a, b, A=False, U=False)
 
 
+def test_singleline_str_diff():
+    a = 'bar'
+    b = 'baz'
+
+    expected = {'N': 'baz', 'O': 'bar'}
+
+    assert expected == diff(a, b, multiline_diff_context=3)
+
+
+def test_multiline_str_diff():
+    a = 'one\ntwo\nthree'
+    b = 'one\n2\nthree\n'
+
+    expected = {
+        'D': [
+            {'I': [0, 3, 0, 4]},
+            {'U': 'one'},
+            {'R': 'two'},
+            {'A': '2'},
+            {'U': 'three'},
+            {'A': ''}
+        ],
+        'E': '',
+    }
+
+    assert expected == diff(a, b, multiline_diff_context=3)
+
+
 def test_tuples_diff():
     a = (1, 2, 4, 5)
     b = (0, 1, 2, 3)

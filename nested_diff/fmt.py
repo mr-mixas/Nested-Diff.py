@@ -54,6 +54,7 @@ class AbstractFormatter(nested_diff.Iterator):
         self.diff_key_tokens = {
             'A': '+ ',
             'D': '  ',
+            'I': '  ',
             'N': '+ ',
             'O': '- ',
             'R': '- ',
@@ -69,6 +70,22 @@ class AbstractFormatter(nested_diff.Iterator):
             'A',
             'U',
         )
+
+    @staticmethod
+    def get_unified_diff_range(start, stop):
+        """
+        Return unified diff lines range.
+
+        """
+        length = stop - start
+
+        if length > 1:
+            return '{},{}'.format(start + 1, length)
+
+        if length == 1:
+            return str(start + 1)
+
+        return '{},{}'.format(start, length)
 
     def format(self, diff):
         """
@@ -133,7 +150,29 @@ class TextFormatter(AbstractFormatter):
         self.__emitters = {
             frozenset: self.emit_set_tokens,
             set: self.emit_set_tokens,
+            str: self.emit_miltiline_tokens,
         }
+
+    def emit_miltiline_tokens(self, diff, depth=0):
+        """
+        Yield unified diff for multiline strings.
+
+        """
+        for subdiff in diff['D']:
+            for tag in ('I', 'R', 'A', 'U'):
+                if tag in subdiff:
+                    yield self.diff_value_tokens[tag]
+                    yield self.indent * depth
+                    if tag == 'I':
+                        yield '@@'
+                        yield ' -' + self.get_unified_diff_range(
+                            subdiff[tag][0], subdiff[tag][1])
+                        yield ' +' + self.get_unified_diff_range(
+                            subdiff[tag][2], subdiff[tag][3]) + ' '
+                        yield '@@'
+                    else:
+                        yield subdiff[tag]
+                    yield self.line_separator
 
     def emit_set_tokens(self, diff, depth=0):
         yield self.diff_key_tokens['D']
@@ -222,6 +261,7 @@ class TermFormatter(TextFormatter):
         self.diff_value_tokens = {
             'A': '\033[32m+ ',
             'D': '  ',
+            'I': '\033[35m  ',
             'N': '\033[32m+ ',
             'O': '\033[31m- ',
             'R': '\033[31m- ',

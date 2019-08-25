@@ -88,7 +88,7 @@ class Differ(object):
 
     """
     def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False,
-                 diff_method=None):
+                 diff_method=None, multiline_diff_context=-1):
         """
         Construct Differ.
 
@@ -103,6 +103,9 @@ class Differ(object):
         diffed object will be called for diff. Second diffed object and all
         Differ opts will be passed as arguments, diff expected for output.
         Disabled (`None`) by default.
+
+        `multiline_diff_context` defines amount of context lines for multiline
+        string diffs, multiline diffs disabled when value is negative.
 
         """
         self.__diff_method = diff_method
@@ -122,6 +125,10 @@ class Differ(object):
             set: self.diff_set,
             tuple: self.diff_tuple,
         }
+
+        if multiline_diff_context >= 0:
+            self.__differs[str] = self.diff_multiline
+            self.multiline_diff_context = multiline_diff_context
 
     def diff(self, a, b):
         """
@@ -269,6 +276,49 @@ class Differ(object):
 
         if dif:
             return {'D': dif}
+
+        return {}
+
+    def diff_multiline(self, a, b):
+        """
+        Compute diff for multiline strings.
+        Highly experimental! Format may be changed at any time.
+
+        """
+        lines_a = a.split('\n', -1)
+        lines_b = b.split('\n', -1)
+
+        if len(lines_a) == len(lines_b) == 1:
+            return self.diff__default(a, b)
+
+        dif = []
+        self.lcs.set_seq1(lines_a)
+        self.lcs.set_seq2(lines_b)
+
+        for group in self.lcs.get_grouped_opcodes(self.multiline_diff_context):
+            dif.append({
+                'I': [
+                    group[0][1], group[-1][2],
+                    group[0][3], group[-1][4],
+                ]
+            })
+
+            for op, i1, i2, j1, j2 in group:
+                if op == 'equal':
+                    for line in lines_a[i1:i2]:
+                        dif.append({'U': line})
+                    continue
+
+                if op in {'replace', 'delete'}:
+                    for line in lines_a[i1:i2]:
+                        dif.append({'R': line})
+
+                if op in {'replace', 'insert'}:
+                    for line in lines_b[j1:j2]:
+                        dif.append({'A': line})
+
+        if dif:
+            return {'D': dif, 'E': a.__class__()}
 
         return {}
 
