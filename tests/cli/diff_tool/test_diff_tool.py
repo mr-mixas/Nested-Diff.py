@@ -102,6 +102,53 @@ def test_ini_ifmt(capsys, expected, fullname, PY2):
         assert expected == captured.out
 
 
+def test_multiline_default(capsys, expected, fullname):
+    DiffApp(args=(
+        fullname('multiline.a.json', shared=True),
+        fullname('multiline.b.json', shared=True),
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
+def test_multiline_default_term(capsys, expected, fullname):
+    DiffApp(args=(
+        fullname('multiline.a.json', shared=True),
+        fullname('multiline.b.json', shared=True),
+        '--ofmt', 'term',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
+def test_multiline_context_0(capsys, expected, fullname):
+    DiffApp(args=(
+        fullname('multiline.a.json', shared=True),
+        fullname('multiline.b.json', shared=True),
+        '--text-ctx', '0'
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
+def test_multiline_disabled(capsys, expected, fullname):
+    DiffApp(args=(
+        fullname('multiline.a.json', shared=True),
+        fullname('multiline.b.json', shared=True),
+        '--text-ctx', '-1'
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
 def test_text_ofmt(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),

@@ -1,0 +1,22 @@
+  {'text'}[0m
+[35m    @@ -2,13 +2,13 @@[0m
+    another common line.[0m
+    And one more common line.[0m
+    Still a common line, but last, next will be different.[0m
+[31m-   First string for a.[0m
+[31m-   Second striing for a.[0m
+[31m-   Third string, belongs to file a.[0m
+[31m-   And fourth. Again to a.[0m
+[32m+   First string for b.[0m
+[32m+   Second striing for b.[0m
+[32m+   Third string, belongs to file b.[0m
+[32m+   And fourth. Again to b.[0m
+    Wow! Common strings began! =)[0m
+    Another common line.[0m
+[31m-   Different line. AAaaaaa!![0m
+[31m-   Aaaaa!![0m
+[31m-   A![0m
+[32m+   Different line. BBbbbbb!![0m
+[32m+   Bbbbb!![0m
+[32m+   B![0m
+    [0m

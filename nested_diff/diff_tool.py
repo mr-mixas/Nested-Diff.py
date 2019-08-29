@@ -40,6 +40,7 @@ class App(nested_diff.cli.App):
         """
         return nested_diff.diff(
             a, b,
+            multiline_diff_context=self.args.text_ctx,
             A=self.args.A,
             N=self.args.N,
             O=self.args.O,
@@ -57,6 +58,15 @@ class App(nested_diff.cli.App):
 
         parser.add_argument('file1', type=argparse.FileType())
         parser.add_argument('file2', type=argparse.FileType())
+
+        parser.add_argument(
+            '--text-ctx',
+            default=3,
+            metavar='NUM',
+            type=int,
+            help='Amount of context lines for multiline strings diffs; ' +
+                 'negative value will disable multiline diffs, default is 3'
+        )
 
         parser.add_argument(
             '--ifmt',
