@@ -201,7 +201,7 @@ class TextFormatter(AbstractFormatter):
         try:
             return self.__emitters[diff['E'].__class__](diff, depth=depth)
         except KeyError:
-            raise NotImplementedError
+            raise NotImplementedError from None
 
     def emit_tokens(self, diff, depth=0):
         """
@@ -228,8 +228,7 @@ class TextFormatter(AbstractFormatter):
                     # value
                     if tag == 'D':
                         if 'E' in diff:
-                            for i in self.get_emitter(diff, depth=depth):
-                                yield i
+                            yield from self.get_emitter(diff, depth=depth)
                         break
 
                     yield self.diff_value_tokens[tag]

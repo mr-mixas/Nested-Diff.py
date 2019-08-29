@@ -437,7 +437,7 @@ class Patcher(object):
         try:
             return self.__patchers[cls]
         except KeyError:
-            raise NotImplementedError("unsupported object type")
+            raise NotImplementedError("unsupported object type") from None
 
     def patch(self, target, ndiff):
         """
@@ -615,7 +615,7 @@ class Iterator(object):
         try:
             return self.__iters[value.__class__](value)
         except KeyError:
-            raise NotImplementedError
+            raise NotImplementedError from None
 
     def set_iter(self, type_, method):
         """

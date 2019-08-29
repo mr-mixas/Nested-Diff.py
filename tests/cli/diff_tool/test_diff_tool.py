@@ -36,7 +36,7 @@ def test_default_diff_with_tty(capsys, expected, fullname, stringio_tty):
     assert expected == captured.out
 
 
-def test_enable_U_ops(capsys, expected, fullname, PY2):
+def test_enable_U_ops(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
@@ -46,11 +46,7 @@ def test_enable_U_ops(capsys, expected, fullname, PY2):
 
     captured = capsys.readouterr()
     assert '' == captured.err
-
-    if PY2:  # json in python2 emit trailing spaces
-        assert json.loads(expected) == json.loads(captured.out)
-    else:
-        assert expected == captured.out
+    assert expected == captured.out
 
 
 def test_output_file(capsys, expected, fullname, testfile):
@@ -68,7 +64,7 @@ def test_output_file(capsys, expected, fullname, testfile):
     assert json.loads(expected) == json.loads(testfile('out'))
 
 
-def test_json_ofmt_opts(capsys, expected, fullname, PY2):
+def test_json_ofmt_opts(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
@@ -78,14 +74,10 @@ def test_json_ofmt_opts(capsys, expected, fullname, PY2):
 
     captured = capsys.readouterr()
     assert '' == captured.err
-
-    if PY2:  # json in python2 emit trailing spaces
-        assert json.loads(expected) == json.loads(captured.out)
-    else:
-        assert expected == captured.out
+    assert expected == captured.out
 
 
-def test_ini_ifmt(capsys, expected, fullname, PY2):
+def test_ini_ifmt(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.ini', shared=True),
         fullname('lists.b.ini', shared=True),
@@ -95,11 +87,7 @@ def test_ini_ifmt(capsys, expected, fullname, PY2):
 
     captured = capsys.readouterr()
     assert '' == captured.err
-
-    if PY2:  # json in python2 emit trailing spaces
-        assert json.loads(expected) == json.loads(captured.out)
-    else:
-        assert expected == captured.out
+    assert expected == captured.out
 
 
 def test_multiline_default(capsys, expected, fullname):
@@ -173,7 +161,7 @@ def test_term_ofmt(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_yaml_ifmt(capsys, expected, fullname, PY2):
+def test_yaml_ifmt(capsys, expected, fullname):
     DiffApp(args=(
         fullname('lists.a.yaml', shared=True),
         fullname('lists.b.yaml', shared=True),
@@ -183,11 +171,7 @@ def test_yaml_ifmt(capsys, expected, fullname, PY2):
 
     captured = capsys.readouterr()
     assert '' == captured.err
-
-    if PY2:  # json in python2 emit trailing spaces
-        assert json.loads(expected) == json.loads(captured.out)
-    else:
-        assert expected == captured.out
+    assert expected == captured.out
 
 
 def test_yaml_ofmt(capsys, expected, fullname):

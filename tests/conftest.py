@@ -2,12 +2,7 @@ import os
 import pytest
 import sys
 
-IS_PY2 = sys.version[0] == '2'
-
-if IS_PY2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
+from io import StringIO
 
 
 def get_testfile_name(request, suffix='dat', shared=False):
@@ -19,11 +14,6 @@ def get_testfile_name(request, suffix='dat', shared=False):
     else:
         return os.path.splitext(request.module.__file__)[0] + \
             '.' + request.function.__name__ + '.' + suffix
-
-
-@pytest.fixture
-def PY2():
-    return IS_PY2
 
 
 @pytest.fixture
