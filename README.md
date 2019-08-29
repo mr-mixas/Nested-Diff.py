@@ -82,19 +82,13 @@ diff:
 >>>
 >>> c = patch(c, diff(c, d))
 >>> assert c == d
->>>
->>>
->>> a = {   1, 2, 4, 5}
->>> b = {0, 1, 2, 3}
->>>
->>> Differ(U=False).diff_sets(a, b)
-{'D': {{'A': 0}, {'R': 4}, {'A': 3}, {'R': 5}}}
->>>
 ```
 
 ## Subclassing
 
 ```
+from nested_diff import Differ
+
 class CustomDiffer(Differ):
     """
     Use custom precision for floats.
@@ -125,5 +119,6 @@ Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.
 ## See Also
 
 [deepdiff](https://pypi.org/project/deepdiff/),
+[jsondiff](https://pypi.org/project/jsondiff/),
 [jsonpatch](https://pypi.org/project/jsonpatch/),
 [json-delta](https://pypi.org/project/json-delta/)
