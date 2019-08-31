@@ -64,7 +64,7 @@ class App(nested_diff.cli.App):
             default=3,
             metavar='NUM',
             type=int,
-            help='Amount of context lines for multiline strings diffs; ' +
+            help='amount of context lines for multiline strings diffs; ' +
                  'negative value will disable multiline diffs, default is 3'
         )
 
@@ -92,16 +92,16 @@ class App(nested_diff.cli.App):
             help='output file; STDERR is used if omitted',
         )
 
-        parser.add_argument('-A', '--A', type=self.decode_bool_arg, nargs='?',
-            const=True, default=True, help="Show added items")
-        parser.add_argument('-N', '--N', type=self.decode_bool_arg, nargs='?',
-            const=True, default=True, help="Show item's new values")
-        parser.add_argument('-O', '--O', type=self.decode_bool_arg, nargs='?',
-            const=True, default=True, help="Show item's old values")
-        parser.add_argument('-R', '--R', type=self.decode_bool_arg, nargs='?',
-            const=True, default=True, help="Show removed items")
-        parser.add_argument('-U', '--U', type=self.decode_bool_arg, nargs='?',
-            const=True, default=False, help="Show unchanged items")
+        parser.add_argument('-A', type=int, choices=(0, 1), default=1,
+                            help='show added items; enabled by deefault')
+        parser.add_argument('-N', type=int, choices=(0, 1), default=1,
+                            help='show item\'s new values; enabled by default')
+        parser.add_argument('-O', type=int, choices=(0, 1), default=1,
+                            help='show item\'s old values; enabled by default')
+        parser.add_argument('-R', type=int, choices=(0, 1), default=1,
+                            help='Show removed items; enabled by default')
+        parser.add_argument('-U', type=int, choices=(0, 1), default=0,
+                            help='show unchanged items; disabled by default')
 
         return parser
 

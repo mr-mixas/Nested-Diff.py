@@ -41,7 +41,7 @@ def test_enable_U_ops(capsys, expected, fullname):
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'json',
-        '-U', '-U=1', '--U', '--U=1', '--U', '1',
+        '-U=1', '-U', '1',
     )).run()
 
     captured = capsys.readouterr()
