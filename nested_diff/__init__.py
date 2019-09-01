@@ -29,7 +29,7 @@ from pickle import dumps
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
-__version__ = '0.4'
+__version__ = '0.5'
 __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
