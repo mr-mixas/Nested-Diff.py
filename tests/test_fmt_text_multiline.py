@@ -55,7 +55,7 @@ def test_trailing_newlines():
   A
 - B
 + b
-  
+  \n\
 """
     assert expected == got
 

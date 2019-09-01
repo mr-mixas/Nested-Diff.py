@@ -171,7 +171,7 @@ class JsonDumper(Dumper):
     tty_final_new_line = True
 
     def __init__(self, **kwargs):
-        super(JsonDumper, self).__init__()
+        super().__init__()
 
         import json
         self.encoder = json.JSONEncoder(**self.get_opts(kwargs))
@@ -194,7 +194,7 @@ class JsonLoader(Loader):
 
     """
     def __init__(self, **kwargs):
-        super(JsonLoader, self).__init__()
+        super().__init__()
 
         import json
         self.decoder = json.JSONDecoder(**self.get_opts(kwargs))
@@ -209,7 +209,7 @@ class IniLoader(Loader):
 
     """
     def __init__(self, **kwargs):
-        super(IniLoader, self).__init__()
+        super().__init__()
 
         if sys.version[0] == '2':
             from ConfigParser import ConfigParser
@@ -250,7 +250,7 @@ class YamlDumper(Dumper):
 
     """
     def __init__(self, **kwargs):
-        super(YamlDumper, self).__init__()
+        super().__init__()
 
         import yaml
         self.codec = yaml
@@ -273,7 +273,7 @@ class YamlLoader(Loader):
 
     """
     def __init__(self, **kwargs):
-        super(YamlLoader, self).__init__()
+        super().__init__()
 
         import yaml
         self.codec = yaml

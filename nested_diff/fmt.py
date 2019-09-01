@@ -35,7 +35,7 @@ class AbstractFormatter(nested_diff.Iterator):
         line_separator='\n',
         **kwargs
     ):
-        super(AbstractFormatter, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.indent = indent
         self.line_separator = line_separator
@@ -145,7 +145,7 @@ class TextFormatter(AbstractFormatter):
 
     """
     def __init__(self, *args, **kwargs):
-        super(TextFormatter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.__emitters = {
             frozenset: self.emit_set_tokens,
@@ -175,6 +175,10 @@ class TextFormatter(AbstractFormatter):
                     yield self.line_separator
 
     def emit_set_tokens(self, diff, depth=0):
+        """
+        Yield tokens for set's and frozenset's diff
+
+        """
         yield self.diff_key_tokens['D']
         yield self.indent * depth
         yield '<'
@@ -245,7 +249,7 @@ class TermFormatter(TextFormatter):
 
     """
     def __init__(self, *args, **kwargs):
-        super(TermFormatter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.line_separator = '\033[0m' + self.line_separator
 

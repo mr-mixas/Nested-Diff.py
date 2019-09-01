@@ -166,18 +166,18 @@ def test_dicts_diff_noU():
 
 
 def test_sets_diff():
-    a = {'a',}
+    a = {'a'}
     b = {'a', 'b'}
 
     got = TextFormatter().format(diff(a, b))
 
     expected = {
-"""\
+        """\
   <set>
     'a'
 +   'b'
 """,
-"""\
+        """\
   <set>
 +   'b'
     'a'
@@ -193,12 +193,12 @@ def test_frozensets_diff():
 
     got = TextFormatter().format(diff(a, b))
     expected = {
-"""\
+        """\
   <frozenset>
     'a'
 +   'b'
 """,
-"""\
+        """\
   <frozenset>
 +   'b'
     'a'

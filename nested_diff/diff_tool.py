@@ -49,7 +49,7 @@ class App(nested_diff.cli.App):
         )
 
     def get_argparser(self, description=None):
-        parent = super(App, self).get_argparser()
+        parent = super().get_argparser()
         parser = argparse.ArgumentParser(
             conflict_handler='resolve',
             description=description,
@@ -117,13 +117,13 @@ class App(nested_diff.cli.App):
         elif fmt == 'text':
             return TextDumper(**kwargs)
 
-        return super(App, self).get_dumper(fmt, **kwargs)
+        return super().get_dumper(fmt, **kwargs)
 
     def get_loader(self, fmt, **kwargs):
         if fmt == 'ini':
             return nested_diff.cli.IniLoader(**kwargs)
 
-        return super(App, self).get_loader(fmt, **kwargs)
+        return super().get_loader(fmt, **kwargs)
 
     def run(self):
         diff = self.diff(
@@ -136,7 +136,7 @@ class App(nested_diff.cli.App):
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):
     def __init__(self, **kwargs):
-        super(AbstractFmtDumper, self).__init__()
+        super().__init__()
         import nested_diff.fmt
 
     def encode(self, data):
@@ -150,13 +150,13 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 
 class TermDumper(AbstractFmtDumper):
     def __init__(self, **kwargs):
-        super(TermDumper, self).__init__()
+        super().__init__()
         self.encoder = nested_diff.fmt.TermFormatter(**self.get_opts(kwargs))
 
 
 class TextDumper(AbstractFmtDumper):
     def __init__(self, **kwargs):
-        super(TextDumper, self).__init__()
+        super().__init__()
         self.encoder = nested_diff.fmt.TextFormatter(**self.get_opts(kwargs))
 
 

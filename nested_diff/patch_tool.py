@@ -29,7 +29,7 @@ class App(nested_diff.cli.App):
 
     """
     def get_argparser(self, description=None):
-        parent = super(App, self).get_argparser()
+        parent = super().get_argparser()
         parser = argparse.ArgumentParser(
             conflict_handler='resolve',
             description=description,
