@@ -20,9 +20,6 @@ Recursive diff for nested structures, implementation of
 https://github.com/mr-mixas/Nested-Diff
 
 """
-
-from __future__ import unicode_literals
-
 from difflib import SequenceMatcher
 from pickle import dumps
 
@@ -379,27 +376,27 @@ class Differ(object):
 
         return ret
 
-    def get_differ(self, cls):
+    def get_differ(self, type_):
         """
         Return diff method for specified type.
 
-        :param cls: diffed object type.
+        :param type_: diffed object type.
 
         """
         try:
-            return self.__differs[cls]
+            return self.__differs[type_]
         except KeyError:
             return self.diff__default
 
-    def set_differ(self, cls, method):
+    def set_differ(self, type_, method):
         """
         Set differ for specified data type.
 
-        :param cls: diffed object type.
+        :param type_: diffed object type.
         :param method: diff method.
 
         """
-        self.__differs[cls] = method
+        self.__differs[type_] = method
 
 
 class Patcher(object):
@@ -427,15 +424,15 @@ class Patcher(object):
             tuple: self.patch_tuple,
         }
 
-    def get_patcher(self, cls):
+    def get_patcher(self, type_):
         """
         Return patch method for specified type.
 
-        :param cls: patched object type.
+        :param type_: patched object type.
 
         """
         try:
-            return self.__patchers[cls]
+            return self.__patchers[type_]
         except KeyError:
             raise NotImplementedError("unsupported object type") from None
 
@@ -547,15 +544,15 @@ class Patcher(object):
         """
         return frozenset(self.patch_set(set(target), ndiff))
 
-    def set_patcher(self, cls, method):
+    def set_patcher(self, type_, method):
         """
         Set patcher for specified data type.
 
-        :param cls: patched object type.
+        :param type_: patched object type.
         :param method: patch method.
 
         """
-        self.__patchers[cls] = method
+        self.__patchers[type_] = method
 
 
 class Iterator(object):
@@ -587,8 +584,10 @@ class Iterator(object):
 
         """
         items = sorted(value.items()) if self.sort_keys else value.items()
+        type_ = value.__class__
+
         for key, val in items:
-            yield value.__class__, key, val
+            yield type_, key, val
 
     @staticmethod
     def _iter_sequence(value):
@@ -599,11 +598,13 @@ class Iterator(object):
 
         """
         idx = 0
+        type_ = value.__class__
+
         for item in value:
             if 'I' in item:
                 idx = item['I']
 
-            yield value.__class__, idx, item
+            yield type_, idx, item
 
             idx += 1
 

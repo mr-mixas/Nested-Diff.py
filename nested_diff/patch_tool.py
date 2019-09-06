@@ -18,7 +18,6 @@
 Patch tool for nested diff.
 
 """
-
 import argparse
 import nested_diff.cli
 

@@ -18,9 +18,6 @@
 Formatters for Nested Diff.
 
 """
-
-from __future__ import unicode_literals
-
 import nested_diff
 
 
