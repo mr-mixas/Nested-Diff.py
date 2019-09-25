@@ -3,8 +3,6 @@
 Recursive diff for python nested structures, implementation of
 [Nested-Diff](https://github.com/mr-mixas/Nested-Diff)
 
-Builtin containers traversed recursively, all other types compared by values.
-
 [![Build Status](https://travis-ci.org/mr-mixas/Nested-Diff.py.svg?branch=master)](https://travis-ci.org/mr-mixas/Nested-Diff.py)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
@@ -113,6 +111,41 @@ a = [0.001, 0.01, 0.1]
 b = [0.002, 0.02, 0.2]
 
 assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
+```
+
+## Formatting diffs
+
+```
+>>> from nested_diff import diff
+>>> from nested_diff.fmt import TextFormatter
+>>>
+>>> a = {'one': 1, 'two': 'some\ntext\ninside'}
+>>> b = {'one': 0, 'two': 'some\ntext'}
+>>>
+>>> d = diff(a, b, U=False, multiline_diff_context=3)
+>>> print(TextFormatter().format(d))
+  {'two'}
+    @@ -1,3 +1,2 @@
+    some
+    text
+-   inside
+  {'one'}
+-   1
++   0
+>>>
+```
+
+## Command line tools
+
+```
+mixas@mixas-laptop:~/github/Nested-Diff.py$ cat a.json b.json
+[0, [1],    3]
+[0, [1, 2], 3]
+mixas@mixas-laptop:~/github/Nested-Diff.py$ nested_diff a.json b.json
+  [1]
++   [1]
++     2
+mixas@mixas-laptop:~/github/Nested-Diff.py$
 ```
 
 ## License
