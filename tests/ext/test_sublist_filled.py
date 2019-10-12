@@ -14,7 +14,7 @@ def test_diff():
 
 
 def test_patch():
-    a = [[]]
-    b = [[0]]
     diff = {'D': [{'D': [{'A': 0}]}]}
-    assert b == nested_diff.patch(a, diff)
+    target = [[]]
+    patched = [[0]]
+    assert patched == nested_diff.patch(target, diff)

@@ -8,13 +8,13 @@ import nested_diff
 def test_diff():
     a = None
     b = ''
-    diff = {'N': '', 'O': None}
+    diff = {'O': None, 'N': ''}
     opts = {}
     assert diff == nested_diff.diff(a, b, **opts)
 
 
 def test_patch():
-    a = None
-    b = ''
-    diff = {'N': '', 'O': None}
-    assert b == nested_diff.patch(a, diff)
+    diff = {'O': None, 'N': ''}
+    target = None
+    patched = ''
+    assert patched == nested_diff.patch(target, diff)

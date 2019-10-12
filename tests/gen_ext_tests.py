@@ -39,11 +39,8 @@ for file_name in os.listdir(DIR_INPUT):
         f.write('    opts = ' + repr(test_opts) + '\n')
         f.write('    assert diff == nested_diff.diff(a, b, **opts)\n')
 
-        if not test_opts or (('A' not in test_opts or test_opts['A']) and
-                             ('N' not in test_opts or test_opts['N']) and
-                             ('R' not in test_opts or test_opts['R'])):
-            f.write('\n\ndef test_patch():\n')
-            f.write('    a = ' + repr(data['a']) + '\n')
-            f.write('    b = ' + repr(data['b']) + '\n')
-            f.write('    diff = ' + repr(data['diff']) + '\n')
-            f.write('    assert b == nested_diff.patch(a, diff)\n')
+        f.write('\n\ndef test_patch():\n')
+        f.write('    diff = ' + repr(data['diff']) + '\n')
+        f.write('    target = ' + repr(data['a']) + '\n')
+        f.write('    patched = ' + repr(data.get('patched', data['b'])) + '\n')
+        f.write('    assert patched == nested_diff.patch(target, diff)\n')

@@ -11,3 +11,10 @@ def test_diff():
     diff = {'D': [{'U': 0}, {'O': 1}, {'U': 2}]}
     opts = {'N': False}
     assert diff == nested_diff.diff(a, b, **opts)
+
+
+def test_patch():
+    diff = {'D': [{'U': 0}, {'O': 1}, {'U': 2}]}
+    target = [0, 1, 2]
+    patched = [0, 1, 2]
+    assert patched == nested_diff.patch(target, diff)

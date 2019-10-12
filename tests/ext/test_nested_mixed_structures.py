@@ -8,13 +8,13 @@ import nested_diff
 def test_diff():
     a = {'one': [{'two': {'three': [7, 4]}}, 8]}
     b = {'one': [{'two': {'three': [7, 3]}}, 8]}
-    diff = {'D': {'one': {'D': [{'D': {'two': {'D': {'three': {'D': [{'U': 7}, {'N': 3, 'O': 4}]}}}}}, {'U': 8}]}}}
+    diff = {'D': {'one': {'D': [{'D': {'two': {'D': {'three': {'D': [{'U': 7}, {'O': 4, 'N': 3}]}}}}}, {'U': 8}]}}}
     opts = {}
     assert diff == nested_diff.diff(a, b, **opts)
 
 
 def test_patch():
-    a = {'one': [{'two': {'three': [7, 4]}}, 8]}
-    b = {'one': [{'two': {'three': [7, 3]}}, 8]}
-    diff = {'D': {'one': {'D': [{'D': {'two': {'D': {'three': {'D': [{'U': 7}, {'N': 3, 'O': 4}]}}}}}, {'U': 8}]}}}
-    assert b == nested_diff.patch(a, diff)
+    diff = {'D': {'one': {'D': [{'D': {'two': {'D': {'three': {'D': [{'U': 7}, {'O': 4, 'N': 3}]}}}}}, {'U': 8}]}}}
+    target = {'one': [{'two': {'three': [7, 4]}}, 8]}
+    patched = {'one': [{'two': {'three': [7, 3]}}, 8]}
+    assert patched == nested_diff.patch(target, diff)

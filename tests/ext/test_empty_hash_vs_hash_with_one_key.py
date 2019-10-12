@@ -14,7 +14,7 @@ def test_diff():
 
 
 def test_patch():
-    a = {}
-    b = {'one': 1}
     diff = {'D': {'one': {'A': 1}}}
-    assert b == nested_diff.patch(a, diff)
+    target = {}
+    patched = {'one': 1}
+    assert patched == nested_diff.patch(target, diff)

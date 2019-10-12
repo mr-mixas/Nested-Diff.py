@@ -6,15 +6,15 @@ import nested_diff
 
 
 def test_diff():
-    a = {'three': 3, 'two': {'nine': 9, 'ten': 10}, 'one': 1}
-    b = {'four': 4, 'two': {'nine': 8, 'ten': 10}, 'one': 1}
-    diff = {'D': {'three': {'R': 3}, 'four': {'A': 4}, 'two': {'D': {'nine': {'N': 8, 'O': 9}}}}}
+    a = {'three': 3, 'one': 1, 'two': {'ten': 10, 'nine': 9}}
+    b = {'four': 4, 'one': 1, 'two': {'ten': 10, 'nine': 8}}
+    diff = {'D': {'four': {'A': 4}, 'three': {'R': 3}, 'two': {'D': {'nine': {'O': 9, 'N': 8}}}}}
     opts = {'U': False}
     assert diff == nested_diff.diff(a, b, **opts)
 
 
 def test_patch():
-    a = {'three': 3, 'two': {'nine': 9, 'ten': 10}, 'one': 1}
-    b = {'four': 4, 'two': {'nine': 8, 'ten': 10}, 'one': 1}
-    diff = {'D': {'three': {'R': 3}, 'four': {'A': 4}, 'two': {'D': {'nine': {'N': 8, 'O': 9}}}}}
-    assert b == nested_diff.patch(a, diff)
+    diff = {'D': {'four': {'A': 4}, 'three': {'R': 3}, 'two': {'D': {'nine': {'O': 9, 'N': 8}}}}}
+    target = {'three': 3, 'one': 1, 'two': {'ten': 10, 'nine': 9}}
+    patched = {'four': 4, 'one': 1, 'two': {'ten': 10, 'nine': 8}}
+    assert patched == nested_diff.patch(target, diff)

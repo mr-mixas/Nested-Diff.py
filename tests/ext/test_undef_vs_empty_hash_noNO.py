@@ -9,5 +9,12 @@ def test_diff():
     a = None
     b = {}
     diff = {}
-    opts = {'N': False, 'O': False}
+    opts = {'O': False, 'N': False}
     assert diff == nested_diff.diff(a, b, **opts)
+
+
+def test_patch():
+    diff = {}
+    target = None
+    patched = None
+    assert patched == nested_diff.patch(target, diff)
