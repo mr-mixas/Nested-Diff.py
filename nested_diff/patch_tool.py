@@ -59,9 +59,11 @@ class App(nested_diff.cli.App):
 
         self.dump(argparse.FileType('w')(self.args.target_file), patched)
 
+        return 0
+
 
 def cli():
-    App().run()
+    return App().run()
 
 
 if __name__ == '__main__':

@@ -130,8 +130,11 @@ class App(nested_diff.cli.App):
             self.load(self.args.file1),
             self.load(self.args.file2),
         )
+        exit_code = 0 if not diff or 'U' in diff else 1
 
         self.dump(self.args.out, diff)
+
+        return exit_code
 
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):
@@ -161,7 +164,7 @@ class TextDumper(AbstractFmtDumper):
 
 
 def cli():
-    App().run()
+    return App().run()
 
 
 if __name__ == '__main__':

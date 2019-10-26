@@ -32,6 +32,8 @@ class App(object):
     version = nested_diff.__version__
 
     def __init__(self, args=None):
+        self.override_excepthook()  # ASAP, but overridable by descendants
+
         self.argparser = self.get_argparser(description=self.__doc__)
         self.args = self.argparser.parse_args(args=args)
 
@@ -116,6 +118,20 @@ class App(object):
 
     def load(self, file_):
         return self.loader.load(file_)
+
+    @staticmethod
+    def override_excepthook():
+        """
+        Change default exit code for unhandled exceptions from 1 to 127.
+        Mainly for diff tool (version control systems treat 1 as difference
+        in files).
+
+        """
+        def overrided(*args, **kwargs):
+            sys.__excepthook__(*args, **kwargs)  # do all the same
+            raise SystemExit(127)  # but change exit code
+
+        sys.excepthook = overrided
 
     def run(self):
         raise NotImplementedError

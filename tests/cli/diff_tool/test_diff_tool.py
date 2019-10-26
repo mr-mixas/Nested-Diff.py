@@ -184,3 +184,31 @@ def test_yaml_ofmt(capsys, expected, fullname):
     captured = capsys.readouterr()
     assert '' == captured.err
     assert expected == captured.out
+
+
+def test_exit_code_diff_absent(fullname):
+    code = DiffApp(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.a.json', shared=True),
+    )).run()
+
+    assert code == 0
+
+
+def test_exit_code_diff_absent_U_opt_enabled(fullname):
+    code = DiffApp(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.a.json', shared=True),
+        '-U=1',
+    )).run()
+
+    assert code == 0
+
+
+def test_exit_code_diff_present(fullname):
+    code = DiffApp(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.json', shared=True),
+    )).run()
+
+    assert code == 1
