@@ -227,20 +227,8 @@ class IniLoader(Loader):
     def __init__(self, **kwargs):
         super().__init__()
 
-        if sys.version[0] == '2':
-            from ConfigParser import ConfigParser
-
-            class Py2ConfigParserWrapper(ConfigParser):
-                # old ConfigParser has no method read_string
-                def read_string(self, data):
-                    from StringIO import StringIO
-                    sio = StringIO(data)
-                    return ConfigParser.readfp(self, sio)
-
-            self.decoder = Py2ConfigParserWrapper(**kwargs)
-        else:
-            from configparser import ConfigParser
-            self.decoder = ConfigParser(**kwargs)
+        from configparser import ConfigParser
+        self.decoder = ConfigParser(**kwargs)
 
     def decode(self, data):
         self.decoder.read_string(data)

@@ -1,12 +1,6 @@
 import json
-import os
-import pytest
-import sys
 
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+from unittest import mock
 
 from nested_diff.diff_tool import App as DiffApp
 

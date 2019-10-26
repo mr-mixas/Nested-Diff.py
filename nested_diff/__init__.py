@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Recursive diff for nested structures, implementation of
 https://github.com/mr-mixas/Nested-Diff
@@ -84,8 +83,8 @@ class Differ(object):
     compared by values.
 
     """
-    def __init__(self, A=True, N=True, O=True, R=True, U=True, trimR=False,
-                 diff_method=None, multiline_diff_context=-1):
+    def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E741
+                 trimR=False, diff_method=None, multiline_diff_context=-1):
         """
         Construct Differ.
 
@@ -144,7 +143,7 @@ class Differ(object):
                 b,
                 A=self.op_a,
                 N=self.op_n,
-                O=self.op_o,
+                O=self.op_o,  # noqa: E741
                 R=self.op_r,
                 U=self.op_u,
                 trimR=self.op_trim_r,

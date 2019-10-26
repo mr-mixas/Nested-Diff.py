@@ -1,5 +1,3 @@
-import pytest
-
 from nested_diff import Differ, Patcher
 
 

@@ -120,4 +120,4 @@ def test_tuples_diff():
     b = (0, 1, 2, 3)
 
     assert {'D': ({'A': 0}, {'I': 2, 'N': 3}, {'R': 5})} == \
-        diff(a, b, O=False, U=False)
+        diff(a, b, O=False, U=False)  # noqa: E741

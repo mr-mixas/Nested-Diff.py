@@ -64,7 +64,3 @@ class App(nested_diff.cli.App):
 
 def cli():
     return App().run()
-
-
-if __name__ == '__main__':
-    App().run()

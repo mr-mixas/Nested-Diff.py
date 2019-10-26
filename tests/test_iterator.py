@@ -122,4 +122,4 @@ def test_unknown_containers():
     diff = {'D': unknown_container([{'O': 0, 'N': 1}])}
 
     with pytest.raises(NotImplementedError):
-        got = list(Iterator().iterate(diff))
+        list(Iterator().iterate(diff))

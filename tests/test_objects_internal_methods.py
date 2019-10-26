@@ -42,7 +42,7 @@ def test_diff_opts():
     a = Custom(value=0)
     b = Custom(value=1)
 
-    result = diff(a, b, O=False, diff_method='__diff__')
+    result = diff(a, b, O=False, diff_method='__diff__')  # noqa: E741
     subdiff = result.pop('D')
 
     assert isinstance(subdiff, Custom)

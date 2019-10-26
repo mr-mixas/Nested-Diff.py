@@ -43,7 +43,7 @@ class App(nested_diff.cli.App):
             multiline_diff_context=self.args.text_ctx,
             A=self.args.A,
             N=self.args.N,
-            O=self.args.O,
+            O=self.args.O,  # noqa: E741
             R=self.args.R,
             U=self.args.U,
         )
@@ -64,7 +64,7 @@ class App(nested_diff.cli.App):
             default=3,
             metavar='NUM',
             type=int,
-            help='amount of context lines for multiline strings diffs; ' +
+            help='amount of context lines for multiline strings diffs; '
                  'negative value will disable multiline diffs, default is 3'
         )
 
@@ -89,7 +89,7 @@ class App(nested_diff.cli.App):
             default=sys.stdout,
             metavar='FILE',
             type=argparse.FileType('w'),
-            help='output file; STDERR is used if omitted',
+            help='output file; STDOUT is used if omitted',
         )
 
         parser.add_argument('-A', type=int, choices=(0, 1), default=1,
@@ -138,10 +138,6 @@ class App(nested_diff.cli.App):
 
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):
-    def __init__(self, **kwargs):
-        super().__init__()
-        import nested_diff.fmt
-
     def encode(self, data):
         return self.encoder.format(data)
 
@@ -154,18 +150,16 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 class TermDumper(AbstractFmtDumper):
     def __init__(self, **kwargs):
         super().__init__()
+        import nested_diff.fmt
         self.encoder = nested_diff.fmt.TermFormatter(**self.get_opts(kwargs))
 
 
 class TextDumper(AbstractFmtDumper):
     def __init__(self, **kwargs):
         super().__init__()
+        import nested_diff.fmt
         self.encoder = nested_diff.fmt.TextFormatter(**self.get_opts(kwargs))
 
 
 def cli():
     return App().run()
-
-
-if __name__ == '__main__':
-    App().run()

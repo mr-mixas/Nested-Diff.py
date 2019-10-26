@@ -1,6 +1,5 @@
 import os
 import pytest
-import sys
 
 from io import StringIO
 
