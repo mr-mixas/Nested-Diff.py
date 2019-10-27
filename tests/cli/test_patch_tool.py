@@ -1,7 +1,10 @@
 import json
+import pytest
+
+from unittest import mock
 from shutil import copyfile
 
-from nested_diff.patch_tool import App as PatchApp
+import nested_diff.patch_tool
 
 
 def test_default_patch(capsys, content, fullname):
@@ -9,7 +12,7 @@ def test_default_patch(capsys, content, fullname):
         fullname('lists.a.json', shared=True),
         fullname('got'),
     )
-    PatchApp(args=(
+    nested_diff.patch_tool.App(args=(
         fullname('got'),
         fullname('lists.patch.json', shared=True),
     )).run()
@@ -27,7 +30,7 @@ def test_json_ofmt_opts(capsys, content, expected, fullname):
         fullname('lists.a.json', shared=True),
         fullname('got'),
     )
-    PatchApp(args=(
+    nested_diff.patch_tool.App(args=(
         fullname('got'),
         fullname('lists.patch.json', shared=True),
         '--ofmt', 'json',
@@ -46,7 +49,7 @@ def test_yaml_ifmt(capsys, content, fullname):
         fullname('lists.a.yaml', shared=True),
         fullname('got'),
     )
-    PatchApp(args=(
+    nested_diff.patch_tool.App(args=(
         fullname('got'),
         fullname('lists.patch.yaml', shared=True),
         '--ifmt', 'yaml',
@@ -66,7 +69,7 @@ def test_yaml_ofmt(capsys, content, expected, fullname):
         fullname('lists.a.json', shared=True),
         fullname('got'),
     )
-    PatchApp(args=(
+    nested_diff.patch_tool.App(args=(
         fullname('got'),
         fullname('lists.patch.json', shared=True),
         '--ofmt', 'yaml',
@@ -77,3 +80,15 @@ def test_yaml_ofmt(capsys, content, expected, fullname):
     assert '' == captured.err
 
     assert expected == content(fullname('got'))
+
+
+def test_entry_point(capsys):
+    with mock.patch('sys.argv', ['nested_patch', '-h']):
+        with pytest.raises(SystemExit) as e:
+            nested_diff.patch_tool.cli()
+
+        assert e.value.code == 0
+
+    captured = capsys.readouterr()
+    assert captured.out.startswith('usage: nested_patch [-h] [--version]')
+    assert '' == captured.err

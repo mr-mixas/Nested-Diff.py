@@ -1,12 +1,13 @@
 import json
+import pytest
 
 from unittest import mock
 
-from nested_diff.diff_tool import App as DiffApp
+import nested_diff.diff_tool
 
 
 def test_default_diff(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
     )).run()
@@ -19,7 +20,7 @@ def test_default_diff(capsys, expected, fullname):
 
 def test_default_diff_with_tty(capsys, expected, fullname, stringio_tty):
     with mock.patch('sys.stdout.isatty', return_value=True):
-        DiffApp(args=(
+        nested_diff.diff_tool.App(args=(
             fullname('lists.a.json', shared=True),
             fullname('lists.b.json', shared=True),
         )).run()
@@ -31,7 +32,7 @@ def test_default_diff_with_tty(capsys, expected, fullname, stringio_tty):
 
 
 def test_enable_U_ops(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'json',
@@ -44,22 +45,22 @@ def test_enable_U_ops(capsys, expected, fullname):
 
 
 def test_output_file(capsys, expected, fullname, testfile):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'json',
-        '--out', fullname('out'),
+        '--out', fullname('got'),
     )).run()
 
     captured = capsys.readouterr()
     assert '' == captured.err
     assert '' == captured.out
 
-    assert json.loads(expected) == json.loads(testfile('out'))
+    assert json.loads(expected) == json.loads(testfile('got'))
 
 
 def test_json_ofmt_opts(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'json',
@@ -72,7 +73,7 @@ def test_json_ofmt_opts(capsys, expected, fullname):
 
 
 def test_ini_ifmt(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.ini', shared=True),
         fullname('lists.b.ini', shared=True),
         '--ifmt', 'ini',
@@ -85,7 +86,7 @@ def test_ini_ifmt(capsys, expected, fullname):
 
 
 def test_multiline_default(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('multiline.a.json', shared=True),
         fullname('multiline.b.json', shared=True),
     )).run()
@@ -96,7 +97,7 @@ def test_multiline_default(capsys, expected, fullname):
 
 
 def test_multiline_default_term(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('multiline.a.json', shared=True),
         fullname('multiline.b.json', shared=True),
         '--ofmt', 'term',
@@ -108,7 +109,7 @@ def test_multiline_default_term(capsys, expected, fullname):
 
 
 def test_multiline_context_0(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('multiline.a.json', shared=True),
         fullname('multiline.b.json', shared=True),
         '--text-ctx', '0'
@@ -120,7 +121,7 @@ def test_multiline_context_0(capsys, expected, fullname):
 
 
 def test_multiline_disabled(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('multiline.a.json', shared=True),
         fullname('multiline.b.json', shared=True),
         '--text-ctx', '-1'
@@ -132,7 +133,7 @@ def test_multiline_disabled(capsys, expected, fullname):
 
 
 def test_text_ofmt(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'text',
@@ -144,7 +145,7 @@ def test_text_ofmt(capsys, expected, fullname):
 
 
 def test_term_ofmt(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'term',
@@ -156,7 +157,7 @@ def test_term_ofmt(capsys, expected, fullname):
 
 
 def test_yaml_ifmt(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.yaml', shared=True),
         fullname('lists.b.yaml', shared=True),
         '--ifmt', 'yaml',
@@ -169,7 +170,7 @@ def test_yaml_ifmt(capsys, expected, fullname):
 
 
 def test_yaml_ofmt(capsys, expected, fullname):
-    DiffApp(args=(
+    nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'yaml',
@@ -181,7 +182,7 @@ def test_yaml_ofmt(capsys, expected, fullname):
 
 
 def test_exit_code_diff_absent(fullname):
-    code = DiffApp(args=(
+    code = nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.a.json', shared=True),
     )).run()
@@ -190,7 +191,7 @@ def test_exit_code_diff_absent(fullname):
 
 
 def test_exit_code_diff_absent_U_opt_enabled(fullname):
-    code = DiffApp(args=(
+    code = nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.a.json', shared=True),
         '-U=1',
@@ -200,9 +201,21 @@ def test_exit_code_diff_absent_U_opt_enabled(fullname):
 
 
 def test_exit_code_diff_present(fullname):
-    code = DiffApp(args=(
+    code = nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
     )).run()
 
     assert code == 1
+
+
+def test_entry_point(capsys):
+    with mock.patch('sys.argv', ['nested_diff', '-h']):
+        with pytest.raises(SystemExit) as e:
+            nested_diff.diff_tool.cli()
+
+        assert e.value.code == 0
+
+    captured = capsys.readouterr()
+    assert captured.out.startswith('usage: nested_diff [-h] [--version]')
+    assert '' == captured.err

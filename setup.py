@@ -22,6 +22,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Libraries :: Python Modules',
@@ -34,7 +35,7 @@ setup(
     packages=['nested_diff'],
     test_suite='tests',
     setup_requires=["pytest-runner"],
-    tests_require=['pytest', 'pyyaml'],
+    tests_require=['pytest', 'pytest-flake8', 'pyyaml'],
     entry_points={
         'console_scripts': [
             'nested_diff=nested_diff.diff_tool:cli',
