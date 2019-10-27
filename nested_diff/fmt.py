@@ -84,12 +84,12 @@ class AbstractFormatter(nested_diff.Iterator):
 
         return '{},{}'.format(start, length)
 
-    def format(self, diff):
+    def format(self, diff, **kwargs):
         """
         Return completely formatted diff
 
         """
-        return ''.join(self.emit_tokens(diff))
+        return ''.join(self.emit_tokens(diff, **kwargs))
 
     def get_open_token(self, type_):
         """
@@ -204,11 +204,15 @@ class TextFormatter(AbstractFormatter):
         except KeyError:
             raise NotImplementedError from None
 
-    def emit_tokens(self, diff, depth=0):
+    def emit_tokens(self, diff, depth=0, header='', footer=''):
         """
-        Yield diff token by token
+        Yield formatted diff token by token
 
         """
+        if header:
+            yield header
+            yield self.line_separator
+
         key_tag = 'D'
 
         for depth, container_type, pointer, diff in self.iterate(
@@ -238,6 +242,10 @@ class TextFormatter(AbstractFormatter):
                     yield self.line_separator
 
             key_tag = None
+
+        if footer:
+            yield footer
+            yield self.line_separator
 
 
 class TermFormatter(TextFormatter):

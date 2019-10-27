@@ -233,3 +233,22 @@ def test_mixed_structures_diff():
 def test_emitter_absent():
     with pytest.raises(NotImplementedError):
         TextFormatter().format({'D': [], 'E': None})
+
+
+def test_wrappings():
+    a = 0
+    b = 1
+
+    got = TextFormatter().format(
+        diff(a, b),
+        header='Header',
+        footer='Footer',
+    )
+    print(got)
+    expected = """\
+Header
+- 0
++ 1
+Footer
+"""
+    assert expected == got
