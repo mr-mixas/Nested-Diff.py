@@ -19,6 +19,7 @@ Common stuff for cli tools.
 
 """
 import argparse
+import os
 import sys
 
 import nested_diff
@@ -40,10 +41,6 @@ class App(object):
         self.dumper = self.get_dumper(
             self.args.ofmt,
             **self._decode_fmt_opts(self.args.ofmt_opts)
-        )
-        self.loader = self.get_loader(
-            self.args.ifmt,
-            **self._decode_fmt_opts(self.args.ifmt_opts)
         )
 
     @staticmethod
@@ -69,9 +66,9 @@ class App(object):
         parser.add_argument(
             '--ifmt',
             type=str,
-            default='json',
-            choices=('json', 'yaml'),
-            help='input files format; "json" used by default',
+            default='auto',
+            choices=('auto', 'json', 'yaml'),
+            help='input files format; "auto" used by default',
         )
 
         parser.add_argument(
@@ -108,6 +105,22 @@ class App(object):
         raise RuntimeError('Unsupported output format: ' + fmt)
 
     @staticmethod
+    def guess_fmt(fp, default, ignore_fps=(sys.stdin, sys.stdout, sys.stderr)):
+        """
+        Guess format of a file object based on its extention.
+
+        """
+        if fp in ignore_fps:
+            return default
+
+        fmt = os.path.splitext(fp.name)[-1].split('.')[-1].lower()
+
+        if fmt == 'yml':
+            fmt = 'yaml'
+
+        return fmt if fmt else default
+
+    @staticmethod
     def get_loader(fmt, **kwargs):
         if fmt == 'json':
             return JsonLoader(**kwargs)
@@ -117,7 +130,13 @@ class App(object):
         raise RuntimeError('Unsupported input format: ' + fmt)
 
     def load(self, file_):
-        return self.loader.load(file_)
+        if self.args.ifmt == 'auto':
+            fmt = self.guess_fmt(file_, 'json')
+        else:
+            fmt = self.args.ifmt
+
+        fmt_opts = self._decode_fmt_opts(self.args.ifmt_opts)
+        return self.get_loader(fmt, **fmt_opts).load(file_)
 
     @staticmethod
     def override_excepthook():

@@ -71,9 +71,9 @@ class App(nested_diff.cli.App):
         parser.add_argument(
             '--ifmt',
             type=str,
-            default='json',
-            choices=('ini', 'json', 'yaml'),
-            help='input files format; "json" used by default',
+            default='auto',
+            choices=('auto', 'ini', 'json', 'yaml'),
+            help='input files format; "auto" used by default',
         )
 
         parser.add_argument(

@@ -9,7 +9,7 @@ import nested_diff.diff_tool
 def test_default_diff(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
-        fullname('lists.b.json', shared=True),
+        fullname('lists.b.yaml', shared=True),
     )).run()
 
     captured = capsys.readouterr()

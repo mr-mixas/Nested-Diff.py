@@ -10,11 +10,11 @@ import nested_diff.patch_tool
 def test_default_patch(capsys, content, fullname):
     copyfile(
         fullname('lists.a.json', shared=True),
-        fullname('got'),
+        fullname('got.json'),
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got'),
-        fullname('lists.patch.json', shared=True),
+        fullname('got.json'),
+        fullname('lists.patch.yaml', shared=True),
     )).run()
 
     captured = capsys.readouterr()
@@ -22,16 +22,16 @@ def test_default_patch(capsys, content, fullname):
     assert '' == captured.err
 
     assert json.loads(content(fullname('lists.b.json', shared=True))) == \
-        json.loads(content(fullname('got')))
+        json.loads(content(fullname('got.json')))
 
 
 def test_json_ofmt_opts(capsys, content, expected, fullname):
     copyfile(
         fullname('lists.a.json', shared=True),
-        fullname('got'),
+        fullname('got.json'),
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got'),
+        fullname('got.json'),
         fullname('lists.patch.json', shared=True),
         '--ofmt', 'json',
         '--ofmt-opts', '{"indent": null}',
@@ -41,7 +41,7 @@ def test_json_ofmt_opts(capsys, content, expected, fullname):
     assert '' == captured.out
     assert '' == captured.err
 
-    assert json.loads(expected) == json.loads(content(fullname('got')))
+    assert json.loads(expected) == json.loads(content(fullname('got.json')))
 
 
 def test_yaml_ifmt(capsys, content, fullname):
@@ -67,10 +67,10 @@ def test_yaml_ifmt(capsys, content, fullname):
 def test_yaml_ofmt(capsys, content, expected, fullname):
     copyfile(
         fullname('lists.a.json', shared=True),
-        fullname('got'),
+        fullname('got.json'),
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got'),
+        fullname('got.json'),
         fullname('lists.patch.json', shared=True),
         '--ofmt', 'yaml',
     )).run()
@@ -79,7 +79,7 @@ def test_yaml_ofmt(capsys, content, expected, fullname):
     assert '' == captured.out
     assert '' == captured.err
 
-    assert expected == content(fullname('got'))
+    assert expected == content(fullname('got.json'))
 
 
 def test_entry_point(capsys):

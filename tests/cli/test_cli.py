@@ -61,3 +61,31 @@ def test_excepthook_raise_system_exit_127():
         sys.excepthook(None, None, None)
 
     assert e.value.code == 127
+
+
+def test_guess_fmt_aliases():
+    class FakeFP(object):
+        name = None
+
+    aliases = {
+        'yml': 'yaml',
+    }
+    fake_fp = FakeFP()
+    app = cli.App(args=())
+
+    for ext in sorted(aliases):
+        fake_fp.name = 'filename.' + ext
+        assert aliases[ext] == app.guess_fmt(fake_fp, 'default')
+
+
+def test_guess_fmt_ignore_fp_defaults():
+    app = cli.App(args=())
+    for fp in sys.stdin, sys.stdout, sys.stderr:
+        assert 'default' == app.guess_fmt(fp, 'default')
+
+
+def test_get_loader_unsupported_fmt():
+    app = cli.App(args=())
+
+    with pytest.raises(RuntimeError, match='Unsupported input format: garbage'):
+        app.get_loader('garbage')
