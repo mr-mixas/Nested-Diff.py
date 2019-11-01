@@ -30,6 +30,12 @@ class App(nested_diff.cli.App):
     Diff tool for nested data structures
 
     """
+    default_ifmt = 'auto'
+    default_ofmt = 'auto'
+
+    supported_ifmts = ('auto', 'ini', 'json', 'yaml')
+    supported_ofmts = ('auto', 'json', 'term', 'text', 'yaml')
+
     def diff(self, a, b):
         """
         Return diff for passed objects
@@ -56,9 +62,6 @@ class App(nested_diff.cli.App):
             parents=(parent,)
         )
 
-        parser.add_argument('file1', type=argparse.FileType())
-        parser.add_argument('file2', type=argparse.FileType())
-
         parser.add_argument(
             '--text-ctx',
             default=3,
@@ -66,22 +69,6 @@ class App(nested_diff.cli.App):
             type=int,
             help='amount of context lines for multiline strings diffs; '
                  'negative value will disable multiline diffs, default is 3'
-        )
-
-        parser.add_argument(
-            '--ifmt',
-            type=str,
-            default='auto',
-            choices=('auto', 'ini', 'json', 'yaml'),
-            help='input files format; "auto" used by default',
-        )
-
-        parser.add_argument(
-            '--ofmt',
-            type=str,
-            default='auto',
-            choices=('auto', 'json', 'term', 'text', 'yaml'),
-            help='output format',
         )
 
         parser.add_argument(
@@ -104,6 +91,11 @@ class App(nested_diff.cli.App):
                             help='show unchanged items; disabled by default')
 
         return parser
+
+    @staticmethod
+    def get_argparser_positional_args():
+        yield 'file1', {'type': argparse.FileType()}
+        yield 'file2', {'type': argparse.FileType()}
 
     def get_dumper(self, fmt, **kwargs):
         if fmt == 'auto':

@@ -30,6 +30,12 @@ class App(object):
     Base class for command line tools
 
     """
+    default_ifmt = 'auto'
+    default_ofmt = 'json'
+
+    supported_ifmts = ('auto', 'json', 'yaml')
+    supported_ofmts = ('json', 'yaml')
+
     version = nested_diff.__version__
 
     def __init__(self, args=None):
@@ -66,9 +72,10 @@ class App(object):
         parser.add_argument(
             '--ifmt',
             type=str,
-            default='auto',
-            choices=('auto', 'json', 'yaml'),
-            help='input files format; "auto" used by default',
+            default=self.default_ifmt,
+            choices=sorted(self.supported_ifmts),
+            help='input files format; "' + self.default_ifmt +
+                 '" used by default',
         )
 
         parser.add_argument(
@@ -81,9 +88,10 @@ class App(object):
         parser.add_argument(
             '--ofmt',
             type=str,
-            default='json',
-            choices=('json', 'yaml'),
-            help='output files format; "json" used by default',
+            default=self.default_ofmt,
+            choices=sorted(self.supported_ofmts),
+            help='output files format; "' + self.default_ofmt +
+                 '" used by default',
         )
 
         parser.add_argument(
@@ -93,7 +101,21 @@ class App(object):
             help='output files format options',
         )
 
+        for name, opts in self.get_argparser_positional_args():
+            parser.add_argument(name, **opts)
+
         return parser
+
+    @staticmethod
+    def get_argparser_positional_args():
+        """
+        Yield tuples (name, opts) for each positional argument.
+
+        It's almost impossible to remove positional args from argparser, so
+        we use method here to be able to override it in subclasses.
+
+        """
+        return ()
 
     @staticmethod
     def get_dumper(fmt, **kwargs):
