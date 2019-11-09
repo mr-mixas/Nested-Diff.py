@@ -150,7 +150,7 @@ mixas@mixas-laptop:~/github/Nested-Diff.py$
 
 ## License
 
-Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0>).
+Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 ## See Also
 
