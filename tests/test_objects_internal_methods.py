@@ -16,7 +16,6 @@ class Custom(object):
         return ret
 
     def __patch__(self, ndiff):
-        print(ndiff)
         if 'N' in ndiff:
             return ndiff['N']
 

@@ -569,95 +569,102 @@ class Iterator(object):
         """
         self.sort_keys = sort_keys
 
-        self.__iters = {
-            dict: self._iter_mapping,
-            list: self._iter_sequence,
-            tuple: self._iter_sequence,
+        self.__iterators = {
+            dict: self.iterate_mapping_diff,
+            list: self.iterate_sequence_diff,
+            tuple: self.iterate_sequence_diff,
         }
 
-    def _iter_mapping(self, value):
+    @staticmethod
+    def iterate__default(ndiff):
         """
-        Iterate over dict-like objects.
+        Yield final diff (do not iterate deeper).
 
-        :param value: mapping.
+        :param ndiff: nested diff.
 
         """
-        items = sorted(value.items()) if self.sort_keys else value.items()
-        type_ = value.__class__
+        yield ndiff, None, None
 
-        for key, val in items:
-            yield type_, key, val
+    def iterate_mapping_diff(self, ndiff):
+        """
+        Iterate over dict-like nested diffs.
+
+        :param ndiff: nested diff.
+
+        """
+        items = ndiff['D'].items()
+
+        for key, subdiff in sorted(items) if self.sort_keys else items:
+            yield ndiff, key, subdiff
 
     @staticmethod
-    def _iter_sequence(value):
+    def iterate_sequence_diff(ndiff):
         """
-        Iterate over lists, tuples and other sequences.
+        Iterate over lists, tuples and alike nedsted diffs.
 
-        :param value: sequence.
+        :param ndiff: nested diff.
 
         """
         idx = 0
-        type_ = value.__class__
 
-        for item in value:
+        for item in ndiff['D']:
             if 'I' in item:
                 idx = item['I']
 
-            yield type_, idx, item
+            yield ndiff, idx, item
 
             idx += 1
 
-    def get_iter(self, value):
+    def get_iterator(self, ndiff):
         """
-        Return apropriate iterator for passed diff value.
+        Return apropriate iterator for passed nested diff.
+
+        :param ndiff: nested diff.
 
         """
+        if 'E' in ndiff:
+            return self.iterate__default(ndiff)
+
         try:
-            return self.__iters[value.__class__](value)
+            return self.__iterators[ndiff['D'].__class__](ndiff)
         except KeyError:
-            raise NotImplementedError from None
+            return self.iterate__default(ndiff)
 
-    def set_iter(self, type_, method):
+    def set_iterator(self, type_, method):
         """
-        Set generator for specified data type.
+        Set generator for specified nested diff type.
 
-        :param type_: data type.
+        :param type_: type.
         :param method: method.
 
-        Generator should yield tuples with three items: container_type, pointer
-        and subdiff.
+        Generator should yield tuples with three items: diff, key, and
+        subdiff for this key.
 
         """
-        self.__iters[type_] = method
+        self.__iterators[type_] = method
 
-    def iterate(self, ndiff, depth=0):
+    def iterate(self, ndiff):
         """
-        Return tuples with depth, container_type, pointer and subdiff for each
-        nested diff.
+        Yield tuples with diff, key and subdiff for each nested diff.
 
-        :param ndiff: Nested diff.
+        :param ndiff: nested diff.
 
         """
-        stack = [((None, None, _) for _ in (ndiff,))]
+        stack = [self.get_iterator(ndiff)]
 
-        while True:
+        while stack:
             try:
-                container_type, pointer, subdiff = next(stack[-1])
+                diff, key, subdiff = next(stack[-1])
             except StopIteration:
                 stack.pop()
+                continue
 
-                if stack:
-                    depth -= 1
-                    continue
-                else:
-                    break
+            yield diff, key, subdiff
 
-            yield depth, container_type, pointer, subdiff
+            if subdiff is None:
+                continue
 
-            if 'D' in subdiff:
-                if 'E' not in subdiff:
-                    stack.append(self.get_iter(subdiff['D']))
-                    depth += 1
+            stack.append(self.get_iterator(subdiff))
 
 
 def diff(a, b, **kwargs):

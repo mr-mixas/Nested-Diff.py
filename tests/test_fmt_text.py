@@ -173,14 +173,14 @@ def test_sets_diff():
 
     expected = {
         """\
-  <set>
-    'a'
-+   'b'
+# <set>
+  'a'
++ 'b'
 """,
         """\
-  <set>
-+   'b'
-    'a'
+# <set>
++ 'b'
+  'a'
 """,
     }
 
@@ -194,14 +194,14 @@ def test_frozensets_diff():
     got = TextFormatter().format(diff(a, b))
     expected = {
         """\
-  <frozenset>
-    'a'
-+   'b'
+# <frozenset>
+  'a'
++ 'b'
 """,
         """\
-  <frozenset>
-+   'b'
-    'a'
+# <frozenset>
++ 'b'
+  'a'
 """,
     }
 
@@ -223,8 +223,8 @@ def test_mixed_structures_diff():
 -     3
 +     4
     [2]
-      <set>
-+       True
+#     <set>
++     True
 """
 
     assert expected == got
@@ -244,11 +244,20 @@ def test_wrappings():
         header='Header',
         footer='Footer',
     )
-    print(got)
+
     expected = """\
 Header
 - 0
 + 1
 Footer
+"""
+    assert expected == got
+
+
+def test_depth():
+    got = TextFormatter().format(diff(0, 1), depth=2)
+    expected = """\
+-     0
++     1
 """
     assert expected == got

@@ -7,7 +7,7 @@ def test_equal():
     b = 'A\nB\nC'
 
     got = TextFormatter().format(diff(a, b, U=False, multiline_diff_context=3))
-    print(got)
+
     assert '' == got
 
 
@@ -17,6 +17,7 @@ def test_line_added():
 
     got = TextFormatter().format(diff(a, b, multiline_diff_context=3))
     expected = """\
+# <str>
   @@ -1,2 +1,3 @@
 + A
   B
@@ -31,6 +32,7 @@ def test_line_changed():
 
     got = TextFormatter().format(diff(a, b, multiline_diff_context=3))
     expected = """\
+# <str>
   @@ -1,3 +1,3 @@
   A
 - B
@@ -46,6 +48,7 @@ def test_line_removed():
 
     got = TextFormatter().format(diff(a, b, multiline_diff_context=3))
     expected = """\
+# <str>
   @@ -1,3 +1,2 @@
   A
 - B
@@ -60,6 +63,7 @@ def test_trailing_newlines():
 
     got = TextFormatter().format(diff(a, b, multiline_diff_context=3))
     expected = """\
+# <str>
   @@ -1,3 +1,3 @@
   A
 - B
@@ -75,6 +79,7 @@ def test_line_changed_ctx_0():
 
     got = TextFormatter().format(diff(a, b, multiline_diff_context=0))
     expected = """\
+# <str>
   @@ -2 +2 @@
 - B
 + b
