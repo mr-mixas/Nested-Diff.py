@@ -189,23 +189,27 @@ class Differ(object):
         """
         dif = {}
 
-        for key in set(list(a) + list(b)):
-            if key in a and key in b:
-                if a[key] == b[key]:
-                    if self.op_u:
-                        dif[key] = {'U': a[key]}
-                else:
-                    subdiff = self.diff(a[key], b[key])
-                    if subdiff:
-                        dif[key] = subdiff
-
-            elif key in a:  # removed
-                if self.op_r:
-                    dif[key] = {'R': None if self.op_trim_r else a[key]}
-
-            else:  # added
+        for key in set(a).union(b):
+            try:
+                one = a[key]
+                try:
+                    two = b[key]
+                except KeyError:  # removed
+                    if self.op_r:
+                        dif[key] = {'R': None if self.op_trim_r else one}
+                    continue
+            except KeyError:  # added
                 if self.op_a:
                     dif[key] = {'A': b[key]}
+                continue
+
+            if one == two:
+                if self.op_u:
+                    dif[key] = {'U': one}
+            else:
+                subdiff = self.diff(one, two)
+                if subdiff:
+                    dif[key] = subdiff
 
         if dif:
             return {'D': dif}
