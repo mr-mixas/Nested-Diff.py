@@ -47,7 +47,7 @@ def test_dict_diff():
         (d['D']['3'], None, None),
 
         (d, '4', d['D']['4']),
-        (d['D']['4'], None, None)
+        (d['D']['4'], None, None),
     ]
 
     got = list(Iterator().iterate(d))
@@ -77,7 +77,7 @@ def test_dict_diff__keys_sorted():
         (d['D']['3'], None, None),
 
         (d, '4', d['D']['4']),
-        (d['D']['4'], None, None)
+        (d['D']['4'], None, None),
     ]
 
     got = list(Iterator(sort_keys=True).iterate(d))
@@ -116,7 +116,7 @@ def test_list_diff__noU():
     expected = [
         (d, 1, d['D'][0]),
         (d['D'][0], 1, d['D'][0]['D'][0]),
-        (d['D'][0]['D'][0], None, None)
+        (d['D'][0]['D'][0], None, None),
     ]
 
     got = list(Iterator().iterate(d))
@@ -130,7 +130,7 @@ def test_set_diff():
     d = diff(a, b)
 
     expected = [
-        ({'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': set()}, None, None)
+        ({'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': set()}, None, None),
     ]
 
     got = list(Iterator().iterate(d))
@@ -149,7 +149,7 @@ def test_custom_containers():
 
     expected = [
         (d, 0, d['D'][0]),
-        (d['D'][0], None, None)
+        (d['D'][0], None, None),
     ]
 
     got = list(it.iterate(d))

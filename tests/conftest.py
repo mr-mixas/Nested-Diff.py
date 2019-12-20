@@ -8,7 +8,7 @@ def get_testfile_name(request, suffix='dat', shared=False):
     if shared:
         return os.path.join(
             os.path.dirname(request.module.__file__),
-            'shared.' + suffix
+            'shared.' + suffix,
         )
     else:
         return os.path.splitext(request.module.__file__)[0] + \

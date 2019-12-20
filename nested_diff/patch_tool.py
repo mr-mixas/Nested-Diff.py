@@ -32,7 +32,7 @@ class App(nested_diff.cli.App):
         parser = argparse.ArgumentParser(
             conflict_handler='resolve',
             description=description,
-            parents=(parent,)
+            parents=(parent,),
         )
 
         return parser

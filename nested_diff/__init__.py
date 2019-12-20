@@ -300,7 +300,7 @@ class Differ(object):
                 'I': [
                     group[0][1], group[-1][2],
                     group[0][3], group[-1][4],
-                ]
+                ],
             })
 
             for op, i1, i2, j1, j2 in group:
@@ -437,7 +437,7 @@ class Patcher(object):
         try:
             return self.__patchers[type_]
         except KeyError:
-            raise NotImplementedError("unsupported object type") from None
+            raise NotImplementedError('unsupported object type') from None
 
     def patch(self, target, ndiff):
         """
@@ -457,7 +457,7 @@ class Patcher(object):
 
         if 'D' in ndiff:
             return self.get_patcher(
-                ndiff.get('E', ndiff['D']).__class__
+                ndiff.get('E', ndiff['D']).__class__,
             )(target, ndiff)
         elif 'N' in ndiff:
             return ndiff['N']

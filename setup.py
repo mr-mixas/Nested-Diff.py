@@ -1,16 +1,26 @@
-from setuptools import setup
+import setuptools
+import sys
+
 import nested_diff
 
 
 with open('README.md') as f:
     long_description = f.read()
 
-setup(
+flake8_modules = [
+    'flake8-commas',
+    'flake8_quotes',
+]
+
+if sys.version_info >= (3, 5):
+    flake8_modules.append('flake8-bugbear')
+
+setuptools.setup(
     name='nested_diff',
     version=nested_diff.__version__,
     description='Recursive diff for nested structures',
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -34,8 +44,8 @@ setup(
     license='Apache License 2.0',
     packages=['nested_diff'],
     test_suite='tests',
-    setup_requires=["pytest-runner"],
-    tests_require=['pytest', 'pytest-flake8', 'pyyaml'],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'pytest-flake8', 'pyyaml'] + flake8_modules,
     entry_points={
         'console_scripts': [
             'nested_diff=nested_diff.diff_tool:cli',
@@ -43,5 +53,5 @@ setup(
         ],
     },
     include_package_data=True,
-    zip_safe=False
+    zip_safe=False,
 )

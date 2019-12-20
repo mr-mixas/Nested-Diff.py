@@ -107,7 +107,7 @@ def test_multiline_str_diff():
             {'R': 'two'},
             {'A': '2'},
             {'U': 'three'},
-            {'A': ''}
+            {'A': ''},
         ],
         'E': '',
     }

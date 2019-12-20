@@ -46,7 +46,7 @@ class App(object):
 
         self.dumper = self.get_dumper(
             self.args.ofmt,
-            **self._decode_fmt_opts(self.args.ofmt_opts)
+            **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
         )
 
     @staticmethod
@@ -66,7 +66,7 @@ class App(object):
             '--version',
             action='version',
             version='%(prog)s {}'.format(self.version),
-            help='print version and exit'
+            help='print version and exit',
         )
 
         parser.add_argument(

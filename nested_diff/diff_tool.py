@@ -59,7 +59,7 @@ class App(nested_diff.cli.App):
         parser = argparse.ArgumentParser(
             conflict_handler='resolve',
             description=description,
-            parents=(parent,)
+            parents=(parent,),
         )
 
         parser.add_argument(
@@ -68,7 +68,7 @@ class App(nested_diff.cli.App):
             metavar='NUM',
             type=int,
             help='amount of context lines for multiline strings diffs; '
-                 'negative value will disable multiline diffs, default is 3'
+                 'negative value will disable multiline diffs, default is 3',
         )
 
         parser.add_argument(
@@ -82,9 +82,9 @@ class App(nested_diff.cli.App):
         parser.add_argument('-A', type=int, choices=(0, 1), default=1,
                             help='show added items; enabled by default')
         parser.add_argument('-N', type=int, choices=(0, 1), default=1,
-                            help='show item\'s new values; enabled by default')
+                            help="show item's new values; enabled by default")
         parser.add_argument('-O', type=int, choices=(0, 1), default=1,
-                            help='show item\'s old values; enabled by default')
+                            help="show item's old values; enabled by default")
         parser.add_argument('-R', type=int, choices=(0, 1), default=1,
                             help='Show removed items; enabled by default')
         parser.add_argument('-U', type=int, choices=(0, 1), default=0,

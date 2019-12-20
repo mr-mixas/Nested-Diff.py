@@ -50,7 +50,7 @@ def test_patch_frozenset():
             {'U': 2},
             {'A': 3},
         ],
-        'E': frozenset()
+        'E': frozenset(),
     }
 
     assert b == patch(a, ndiff)

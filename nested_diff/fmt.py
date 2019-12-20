@@ -26,12 +26,7 @@ class AbstractFormatter(nested_diff.Iterator):
     Base class for nested diff formatters
 
     """
-    def __init__(
-        self,
-        indent='  ',
-        line_separator='\n',
-        **kwargs
-    ):
+    def __init__(self, indent='  ', line_separator='\n', **kwargs):
         super().__init__(**kwargs)
 
         self.indent = indent

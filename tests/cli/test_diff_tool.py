@@ -112,7 +112,7 @@ def test_multiline_context_0(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
         fullname('multiline.a.json', shared=True),
         fullname('multiline.b.json', shared=True),
-        '--text-ctx', '0'
+        '--text-ctx', '0',
     )).run()
 
     captured = capsys.readouterr()
@@ -124,7 +124,7 @@ def test_multiline_disabled(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
         fullname('multiline.a.json', shared=True),
         fullname('multiline.b.json', shared=True),
-        '--text-ctx', '-1'
+        '--text-ctx', '-1',
     )).run()
 
     captured = capsys.readouterr()
