@@ -75,7 +75,7 @@ class App(object):
             default=self.default_ifmt,
             choices=sorted(self.supported_ifmts),
             help='input files format; "' + self.default_ifmt +
-                 '" used by default',
+            '" used by default',
         )
 
         parser.add_argument(
@@ -91,7 +91,7 @@ class App(object):
             default=self.default_ofmt,
             choices=sorted(self.supported_ofmts),
             help='output files format; "' + self.default_ofmt +
-                 '" used by default',
+            '" used by default',
         )
 
         parser.add_argument(

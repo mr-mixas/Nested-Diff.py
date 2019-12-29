@@ -142,15 +142,15 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 class TermDumper(AbstractFmtDumper):
     def __init__(self, **kwargs):
         super().__init__()
-        import nested_diff.fmt
-        self.encoder = nested_diff.fmt.TermFormatter(**self.get_opts(kwargs))
+        from nested_diff import fmt
+        self.encoder = fmt.TermFormatter(**self.get_opts(kwargs))
 
 
 class TextDumper(AbstractFmtDumper):
     def __init__(self, **kwargs):
         super().__init__()
-        import nested_diff.fmt
-        self.encoder = nested_diff.fmt.TextFormatter(**self.get_opts(kwargs))
+        from nested_diff import fmt
+        self.encoder = fmt.TextFormatter(**self.get_opts(kwargs))
 
 
 def cli():

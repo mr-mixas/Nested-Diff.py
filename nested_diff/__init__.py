@@ -138,23 +138,27 @@ class Differ(object):
         :param b: Second object to diff.
 
         """
-        if self.__diff_method is not None and hasattr(a, self.__diff_method):
-            return getattr(a, self.__diff_method)(
-                b,
-                A=self.op_a,
-                N=self.op_n,
-                O=self.op_o,  # noqa: E741
-                R=self.op_r,
-                U=self.op_u,
-                trimR=self.op_trim_r,
-                diff_method=self.__diff_method,
-            )
+        if self.__diff_method is not None:
+            try:
+                method = a.__getattribute__(self.__diff_method)
+            except AttributeError:
+                pass
+            else:
+                return method(
+                    b,
+                    A=self.op_a,
+                    N=self.op_n,
+                    O=self.op_o,  # noqa: E741
+                    R=self.op_r,
+                    U=self.op_u,
+                    trimR=self.op_trim_r,
+                    diff_method=self.__diff_method,
+                )
 
         if a.__class__ is b.__class__:
             if a == b:
                 return {'U': a} if self.op_u else {}
-            else:
-                return self.get_differ(a.__class__)(a, b)
+            return self.get_differ(a.__class__)(a, b)
 
         return self.diff__default(a, b)
 
@@ -163,14 +167,14 @@ class Differ(object):
         Return default diff.
 
         """
-        ret = {}
+        dif = {}
 
         if self.op_n:
-            ret['N'] = b
+            dif['N'] = b
         if self.op_o:
-            ret['O'] = a
+            dif['O'] = a
 
-        return ret
+        return dif
 
     def diff_dict(self, a, b):
         """
@@ -191,23 +195,23 @@ class Differ(object):
 
         for key in set(a).union(b):
             try:
-                one = a[key]
+                old = a[key]
                 try:
-                    two = b[key]
+                    new = b[key]
                 except KeyError:  # removed
                     if self.op_r:
-                        dif[key] = {'R': None if self.op_trim_r else one}
+                        dif[key] = {'R': None if self.op_trim_r else old}
                     continue
             except KeyError:  # added
                 if self.op_a:
                     dif[key] = {'A': b[key]}
                 continue
 
-            if one == two:
+            if old == new:
                 if self.op_u:
-                    dif[key] = {'U': one}
+                    dif[key] = {'U': old}
             else:
-                subdiff = self.diff(one, two)
+                subdiff = self.diff(old, new)
                 if subdiff:
                     dif[key] = subdiff
 
@@ -372,12 +376,12 @@ class Differ(object):
         >>>
 
         """
-        ret = self.diff_list(a, b)
+        dif = self.diff_list(a, b)
 
-        if 'D' in ret:
-            ret['D'] = tuple(ret['D'])
+        if 'D' in dif:
+            dif['D'] = tuple(dif['D'])
 
-        return ret
+        return dif
 
     def get_differ(self, type_):
         """
@@ -443,26 +447,30 @@ class Patcher(object):
         """
         Return patched object.
 
-        This method is a dispatcher and calls registered patch method for each
-        patched value according to it's type. `patch__default` called for
-        non-registered types. Args and kwargs passed to called method as is.
+        This method is a dispatcher and calls apropriate patch method for
+        target value according to it's type. Values with non-registered types
+        patched by `patch__default` method.
 
         :param target: Object to patch.
         :param ndiff: Nested diff.
 
         """
-        if self.__patch_method is not None and \
-           hasattr(target, self.__patch_method):
-            return getattr(target, self.__patch_method)(ndiff)
+        if self.__patch_method is not None:
+            try:
+                method = target.__getattribute__(self.__patch_method)
+            except AttributeError:
+                pass
+            else:
+                return method(ndiff)
 
         if 'D' in ndiff:
             return self.get_patcher(
-                ndiff.get('E', ndiff['D']).__class__,
+                ndiff['E' if 'E' in ndiff else 'D'].__class__,
             )(target, ndiff)
         elif 'N' in ndiff:
             return ndiff['N']
-        else:
-            return target
+
+        return target
 
     def patch_dict(self, target, ndiff):
         """
@@ -658,12 +666,12 @@ class Iterator(object):
 
         while stack:
             try:
-                diff, key, subdiff = next(stack[-1])
+                ndiff, key, subdiff = next(stack[-1])
             except StopIteration:
                 stack.pop()
                 continue
 
-            yield diff, key, subdiff
+            yield ndiff, key, subdiff
 
             if subdiff is None:
                 continue

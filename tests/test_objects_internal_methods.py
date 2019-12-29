@@ -68,11 +68,11 @@ def test_patch_with_diff_method():
 
 
 def test_patch_without_diff_method():
-    a = Custom(value=0)
-    b = Custom(value=1)
+    a = Custom(value={'old': 0})
+    b = Custom(value={'new': 1})
 
     diff_ = diff(a, b)
     a = patch(a, diff_, patch_method='__patch__')
 
     assert isinstance(a, Custom)
-    assert 1 == a.value
+    assert {'new': 1} == a.value
