@@ -350,7 +350,8 @@ class Differ(object):
 
             elif i in a:  # removed
                 if self.op_r:
-                    dif.append({'R': None if self.op_trim_r else i})
+                    # ignore trimR opt here: value required for removal
+                    dif.append({'R': i})
 
             else:  # added
                 if self.op_a:

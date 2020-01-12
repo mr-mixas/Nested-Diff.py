@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import patch
+from nested_diff import diff, patch
 
 
 def test_incorrect_diff_type():
@@ -36,6 +36,15 @@ def test_patch_set():
         ],
         'E': set(),
     }
+
+    assert b == patch(a, ndiff)
+
+
+def test_patch_set_trimR():
+    a = {1, 2, 4, 5}
+    b = {0, 1, 2, 3}
+
+    ndiff = diff(a, b, trimR=True)
 
     assert b == patch(a, ndiff)
 

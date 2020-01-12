@@ -70,7 +70,7 @@ def test_sets_diff_trimR():
 
     expected = {
         'D': [
-            {'R': None},
+            {'R': 1},
             {'U': 2},
             {'A': 3},
         ],
