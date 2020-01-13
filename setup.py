@@ -12,7 +12,7 @@ flake8_modules = [
     'flake8_quotes',
 ]
 
-if sys.version_info >= (3, 5):
+if sys.version_info >= (3, 6):
     flake8_modules.append('flake8-bugbear')
 
 setuptools.setup(
