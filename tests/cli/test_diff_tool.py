@@ -44,19 +44,20 @@ def test_enable_U_ops(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_output_file(capsys, expected, fullname, testfile):
+def test_output_file(capsys, content, expected, fullname, tmp_path):
+    result_file_name = '{}.got'.format(tmp_path)
     nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'json',
-        '--out', fullname('got'),
+        '--out', result_file_name,
     )).run()
 
     captured = capsys.readouterr()
     assert '' == captured.err
     assert '' == captured.out
 
-    assert json.loads(expected) == json.loads(testfile('got'))
+    assert json.loads(expected) == json.loads(content(result_file_name))
 
 
 def test_json_ofmt_opts(capsys, expected, fullname):

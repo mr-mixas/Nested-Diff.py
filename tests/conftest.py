@@ -4,6 +4,9 @@ import pytest
 from io import StringIO
 
 
+pytest.register_assert_rewrite('tests.common')
+
+
 def get_testfile_name(request, suffix='dat', shared=False):
     if shared:
         return os.path.join(
@@ -37,16 +40,6 @@ def fullname(request):
         return get_testfile_name(request, suffix=suffix, shared=shared)
 
     return _name_getter
-
-
-@pytest.fixture
-def testfile(request):
-    def _content_getter(suffix, shared=False):
-        filename = get_testfile_name(request, suffix=suffix, shared=shared)
-        with open(filename) as f:
-            return f.read()
-
-    return _content_getter
 
 
 @pytest.fixture

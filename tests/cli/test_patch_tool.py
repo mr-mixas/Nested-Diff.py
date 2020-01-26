@@ -7,13 +7,14 @@ from shutil import copyfile
 import nested_diff.patch_tool
 
 
-def test_default_patch(capsys, content, fullname):
+def test_default_patch(capsys, content, fullname, tmp_path):
+    result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
         fullname('lists.a.json', shared=True),
-        fullname('got.json'),
+        result_file_name,
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got.json'),
+        result_file_name,
         fullname('lists.patch.yaml', shared=True),
     )).run()
 
@@ -22,16 +23,17 @@ def test_default_patch(capsys, content, fullname):
     assert '' == captured.err
 
     assert json.loads(content(fullname('lists.b.json', shared=True))) == \
-        json.loads(content(fullname('got.json')))
+        json.loads(content(result_file_name))
 
 
-def test_json_ofmt_opts(capsys, content, expected, fullname):
+def test_json_ofmt_opts(capsys, content, expected, fullname, tmp_path):
+    result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
         fullname('lists.a.json', shared=True),
-        fullname('got.json'),
+        result_file_name,
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got.json'),
+        result_file_name,
         fullname('lists.patch.json', shared=True),
         '--ofmt', 'json',
         '--ofmt-opts', '{"indent": null}',
@@ -41,16 +43,17 @@ def test_json_ofmt_opts(capsys, content, expected, fullname):
     assert '' == captured.out
     assert '' == captured.err
 
-    assert json.loads(expected) == json.loads(content(fullname('got.json')))
+    assert json.loads(expected) == json.loads(content(result_file_name))
 
 
-def test_yaml_ifmt(capsys, content, fullname):
+def test_yaml_ifmt(capsys, content, fullname, tmp_path):
+    result_file_name = '{}.got'.format(tmp_path)
     copyfile(
         fullname('lists.a.yaml', shared=True),
-        fullname('got'),
+        result_file_name,
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got'),
+        result_file_name,
         fullname('lists.patch.yaml', shared=True),
         '--ifmt', 'yaml',
     )).run()
@@ -61,16 +64,17 @@ def test_yaml_ifmt(capsys, content, fullname):
 
     # output is json by default
     assert json.loads(content(fullname('lists.b.json', shared=True))) == \
-        json.loads(content(fullname('got')))
+        json.loads(content(result_file_name))
 
 
-def test_yaml_ofmt(capsys, content, expected, fullname):
+def test_yaml_ofmt(capsys, content, expected, fullname, tmp_path):
+    result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
         fullname('lists.a.json', shared=True),
-        fullname('got.json'),
+        result_file_name,
     )
     nested_diff.patch_tool.App(args=(
-        fullname('got.json'),
+        result_file_name,
         fullname('lists.patch.json', shared=True),
         '--ofmt', 'yaml',
     )).run()
@@ -79,7 +83,7 @@ def test_yaml_ofmt(capsys, content, expected, fullname):
     assert '' == captured.out
     assert '' == captured.err
 
-    assert expected == content(fullname('got.json'))
+    assert expected == content(result_file_name)
 
 
 def test_entry_point(capsys):
