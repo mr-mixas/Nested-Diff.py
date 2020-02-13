@@ -403,7 +403,7 @@ RESULTS = {
         'result': '  None\x1b[0m\n',
     },
     'wrapping_text': {
-        'result': 'Header\x1b[0m\n\x1b[31m- 0\x1b[0m\n\x1b[32m+ 1\x1b[0m\nFooter\x1b[0m\n',
+        'result': 'Header\n\x1b[31m- 0\x1b[0m\n\x1b[32m+ 1\x1b[0m\nFooter\n',
     },
 }
 

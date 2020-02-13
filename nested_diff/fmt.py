@@ -77,10 +77,7 @@ class AbstractFormatter(nested_diff.Iterator):
         if length > 1:
             return '{},{}'.format(start + 1, length)
 
-        if length == 1:
-            return str(start + 1)
-
-        return '{},{}'.format(start, length)
+        return str(start + 1)
 
     def format(self, diff, **kwargs):
         """
@@ -172,9 +169,7 @@ class TextFormatter(AbstractFormatter):
         Yield formatted diff token by token
 
         """
-        if header:
-            yield header
-            yield self.line_separator
+        yield header
 
         stack = [self.get_iterator(diff)]
 
@@ -216,9 +211,7 @@ class TextFormatter(AbstractFormatter):
             depth += 1
             stack.append(self.get_iterator(subdiff))
 
-        if footer:
-            yield footer
-            yield self.line_separator
+        yield footer
 
     def get_emitter(self, diff, depth=0):
         """

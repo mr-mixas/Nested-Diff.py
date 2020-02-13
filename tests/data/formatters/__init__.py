@@ -46,8 +46,8 @@ def get_tests():
             'b': 1,
             'diff': {'N': 1, 'O': 0},
             'format_func_opts': {
-                'header': 'Header',
-                'footer': 'Footer',
+                'header': 'Header\n',
+                'footer': 'Footer\n',
             },
         },
         'redefined_depth': {
