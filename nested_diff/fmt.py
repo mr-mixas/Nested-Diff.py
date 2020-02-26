@@ -32,18 +32,18 @@ class AbstractFormatter(nested_diff.Iterator):
         self.indent = indent
         self.line_separator = line_separator
 
-        self.open_tokens = {
+        self.obj_prefix = {
             dict: '{',
             list: '[',
             tuple: '(',
         }
-        self.close_tokens = {
+        self.obj_suffix = {
             dict: '}',
             list: ']',
             tuple: ')',
         }
 
-        self.diff_key_tokens = {
+        self.key_line_prefix = {
             'A': '+ ',
             'D': '  ',
             'N': '  ',
@@ -51,11 +51,11 @@ class AbstractFormatter(nested_diff.Iterator):
             'R': '- ',
             'U': '  ',
         }
-        self.diff_value_tokens = self.diff_key_tokens.copy()
-        self.diff_value_tokens['H'] = '# '
-        self.diff_value_tokens['I'] = '  '
-        self.diff_value_tokens['O'] = '- '
-        self.diff_value_tokens['N'] = '+ '
+        self.val_line_prefix = self.key_line_prefix.copy()
+        self.val_line_prefix['H'] = '# '
+        self.val_line_prefix['I'] = '  '
+        self.val_line_prefix['O'] = '- '
+        self.val_line_prefix['N'] = '+ '
 
         self.tags = (  # diff tags to format, sequence is important
             'D',
@@ -127,7 +127,7 @@ class TextFormatter(AbstractFormatter):
         for subdiff in diff['D']:
             for tag in ('I', 'R', 'A', 'U'):
                 if tag in subdiff:
-                    yield self.diff_value_tokens[tag]
+                    yield self.val_line_prefix[tag]
                     yield indent
                     if tag == 'I':
                         yield '@@'
@@ -150,14 +150,14 @@ class TextFormatter(AbstractFormatter):
         for subdiff in diff['D']:
             for tag in ('R', 'A', 'U'):
                 if tag in subdiff:
-                    yield self.diff_value_tokens[tag]
+                    yield self.val_line_prefix[tag]
                     yield indent
                     yield self.repr_value(subdiff[tag])
                     yield self.line_separator
                     break
 
     def emit_type_header(self, diff, depth=0):
-        yield self.diff_value_tokens['H']
+        yield self.val_line_prefix['H']
         yield self.indent * depth
         yield '<'
         yield diff['E'].__class__.__name__
@@ -190,7 +190,7 @@ class TextFormatter(AbstractFormatter):
             if subdiff is None:
                 for tag in self.tags:
                     if tag in diff:
-                        yield self.diff_value_tokens[tag]
+                        yield self.val_line_prefix[tag]
                         yield self.indent * depth
                         yield self.repr_value(diff[tag])
                         yield self.line_separator
@@ -200,11 +200,11 @@ class TextFormatter(AbstractFormatter):
             diff_type = diff['D'].__class__
             for tag in self.tags:
                 if tag in subdiff:
-                    yield self.diff_key_tokens[tag]
+                    yield self.key_line_prefix[tag]
                     yield self.indent * depth
-                    yield self.open_tokens[diff_type]
+                    yield self.obj_prefix[diff_type]
                     yield self.repr_key(key)
-                    yield self.close_tokens[diff_type]
+                    yield self.obj_suffix[diff_type]
                     yield self.line_separator
                     break
 
@@ -234,12 +234,12 @@ class TermFormatter(TextFormatter):
 
         self.line_separator = '\033[0m' + self.line_separator
 
-        self.diff_key_tokens['A'] = '\033[1;32m' + self.diff_key_tokens['A']
-        self.diff_key_tokens['R'] = '\033[1;31m' + self.diff_key_tokens['R']
+        self.key_line_prefix['A'] = '\033[1;32m' + self.key_line_prefix['A']
+        self.key_line_prefix['R'] = '\033[1;31m' + self.key_line_prefix['R']
 
-        self.diff_value_tokens['A'] = '\033[32m' + self.diff_value_tokens['A']
-        self.diff_value_tokens['H'] = '\033[34m' + self.diff_value_tokens['H']
-        self.diff_value_tokens['I'] = '\033[35m' + self.diff_value_tokens['I']
-        self.diff_value_tokens['N'] = '\033[32m' + self.diff_value_tokens['N']
-        self.diff_value_tokens['O'] = '\033[31m' + self.diff_value_tokens['O']
-        self.diff_value_tokens['R'] = '\033[31m' + self.diff_value_tokens['R']
+        self.val_line_prefix['A'] = '\033[32m' + self.val_line_prefix['A']
+        self.val_line_prefix['H'] = '\033[34m' + self.val_line_prefix['H']
+        self.val_line_prefix['I'] = '\033[35m' + self.val_line_prefix['I']
+        self.val_line_prefix['N'] = '\033[32m' + self.val_line_prefix['N']
+        self.val_line_prefix['O'] = '\033[31m' + self.val_line_prefix['O']
+        self.val_line_prefix['R'] = '\033[31m' + self.val_line_prefix['R']
