@@ -286,7 +286,19 @@ class Differ(object):
     def diff_multiline(self, a, b):
         """
         Compute diff for multiline strings.
-        Highly experimental! Format may be changed at any time.
+
+        Result is a unified diff formatted as usual nested diff structure with
+        'I' tagged subdiffs to contain hunks headers.
+
+        :param a: First string to diff.
+        :param b: Second string to diff.
+
+        >>> a = 'A\nB\nC'
+        >>> b = 'A\nC'
+        >>>
+        >>> Differ(multiline_diff_context=3).diff_multiline(a, b)
+        {'D': [{'I': [0, 3, 0, 2]}, {'U': 'A'}, {'R': 'B'}, {'U': 'C'}],
+         'E': ''}
 
         """
         lines_a = a.split('\n', -1)
@@ -429,6 +441,7 @@ class Patcher(object):
             frozenset: self.patch_frozenset,
             list: self.patch_list,
             set: self.patch_set,
+            str: self.patch_multiline,
             tuple: self.patch_tuple,
         }
 
@@ -442,7 +455,7 @@ class Patcher(object):
         try:
             return self.__patchers[type_]
         except KeyError:
-            raise NotImplementedError('unsupported object type') from None
+            raise NotImplementedError('unsupported diff type') from None
 
     def patch(self, target, ndiff):
         """
@@ -518,6 +531,41 @@ class Patcher(object):
             i += 1
 
         return target
+
+    def patch_multiline(self, target, ndiff):
+        """
+        Return patched multiline string.
+
+        Unlike GNU patch, this algorithm does not implement any heuristics and
+        patch target in straightforward way: get position from hunk header and
+        apply changes specified in hunk.
+
+        :param target: string to patch.
+        :param ndiff: Nested diff.
+
+        """
+        offset = 0
+        target = target.split('\n', -1)
+
+        for subdiff in ndiff['D']:
+            if 'I' in subdiff:  # hunk started
+                idx = subdiff['I'][0] + offset
+            elif 'A' in subdiff:
+                target.insert(idx, subdiff['A'])
+                offset = offset + 1
+                idx = idx + 1
+            elif 'R' in subdiff:
+                if target.pop(idx) != subdiff['R']:
+                    raise ValueError('Removing line does not match')
+                offset = offset - 1
+            elif 'U' in subdiff:
+                if target[idx] != subdiff['U']:
+                    raise ValueError('Unchanged line does not match')
+                idx = idx + 1
+            else:
+                raise ValueError('Unsupported operation')
+
+        return '\n'.join(target)
 
     @staticmethod
     def patch_set(target, ndiff):

@@ -183,31 +183,37 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '  (0)\n-   ()\n+   frozenset()\n  (1)\n#   <set>\n+   True\n',
     },
-    'multiline__empty_line_added': {
+    'multiline_empty_line_added': {
         'result': '# <str>\n  @@ -1 +1,2 @@\n  \n+ \n',
     },
-    'multiline__empty_vs_multiline': {
+    'multiline_empty_vs_multiline': {
         'result': '# <str>\n  @@ -1 +1,2 @@\n- \n+ A\n+ B\n',
     },
-    'multiline__equal': {
+    'multiline_equal': {
         'result': '',
     },
-    'multiline__line_added': {
-        'result': '# <str>\n  @@ -1,2 +1,3 @@\n+ A\n  B\n  C\n',
-    },
-    'multiline__line_changed': {
-        'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  C\n',
-    },
-    'multiline__line_changed_ctx_0': {
-        'result': '# <str>\n  @@ -2 +2 @@\n- B\n+ b\n',
-    },
-    'multiline__line_removed': {
+    'multiline_lcs': {
         'result': '# <str>\n  @@ -1,3 +1,2 @@\n  A\n- B\n  C\n',
     },
-    'multiline__trailing_newlines': {
+    'multiline_line_added': {
+        'result': '# <str>\n  @@ -1,2 +1,3 @@\n+ A\n  B\n  C\n',
+    },
+    'multiline_line_changed': {
+        'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  C\n',
+    },
+    'multiline_line_changed_ctx_0': {
+        'result': '# <str>\n  @@ -2 +2 @@\n- B\n+ b\n',
+    },
+    'multiline_line_removed': {
+        'result': '# <str>\n  @@ -1,3 +1,2 @@\n  A\n- B\n  C\n',
+    },
+    'multiline_multiple_hunks': {
+        'result': '# <str>\n  @@ -1 +1 @@\n+ A\n  @@ -3 +4 @@\n- C\n',
+    },
+    'multiline_trailing_newlines': {
         'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  \n',
     },
-    'multiline__vs_empty': {
+    'multiline_vs_empty': {
         'result': '# <str>\n  @@ -1,2 +1 @@\n- A\n- B\n+ \n',
     },
     'nested_hashes': {

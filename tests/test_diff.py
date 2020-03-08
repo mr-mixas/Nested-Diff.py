@@ -18,24 +18,3 @@ def test_diff(name):
     got = diff(a, b, **opts)
 
     assert expected == got
-
-
-# Test what doesn't covered by batch tests above
-
-def test_multiline_str_diff():
-    a = 'one\ntwo\nthree'
-    b = 'one\n2\nthree\n'
-
-    expected = {
-        'D': [
-            {'I': [0, 3, 0, 4]},
-            {'U': 'one'},
-            {'R': 'two'},
-            {'A': '2'},
-            {'U': 'three'},
-            {'A': ''},
-        ],
-        'E': '',
-    }
-
-    assert expected == diff(a, b, multiline_diff_context=3)

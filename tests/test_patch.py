@@ -30,6 +30,30 @@ def test_incorrect_diff_type():
         patch(None, None)
 
 
+def test_multiline_removing_line_mismatsh():
+    with pytest.raises(ValueError):
+        patch(
+            '\nB',
+            {'D': [{'I': [0, 2, 0, 1]}, {'U': ''}, {'R': 'A'}], 'E': ''},
+        )
+
+
+def test_multiline_unchanged_line_mismatsh():
+    with pytest.raises(ValueError):
+        patch(
+            'A\nB',
+            {'D': [{'I': [0, 2, 0, 1]}, {'U': 'Z'}, {'R': 'B'}], 'E': ''},
+        )
+
+
+def test_multiline_unsupported_op():
+    with pytest.raises(ValueError):
+        patch(
+            'A\nB',
+            {'D': [{'I': [0, 2, 0, 1]}, {'Z': 'A'}, {'R': 'B'}], 'E': ''},
+        )
+
+
 def test_type_mismatch():
     with pytest.raises(AttributeError):
         patch({}, {'D': [{'A': 1}]})

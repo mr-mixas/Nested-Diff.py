@@ -183,31 +183,37 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '  (0)\x1b[0m\n\x1b[31m-   ()\x1b[0m\n\x1b[32m+   frozenset()\x1b[0m\n  (1)\x1b[0m\n\x1b[34m#   <set>\x1b[0m\n\x1b[32m+   True\x1b[0m\n',
     },
-    'multiline__empty_line_added': {
+    'multiline_empty_line_added': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1 +1,2 @@\x1b[0m\n  \x1b[0m\n\x1b[32m+ \x1b[0m\n',
     },
-    'multiline__empty_vs_multiline': {
+    'multiline_empty_vs_multiline': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1 +1,2 @@\x1b[0m\n\x1b[31m- \x1b[0m\n\x1b[32m+ A\x1b[0m\n\x1b[32m+ B\x1b[0m\n',
     },
-    'multiline__equal': {
+    'multiline_equal': {
         'result': '',
     },
-    'multiline__line_added': {
-        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,2 +1,3 @@\x1b[0m\n\x1b[32m+ A\x1b[0m\n  B\x1b[0m\n  C\x1b[0m\n',
-    },
-    'multiline__line_changed': {
-        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,3 +1,3 @@\x1b[0m\n  A\x1b[0m\n\x1b[31m- B\x1b[0m\n\x1b[32m+ b\x1b[0m\n  C\x1b[0m\n',
-    },
-    'multiline__line_changed_ctx_0': {
-        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -2 +2 @@\x1b[0m\n\x1b[31m- B\x1b[0m\n\x1b[32m+ b\x1b[0m\n',
-    },
-    'multiline__line_removed': {
+    'multiline_lcs': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,3 +1,2 @@\x1b[0m\n  A\x1b[0m\n\x1b[31m- B\x1b[0m\n  C\x1b[0m\n',
     },
-    'multiline__trailing_newlines': {
+    'multiline_line_added': {
+        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,2 +1,3 @@\x1b[0m\n\x1b[32m+ A\x1b[0m\n  B\x1b[0m\n  C\x1b[0m\n',
+    },
+    'multiline_line_changed': {
+        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,3 +1,3 @@\x1b[0m\n  A\x1b[0m\n\x1b[31m- B\x1b[0m\n\x1b[32m+ b\x1b[0m\n  C\x1b[0m\n',
+    },
+    'multiline_line_changed_ctx_0': {
+        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -2 +2 @@\x1b[0m\n\x1b[31m- B\x1b[0m\n\x1b[32m+ b\x1b[0m\n',
+    },
+    'multiline_line_removed': {
+        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,3 +1,2 @@\x1b[0m\n  A\x1b[0m\n\x1b[31m- B\x1b[0m\n  C\x1b[0m\n',
+    },
+    'multiline_multiple_hunks': {
+        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1 +1 @@\x1b[0m\n\x1b[32m+ A\x1b[0m\n\x1b[35m  @@ -3 +4 @@\x1b[0m\n\x1b[31m- C\x1b[0m\n',
+    },
+    'multiline_trailing_newlines': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,3 +1,3 @@\x1b[0m\n  A\x1b[0m\n\x1b[31m- B\x1b[0m\n\x1b[32m+ b\x1b[0m\n  \x1b[0m\n',
     },
-    'multiline__vs_empty': {
+    'multiline_vs_empty': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,2 +1 @@\x1b[0m\n\x1b[31m- A\x1b[0m\n\x1b[31m- B\x1b[0m\n\x1b[32m+ \x1b[0m\n',
     },
     'nested_hashes': {
