@@ -52,7 +52,7 @@ class AbstractFormatter(nested_diff.Iterator):
             'U': '  ',
         }
         self.val_line_prefix = self.key_line_prefix.copy()
-        self.val_line_prefix['H'] = '# '
+        self.val_line_prefix['E'] = '# '
         self.val_line_prefix['I'] = '  '
         self.val_line_prefix['O'] = '- '
         self.val_line_prefix['N'] = '+ '
@@ -157,7 +157,7 @@ class TextFormatter(AbstractFormatter):
                     break
 
     def emit_type_header(self, diff, depth=0):
-        yield self.val_line_prefix['H']
+        yield self.val_line_prefix['E']
         yield self.indent * depth
         yield '<'
         yield diff['E'].__class__.__name__
@@ -238,7 +238,7 @@ class TermFormatter(TextFormatter):
         self.key_line_prefix['R'] = '\033[1;31m' + self.key_line_prefix['R']
 
         self.val_line_prefix['A'] = '\033[32m' + self.val_line_prefix['A']
-        self.val_line_prefix['H'] = '\033[34m' + self.val_line_prefix['H']
+        self.val_line_prefix['E'] = '\033[34m' + self.val_line_prefix['E']
         self.val_line_prefix['I'] = '\033[35m' + self.val_line_prefix['I']
         self.val_line_prefix['N'] = '\033[32m' + self.val_line_prefix['N']
         self.val_line_prefix['O'] = '\033[31m' + self.val_line_prefix['O']
