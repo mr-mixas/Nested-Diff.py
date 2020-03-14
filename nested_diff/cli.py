@@ -33,8 +33,8 @@ class App(object):
     default_ifmt = 'auto'
     default_ofmt = 'json'
 
-    supported_ifmts = ('auto', 'json', 'yaml')
-    supported_ofmts = ('json', 'yaml')
+    supported_ifmts = ('auto', 'ini', 'json', 'yaml')
+    supported_ofmts = ('ini', 'json', 'yaml')
 
     version = nested_diff.__version__
 
@@ -123,6 +123,8 @@ class App(object):
             return JsonDumper(**kwargs)
         elif fmt == 'yaml':
             return YamlDumper(**kwargs)
+        elif fmt == 'ini':
+            return IniDumper(**kwargs)
 
         raise RuntimeError('Unsupported output format: ' + fmt)
 
@@ -148,6 +150,8 @@ class App(object):
             return JsonLoader(**kwargs)
         elif fmt == 'yaml':
             return YamlLoader(**kwargs)
+        elif fmt == 'ini':
+            return IniLoader(**kwargs)
 
         raise RuntimeError('Unsupported input format: ' + fmt)
 
@@ -258,6 +262,26 @@ class JsonLoader(Loader):
 
     def decode(self, data):
         return self.decoder.decode(data)
+
+
+class IniDumper(Dumper):
+    """
+    INI dumper
+
+    """
+    def __init__(self, **kwargs):
+        super().__init__()
+
+        import configparser
+        import io
+        self.encoder = configparser.ConfigParser(**self.get_opts(kwargs))
+        self.stringio = io.StringIO()
+
+    def encode(self, data):
+        self.encoder.read_dict(data)
+        self.encoder.write(self.stringio)
+
+        return self.stringio.getvalue()
 
 
 class IniLoader(Loader):

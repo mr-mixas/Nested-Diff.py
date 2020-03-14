@@ -75,8 +75,8 @@ def test_json_ofmt_opts(capsys, expected, fullname):
 
 def test_ini_ifmt(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
-        fullname('lists.a.ini', shared=True),
-        fullname('lists.b.ini', shared=True),
+        fullname('a.ini', shared=True),
+        fullname('b.ini', shared=True),
         '--ifmt', 'ini',
         '--ofmt', 'json',
     )).run()

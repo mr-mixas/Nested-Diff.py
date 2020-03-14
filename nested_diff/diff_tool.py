@@ -111,12 +111,6 @@ class App(nested_diff.cli.App):
 
         return super().get_dumper(fmt, **kwargs)
 
-    def get_loader(self, fmt, **kwargs):
-        if fmt == 'ini':
-            return nested_diff.cli.IniLoader(**kwargs)
-
-        return super().get_loader(fmt, **kwargs)
-
     def run(self):
         diff = self.diff(
             self.load(self.args.file1),
