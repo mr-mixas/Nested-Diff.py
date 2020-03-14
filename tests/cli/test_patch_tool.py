@@ -46,6 +46,24 @@ def test_json_ofmt_opts(capsys, content, expected, fullname, tmp_path):
     assert json.loads(expected) == json.loads(content(result_file_name))
 
 
+def test_auto_fmts(capsys, content, expected, fullname, tmp_path):
+    result_file_name = '{}.got.yaml'.format(tmp_path)
+    copyfile(
+        fullname('lists.a.yaml', shared=True),
+        result_file_name,
+    )
+    nested_diff.patch_tool.App(args=(
+        result_file_name,
+        fullname('lists.patch.json', shared=True),
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.out
+    assert '' == captured.err
+
+    assert expected == content(result_file_name)
+
+
 def test_yaml_ifmt(capsys, content, fullname, tmp_path):
     result_file_name = '{}.got'.format(tmp_path)
     copyfile(
@@ -56,6 +74,7 @@ def test_yaml_ifmt(capsys, content, fullname, tmp_path):
         result_file_name,
         fullname('lists.patch.yaml', shared=True),
         '--ifmt', 'yaml',
+        '--ofmt', 'json',
     )).run()
 
     captured = capsys.readouterr()

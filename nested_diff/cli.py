@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019 Michael Samoglyadov
+# Copyright 2019,2020 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,10 +31,10 @@ class App(object):
 
     """
     default_ifmt = 'auto'
-    default_ofmt = 'json'
+    default_ofmt = 'auto'
 
     supported_ifmts = ('auto', 'ini', 'json', 'yaml')
-    supported_ofmts = ('ini', 'json', 'yaml')
+    supported_ofmts = ('auto', 'ini', 'json', 'yaml')
 
     version = nested_diff.__version__
 
@@ -44,11 +44,6 @@ class App(object):
         self.argparser = self.get_argparser(description=self.__doc__)
         self.args = self.argparser.parse_args(args=args)
 
-        self.dumper = self.get_dumper(
-            self.args.ofmt,
-            **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
-        )
-
     @staticmethod
     def _decode_fmt_opts(opts):
         if opts is None:
@@ -57,8 +52,11 @@ class App(object):
         import json
         return json.loads(opts)
 
-    def dump(self, file_, data):
-        self.dumper.dump(file_, data)
+    def dump(self, file_, data, fmt):
+        self.get_dumper(
+            fmt,
+            **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
+        ).dump(file_, data)
 
     def get_argparser(self, description=None):
         parser = argparse.ArgumentParser(description=description)

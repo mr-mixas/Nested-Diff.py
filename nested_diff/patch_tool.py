@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019 Michael Samoglyadov
+# Copyright 2019,2020 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +27,12 @@ class App(nested_diff.cli.App):
     Patch tool for nested data structures
 
     """
+    def dump(self, file_, data, fmt):
+        if fmt == 'auto':
+            fmt = self.guess_fmt(file_, 'json')
+
+        super().dump(file_, data, fmt)
+
     def get_argparser(self, description=None):
         parent = super().get_argparser()
         parser = argparse.ArgumentParser(
@@ -59,7 +65,11 @@ class App(nested_diff.cli.App):
             self.load(self.args.patch_file),
         )
 
-        self.dump(argparse.FileType('w')(self.args.target_file), patched)
+        self.dump(
+            argparse.FileType('w')(self.args.target_file),
+            patched,
+            self.args.ofmt,
+        )
 
         return 0
 

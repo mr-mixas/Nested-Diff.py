@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019 Michael Samoglyadov
+# Copyright 2019,2020 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,9 +30,6 @@ class App(nested_diff.cli.App):
     Diff tool for nested data structures
 
     """
-    default_ifmt = 'auto'
-    default_ofmt = 'auto'
-
     supported_ifmts = ('auto', 'ini', 'json', 'yaml')
     supported_ofmts = ('auto', 'json', 'term', 'text', 'yaml')
 
@@ -118,7 +115,7 @@ class App(nested_diff.cli.App):
         )
         exit_code = 0 if not diff or 'U' in diff else 1
 
-        self.dump(self.args.out, diff)
+        self.dump(self.args.out, diff, self.args.ofmt)
 
         return exit_code
 
