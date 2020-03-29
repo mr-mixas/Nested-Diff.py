@@ -408,8 +408,11 @@ RESULTS = {
     'undef_vs_undef': {
         'result': '  None\n',
     },
-    'wrapping_text': {
+    'wrappings_defined': {
         'result': 'Header\n- 0\n+ 1\nFooter\n',
+    },
+    'wrappings_undefined': {
+        'result': '- 0\n+ 1\n',
     },
 }
 

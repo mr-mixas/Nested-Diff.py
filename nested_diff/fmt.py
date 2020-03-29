@@ -26,11 +26,20 @@ class AbstractFormatter(nested_diff.Iterator):
     Base class for nested diff formatters
 
     """
-    def __init__(self, indent='  ', line_separator='\n', **kwargs):
+    def __init__(
+        self,
+        indent='  ',
+        line_separator='\n',
+        header='',
+        footer='',
+        **kwargs  # noqa C816
+    ):
         super().__init__(**kwargs)
 
         self.indent = indent
         self.line_separator = line_separator
+        self.header = self.get_header() if header is None else header
+        self.footer = self.get_footer() if footer is None else footer
 
         self.obj_prefix = {
             dict: '{',
@@ -65,6 +74,20 @@ class AbstractFormatter(nested_diff.Iterator):
             'A',
             'U',
         )
+
+    def get_header(self):
+        """
+        Return header for formatted diff.
+
+        """
+        return ''
+
+    def get_footer(self):
+        """
+        Return footer for formatted diff.
+
+        """
+        return ''
 
     @staticmethod
     def get_unified_diff_range(start, stop):
@@ -164,12 +187,12 @@ class TextFormatter(AbstractFormatter):
         yield '>'
         yield self.line_separator
 
-    def emit_tokens(self, diff, depth=0, header='', footer=''):
+    def emit_tokens(self, diff, depth=0):
         """
         Yield formatted diff token by token
 
         """
-        yield header
+        yield self.header
 
         stack = [self.get_iterator(diff)]
 
@@ -211,7 +234,7 @@ class TextFormatter(AbstractFormatter):
             depth += 1
             stack.append(self.get_iterator(subdiff))
 
-        yield footer
+        yield self.footer
 
     def get_emitter(self, diff, depth=0):
         """

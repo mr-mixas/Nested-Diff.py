@@ -408,8 +408,11 @@ RESULTS = {
     'undef_vs_undef': {
         'result': '  None\x1b[0m\n',
     },
-    'wrapping_text': {
+    'wrappings_defined': {
         'result': 'Header\n\x1b[31m- 0\x1b[0m\n\x1b[32m+ 1\x1b[0m\nFooter\n',
+    },
+    'wrappings_undefined': {
+        'result': '\x1b[31m- 0\x1b[0m\n\x1b[32m+ 1\x1b[0m\n',
     },
 }
 

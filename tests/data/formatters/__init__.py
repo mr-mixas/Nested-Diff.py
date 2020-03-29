@@ -41,15 +41,25 @@ def get_tests():
             },
             'formatter_opts': {'sort_keys': True},
         },
-        'wrapping_text': {
+        'wrappings_defined': {
             'a': 0,
             'b': 1,
             'diff': {'N': 1, 'O': 0},
-            'format_func_opts': {
+            'formatter_opts': {
                 'header': 'Header\n',
                 'footer': 'Footer\n',
             },
         },
+        'wrappings_undefined': {
+            'a': 0,
+            'b': 1,
+            'diff': {'N': 1, 'O': 0},
+            'formatter_opts': {
+                'header': None,
+                'footer': None,
+            },
+        },
+
         'redefined_depth': {
             'a': 0,
             'b': 1,
