@@ -1,19 +1,10 @@
 import setuptools
-import sys
 
 import nested_diff
 
 
 with open('README.md') as f:
     long_description = f.read()
-
-flake8_modules = [
-    'flake8-commas',
-    'flake8_quotes',
-]
-
-if sys.version_info >= (3, 6):
-    flake8_modules.append('flake8-bugbear')
 
 setuptools.setup(
     name='nested_diff',
@@ -43,9 +34,6 @@ setuptools.setup(
     author_email='mixas.sr@gmail.com',
     license='Apache License 2.0',
     packages=['nested_diff'],
-    test_suite='tests',
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'pytest-flake8', 'pyyaml'] + flake8_modules,
     entry_points={
         'console_scripts': [
             'nested_diff=nested_diff.diff_tool:cli',

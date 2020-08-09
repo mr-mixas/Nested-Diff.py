@@ -9,12 +9,13 @@ python:
 matrix:
   include:
     - python: '3.8'
-      script: coverage run --source nested_diff setup.py test
+      install:
+      - pip install --quiet --upgrade coveralls tox
+      script: tox -e coverage
       after_success:
       - coveralls
 install:
-- pip install --quiet --upgrade coveralls pytest
-script: python setup.py test
-sudo: false
+- pip install --quiet --upgrade tox
+script: tox -e py
 notifications:
   email: false
