@@ -132,7 +132,8 @@ class Differ(object):
 
         This method is a dispatcher and calls registered diff method for each
         diffed values pair according to their type. `diff__default` called for
-        non-registered types. Args and kwargs passed to called method as is.
+        unequal and not registered types. Args and kwargs passed to called
+        method as is.
 
         :param a: First object to diff.
         :param b: Second object to diff.
@@ -156,8 +157,11 @@ class Differ(object):
                 )
 
         if a.__class__ is b.__class__:
-            if a == b:
+            # it's faster to compare pickled dumps and dig differences
+            # afterwards than recursively diff each pair of objects
+            if a is b or dumps(a, -1) == dumps(b, -1):
                 return {'U': a} if self.op_u else {}
+
             return self.get_differ(a.__class__)(a, b)
 
         return self.diff__default(a, b)
@@ -207,13 +211,9 @@ class Differ(object):
                     dif[key] = {'A': b[key]}
                 continue
 
-            if old == new:
-                if self.op_u:
-                    dif[key] = {'U': old}
-            else:
-                subdiff = self.diff(old, new)
-                if subdiff:
-                    dif[key] = subdiff
+            subdiff = self.diff(old, new)
+            if subdiff:
+                dif[key] = subdiff
 
         if dif:
             return {'D': dif}
