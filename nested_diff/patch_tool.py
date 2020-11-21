@@ -33,20 +33,13 @@ class App(nested_diff.cli.App):
 
         super().dump(file_, data, fmt)
 
-    def get_argparser(self, description=None):
-        parent = super().get_argparser()
-        parser = argparse.ArgumentParser(
-            conflict_handler='resolve',
-            description=description,
-            parents=(parent,),
-        )
+    def get_positional_args_parser(self):
+        parser = super().get_positional_args_parser()
+
+        parser.add_argument('target_file')
+        parser.add_argument('patch_file', type=argparse.FileType())
 
         return parser
-
-    @staticmethod
-    def get_argparser_positional_args():
-        yield 'target_file', {}
-        yield 'patch_file', {'type': argparse.FileType()}
 
     @staticmethod
     def patch(target, diff):

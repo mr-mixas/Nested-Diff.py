@@ -59,7 +59,16 @@ class App(object):
         ).dump(file_, data)
 
     def get_argparser(self, description=None):
-        parser = argparse.ArgumentParser(description=description)
+        return argparse.ArgumentParser(
+            description=description,
+            parents=(
+                self.get_optional_args_parser(),
+                self.get_positional_args_parser(),
+            ),
+        )
+
+    def get_optional_args_parser(self):
+        parser = argparse.ArgumentParser(add_help=False)
         parser.add_argument(
             '--version',
             action='version',
@@ -99,21 +108,11 @@ class App(object):
             help='output files format options',
         )
 
-        for name, opts in self.get_argparser_positional_args():
-            parser.add_argument(name, **opts)
-
         return parser
 
     @staticmethod
-    def get_argparser_positional_args():
-        """
-        Yield tuples (name, opts) for each positional argument.
-
-        It's almost impossible to remove positional args from argparser, so
-        we use method here to be able to override it in subclasses.
-
-        """
-        return ()
+    def get_positional_args_parser():
+        return argparse.ArgumentParser(add_help=False)
 
     @staticmethod
     def get_dumper(fmt, **kwargs):

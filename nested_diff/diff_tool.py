@@ -51,13 +51,8 @@ class App(nested_diff.cli.App):
             U=self.args.U,
         )
 
-    def get_argparser(self, description=None):
-        parent = super().get_argparser()
-        parser = argparse.ArgumentParser(
-            conflict_handler='resolve',
-            description=description,
-            parents=(parent,),
-        )
+    def get_optional_args_parser(self):
+        parser = super().get_optional_args_parser()
 
         parser.add_argument(
             '--text-ctx',
@@ -89,10 +84,13 @@ class App(nested_diff.cli.App):
 
         return parser
 
-    @staticmethod
-    def get_argparser_positional_args():
-        yield 'file1', {'type': argparse.FileType()}
-        yield 'file2', {'type': argparse.FileType()}
+    def get_positional_args_parser(self):
+        parser = super().get_positional_args_parser()
+
+        parser.add_argument('file1', type=argparse.FileType())
+        parser.add_argument('file2', type=argparse.FileType())
+
+        return parser
 
     def get_dumper(self, fmt, **kwargs):
         if fmt == 'auto':

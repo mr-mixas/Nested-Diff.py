@@ -218,5 +218,5 @@ def test_entry_point(capsys):
         assert e.value.code == 0
 
     captured = capsys.readouterr()
-    assert captured.out.startswith('usage: nested_diff [-h] [--version]')
+    assert captured.out.startswith('usage: nested_diff')
     assert '' == captured.err
