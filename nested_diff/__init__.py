@@ -462,8 +462,7 @@ class Patcher(object):
         Return patched object.
 
         This method is a dispatcher and calls apropriate patch method for
-        target value according to it's type. Values with non-registered types
-        patched by `patch__default` method.
+        target value according to it's type.
 
         :param target: Object to patch.
         :param ndiff: Nested diff.
