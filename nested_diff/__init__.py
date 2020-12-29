@@ -567,8 +567,7 @@ class Patcher(object):
 
         return '\n'.join(target)
 
-    @staticmethod
-    def patch_set(target, ndiff):
+    def patch_set(self, target, ndiff):
         """
         Return patched set.
 
