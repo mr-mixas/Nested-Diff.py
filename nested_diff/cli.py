@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019,2020 Michael Samoglyadov
+# Copyright 2019,2020,2021 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,15 +81,14 @@ class App(object):
             type=str,
             default=self.default_ifmt,
             choices=sorted(self.supported_ifmts),
-            help='input files format; "' + self.default_ifmt +
-            '" used by default',
+            help='input files format; "%(default)s" is used by default',
         )
 
         parser.add_argument(
             '--ifmt-opts',
             metavar='JSON',
             type=str,
-            help='input files format options',
+            help='input files format options (JSON string)',
         )
 
         parser.add_argument(
@@ -97,15 +96,14 @@ class App(object):
             type=str,
             default=self.default_ofmt,
             choices=sorted(self.supported_ofmts),
-            help='output files format; "' + self.default_ofmt +
-            '" used by default',
+            help='output files format; "%(default)s" is used by default',
         )
 
         parser.add_argument(
             '--ofmt-opts',
             metavar='JSON',
             type=str,
-            help='output files format options',
+            help='output files format options (JSON string)',
         )
 
         return parser

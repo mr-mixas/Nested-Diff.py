@@ -1,62 +1,32 @@
 # Nested-Diff.py
 
-Recursive diff for python nested structures, implementation of
-[Nested-Diff](https://github.com/mr-mixas/Nested-Diff)
+Recursive diff and patch for nested structures
 
 [![Build Status](https://travis-ci.org/mr-mixas/Nested-Diff.py.svg?branch=master)](https://travis-ci.org/mr-mixas/Nested-Diff.py)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 [![License](https://img.shields.io/pypi/l/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 
-## Diff format
+## Install
 
-Diff is a dict and may contain following keys:
+`pip install nested_diff`
 
-* `A` stands for 'added', it's value - added item.
-* `D` means 'different' and contains subdiff.
-* `E` diffed entity (optional), value - empty instance of entity's class.
-* `I` index for sequence item, used only when prior item was omitted.
-* `N` is a new value for changed item.
-* `O` is a changed item's old value.
-* `R` key used for removed item.
-* `U` represent unchanged item.
-
-Diff metadata alternates with actual data; simple types specified as is, dicts,
-lists and tuples contain subdiffs for their items with native for such types
-addressing: indexes for lists and tuples and keys for dictionaries. Each status
-type, except `D`. `E` and `I`, may be omitted during diff computation. `E` tag
-is used with `D` when entity unable to contain diff by itself (set, frozenset);
-`D` contain a list of subdiffs in this case.
-
-Annotated example:
+## Command line tools examples
 
 ```
-a:  {"one": [5,7]}
-b:  {"one": [5], "two": 2}
-opts: U=False  # omit unchanged items
-
-diff:
-{"D": {"one": {"D": [{"I": 1, "R": 7}]}, "two": {"A": 2}}}
-| |   |  |    | |   || |   |   |   |       |    | |   |
-| |   |  |    | |   || |   |   |   |       |    | |   +- with value 2
-| |   |  |    | |   || |   |   |   |       |    | +- key 'two' was added
-| |   |  |    | |   || |   |   |   |       |    +- subdiff for it
-| |   |  |    | |   || |   |   |   |       +- another key from top-level
-| |   |  |    | |   || |   |   |   +- what it was (item's value: 7)
-| |   |  |    | |   || |   |   +- what happened to item (removed)
-| |   |  |    | |   || |   +- list item's actual index
-| |   |  |    | |   || +- prior item was omitted
-| |   |  |    | |   |+- subdiff for list item
-| |   |  |    | |   +- it's value - list
-| |   |  |    | +- it is deeply changed
-| |   |  |    +- subdiff for key 'one'
-| |   |  +- it has key 'one'
-| |   +- top-level thing is a dict
-| +- changes somewhere deeply inside
-+- diff is always a dict
+mixas:~/$ cat a.json b.json
+[0, [1],    3]
+[0, [1, 2], 3]
+mixas:~/$ nested_diff a.json b.json
+  [1]
++   [1]
++     2
+mixas:~/$
+mixas:~/$ nested_diff a.json b.json --ofmt json > patch.json
+mixas:~/$ nested_patch a.json patch.json
 ```
 
-## Examples
+## Library usage examples
 
 ```
 >>> from nested_diff import diff, patch
@@ -74,15 +44,11 @@ diff:
 >>> c = [0,1,2,3]
 >>> d = [  1,2,4,5]
 >>>
->>> diff(c, d, O=False, U=False)
-{'D': [{'R': 0}, {'I': 3, 'N': 4}, {'A': 5}]}
->>>
->>>
 >>> c = patch(c, diff(c, d))
 >>> assert c == d
 ```
 
-## Subclassing
+### Subclassing
 
 ```
 from nested_diff import Differ
@@ -113,7 +79,7 @@ b = [0.002, 0.02, 0.2]
 assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 ```
 
-## Formatting diffs
+### Formatting diffs
 
 ```
 >>> from nested_diff import diff
@@ -135,17 +101,52 @@ assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 >>>
 ```
 
-## Command line tools
+## Diff format
+
+Diff is a dict and may contain following keys:
+
+* `A` stands for 'added', it's value - added item.
+* `D` means 'different' and contains subdiff.
+* `E` diffed entity (optional), value - empty instance of entity's class.
+* `I` index for sequence item, used only when prior item was omitted.
+* `N` is a new value for changed item.
+* `O` is a changed item's old value.
+* `R` key used for removed item.
+* `U` represent unchanged item.
+
+Diff metadata alternates with actual data; simple types specified as is, dicts,
+lists and tuples contain subdiffs for their items with native for such types
+addressing: indexes for lists and tuples and keys for dictionaries. Each status
+type, except `D`. `E` and `I`, may be omitted during diff computation. `E` tag
+is used with `D` when entity unable to contain diff by itself (set, frozenset);
+`D` contain a list of subdiffs in this case.
+
+### Annotated example:
 
 ```
-mixas@mixas-laptop:~/github/Nested-Diff.py$ cat a.json b.json
-[0, [1],    3]
-[0, [1, 2], 3]
-mixas@mixas-laptop:~/github/Nested-Diff.py$ nested_diff a.json b.json
-  [1]
-+   [1]
-+     2
-mixas@mixas-laptop:~/github/Nested-Diff.py$
+a:  {"one": [5,7]}
+b:  {"one": [5], "two": 2}
+opts: U=False  # omit unchanged items
+
+diff:
+{"D": {"one": {"D": [{"I": 1, "R": 7}]}, "two": {"A": 2}}}
+| |   |  |    | |   || |   |   |   |       |    | |   |
+| |   |  |    | |   || |   |   |   |       |    | |   +- with value 2
+| |   |  |    | |   || |   |   |   |       |    | +- key 'two' was added
+| |   |  |    | |   || |   |   |   |       |    +- subdiff for it
+| |   |  |    | |   || |   |   |   |       +- another key from top-level
+| |   |  |    | |   || |   |   |   +- what it was (item's value: 7)
+| |   |  |    | |   || |   |   +- what happened to item (removed)
+| |   |  |    | |   || |   +- list item's actual index
+| |   |  |    | |   || +- prior item was omitted
+| |   |  |    | |   |+- subdiff for list item
+| |   |  |    | |   +- it's value - list
+| |   |  |    | +- it is deeply changed
+| |   |  |    +- subdiff for key 'one'
+| |   |  +- it has key 'one'
+| |   +- top-level thing is a dict
+| +- changes somewhere deeply inside
++- diff is always a dict
 ```
 
 ## License

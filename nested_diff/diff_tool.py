@@ -60,7 +60,8 @@ class App(nested_diff.cli.App):
             metavar='NUM',
             type=int,
             help='amount of context lines for multiline strings diffs; '
-                 'negative value will disable multiline diffs, default is 3',
+                 'negative value will disable multiline diffs, default is '
+                 '"%(default)s"',
         )
 
         parser.add_argument(
