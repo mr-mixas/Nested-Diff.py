@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018,2019 Michael Samoglyadov
+# Copyright 2018-2021 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ from pickle import dumps
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
-__version__ = '0.6'
+__version__ = '0.7'
 __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
