@@ -5,7 +5,6 @@ import nested_diff
 
 
 def do_test_function(test, func):
-
     if 'raises' in test:
         with test['raises']:
             func(test)

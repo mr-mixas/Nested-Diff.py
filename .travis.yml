@@ -5,10 +5,11 @@ python:
 - '3.5'
 - '3.6'
 - '3.7'
+- '3.8'
 - 'pypy3'
 matrix:
   include:
-    - python: '3.8'
+    - python: '3.9'
       install:
       - pip install --quiet --upgrade coveralls tox
       script: tox -e coverage
