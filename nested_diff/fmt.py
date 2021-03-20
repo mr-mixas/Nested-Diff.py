@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019 Michael Samoglyadov
+# Copyright 2019-2021 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 Formatters for Nested Diff.
 
 """
+import html
+
 import nested_diff
 
 
@@ -26,20 +28,14 @@ class AbstractFormatter(nested_diff.Iterator):
     Base class for nested diff formatters
 
     """
-    def __init__(
-        self,
-        indent='  ',
-        line_separator='\n',
-        header='',
-        footer='',
-        **kwargs  # noqa C816
-    ):
+    def __init__(self, indent='  ', line_separator='\n', **kwargs):
         super().__init__(**kwargs)
 
         self.indent = indent
         self.line_separator = line_separator
-        self.header = self.get_header() if header is None else header
-        self.footer = self.get_footer() if footer is None else footer
+
+        self.multiline_header_prefix = '@@ -'
+        self.multiline_header_suffix = ' @@'
 
         self.obj_prefix = {
             dict: '{',
@@ -75,19 +71,20 @@ class AbstractFormatter(nested_diff.Iterator):
             'U',
         )
 
-    def get_header(self):
+        self.type_prefix = '<'
+        self.type_suffix = '>'
+
+        self.__emitters = {}
+
+    def get_emitter(self, diff, depth=0):
         """
-        Return header for formatted diff.
+        Return apropriate tokens emitter for diff extention.
 
         """
-        return ''
-
-    def get_footer(self):
-        """
-        Return footer for formatted diff.
-
-        """
-        return ''
+        try:
+            return self.__emitters[diff['E'].__class__](diff, depth=depth)
+        except KeyError:
+            raise NotImplementedError from None
 
     @staticmethod
     def get_unified_diff_range(start, stop):
@@ -109,21 +106,12 @@ class AbstractFormatter(nested_diff.Iterator):
         """
         return ''.join(self.emit_tokens(diff, **kwargs))
 
-    @staticmethod
-    def repr_key(key):
+    def set_emitter(self, type_, method):
         """
-        Return string representation for key/index
+        Set tokens emitter for diff extention.
 
         """
-        return key.__repr__()
-
-    @staticmethod
-    def repr_value(val):
-        """
-        Return string representation for value
-
-        """
-        return val.__repr__()
+        self.__emitters[type_] = method
 
 
 class TextFormatter(AbstractFormatter):
@@ -134,11 +122,9 @@ class TextFormatter(AbstractFormatter):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.__emitters = {
-            frozenset: self.emit_set_tokens,
-            set: self.emit_set_tokens,
-            str: self.emit_miltiline_tokens,
-        }
+        self.set_emitter(frozenset, self.emit_set_tokens)
+        self.set_emitter(set, self.emit_set_tokens)
+        self.set_emitter(str, self.emit_miltiline_tokens)
 
     def emit_miltiline_tokens(self, diff, depth=0):
         """
@@ -152,15 +138,17 @@ class TextFormatter(AbstractFormatter):
                 if tag in subdiff:
                     yield self.val_line_prefix[tag]
                     yield indent
+
+                    value = subdiff[tag]
                     if tag == 'I':
-                        yield '@@'
-                        yield ' -' + self.get_unified_diff_range(
-                            subdiff[tag][0], subdiff[tag][1])
-                        yield ' +' + self.get_unified_diff_range(
-                            subdiff[tag][2], subdiff[tag][3]) + ' '
-                        yield '@@'
+                        yield self.multiline_header_prefix
+                        yield self.get_unified_diff_range(value[0], value[1])
+                        yield ' +'
+                        yield self.get_unified_diff_range(value[2], value[3])
+                        yield self.multiline_header_suffix
                     else:
-                        yield subdiff[tag]
+                        yield from self.repr_string(value, tag)
+
                     yield self.line_separator
 
     def emit_set_tokens(self, diff, depth=0):
@@ -175,24 +163,24 @@ class TextFormatter(AbstractFormatter):
                 if tag in subdiff:
                     yield self.val_line_prefix[tag]
                     yield indent
-                    yield self.repr_value(subdiff[tag])
+                    yield from self.repr_value(subdiff[tag], tag)
                     yield self.line_separator
                     break
 
     def emit_type_header(self, diff, depth=0):
         yield self.val_line_prefix['E']
         yield self.indent * depth
-        yield '<'
+        yield self.type_prefix
         yield diff['E'].__class__.__name__
-        yield '>'
+        yield self.type_suffix
         yield self.line_separator
 
-    def emit_tokens(self, diff, depth=0):
+    def emit_tokens(self, diff, depth=0, header='', footer=''):
         """
         Yield formatted diff token by token
 
         """
-        yield self.header
+        yield header
 
         stack = [self.get_iterator(diff)]
 
@@ -215,7 +203,7 @@ class TextFormatter(AbstractFormatter):
                     if tag in diff:
                         yield self.val_line_prefix[tag]
                         yield self.indent * depth
-                        yield self.repr_value(diff[tag])
+                        yield from self.repr_value(diff[tag], tag)
                         yield self.line_separator
                 continue
 
@@ -225,26 +213,128 @@ class TextFormatter(AbstractFormatter):
                 if tag in subdiff:
                     yield self.key_line_prefix[tag]
                     yield self.indent * depth
-                    yield self.obj_prefix[diff_type]
-                    yield self.repr_key(key)
-                    yield self.obj_suffix[diff_type]
+                    yield from self.repr_key(key, tag, diff_type)
                     yield self.line_separator
                     break
 
             depth += 1
             stack.append(self.get_iterator(subdiff))
 
-        yield self.footer
+        yield footer
 
-    def get_emitter(self, diff, depth=0):
+    def repr_key(self, key, tag, diff_type):
         """
-        Return apropriate tokens emitter for diff extention.
+        Return string representation for key/index
 
         """
-        try:
-            return self.__emitters[diff['E'].__class__](diff, depth=depth)
-        except KeyError:
-            raise NotImplementedError from None
+        yield self.obj_prefix[diff_type]
+        yield key.__repr__()
+        yield self.obj_suffix[diff_type]
+
+    @staticmethod
+    def repr_string(val, tag):
+        yield val
+
+    @staticmethod
+    def repr_value(val, tag):
+        """
+        Return string representation for value
+
+        """
+        yield val.__repr__()
+
+
+class HtmlFormatter(TextFormatter):
+    """
+    Produce human friendly html diff with indenting formatting.
+
+    Text copied from the browser should be exactly the same as TextFormatter
+    produce.
+
+    """
+    def __init__(self, *args, line_separator='', **kwargs):
+        super().__init__(*args, line_separator=line_separator, **kwargs)
+
+        self.line_separator = '</div>' + self.line_separator
+
+        self.multiline_header_prefix = '<span class="dif-kX0-0">@@ -'
+        self.multiline_header_suffix = ' @@</span>'
+
+        for key, val in self.key_line_prefix.items():
+            self.key_line_prefix[key] = '<div>' + val
+        for key, val in self.val_line_prefix.items():
+            self.val_line_prefix[key] = '<div>' + val
+
+        self.type_prefix = '<span class="dif-kE">&lt;'
+        self.type_suffix = '&gt;</span>'
+
+        self.key_prefix = {}
+        self.key_suffix = {}
+        for key in self.key_line_prefix:
+            self.key_prefix[key] = '<span class="dif-k' + key + '">'
+            self.key_suffix[key] = '</span>'
+
+        self.val_prefix = {}
+        self.val_suffix = {}
+        for key in self.val_line_prefix:
+            self.val_prefix[key] = '<span class="dif-v' + key + '">'
+            self.val_suffix[key] = '</span>'
+
+    @staticmethod
+    def get_css():
+        return (
+            '.dif-body {font-family: monospace; white-space: pre}'
+            ' .dif-kA {background-color: #cfc; font-weight: bold}'
+            ' .dif-kD {color: #000}'
+            ' .dif-kE {color: #00b}'
+            ' .dif-kN {color: #000}'
+            ' .dif-kO {color: #000}'
+            ' .dif-kR {background-color: #fcc; font-weight: bold}'
+            ' .dif-kU {color: #777}'
+            ' .dif-kX0-0 {color: #707}'
+            ' .dif-vA {background-color: #dfd}'
+            ' .dif-vN {background-color: #dfd}'
+            ' .dif-vO {background-color: #fdd}'
+            ' .dif-vR {background-color: #fdd}'
+            ' .dif-vU {color: #777}'
+        )
+
+    def emit_tokens(self, diff, depth=0, header='', footer=''):
+        """
+        Yield formatted diff token by token.
+
+        """
+        yield from super().emit_tokens(
+            diff,
+            depth=depth,
+            header=header + '<div class="dif-body">',
+            footer='</div>' + footer,
+        )
+
+    def repr_key(self, key, tag, diff_type):
+        """
+        Return string representation for key/index
+
+        """
+        yield self.key_prefix[tag]
+        yield self.obj_prefix[diff_type]
+        yield html.escape(key.__repr__())
+        yield self.obj_suffix[diff_type]
+        yield self.key_suffix[tag]
+
+    def repr_string(self, val, tag):
+        yield self.val_prefix[tag]
+        yield html.escape(val)
+        yield self.val_suffix[tag]
+
+    def repr_value(self, val, tag):
+        """
+        Return string representation for value
+
+        """
+        yield self.val_prefix[tag]
+        yield html.escape(val.__repr__())
+        yield self.val_suffix[tag]
 
 
 class TermFormatter(TextFormatter):
