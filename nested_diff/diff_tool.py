@@ -31,7 +31,7 @@ class App(nested_diff.cli.App):
 
     """
     supported_ifmts = ('auto', 'ini', 'json', 'yaml')
-    supported_ofmts = ('auto', 'json', 'term', 'text', 'yaml')
+    supported_ofmts = ('auto', 'html', 'json', 'term', 'text', 'yaml')
 
     def diff(self, a, b):
         """
@@ -104,6 +104,8 @@ class App(nested_diff.cli.App):
             return TermDumper(**kwargs)
         elif fmt == 'text':
             return TextDumper(**kwargs)
+        elif fmt == 'html':
+            return HtmlDumper(**kwargs)
 
         return super().get_dumper(fmt, **kwargs)
 
@@ -127,6 +129,37 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
     def get_opts(opts):
         opts.setdefault('sort_keys', True)
         return opts
+
+
+class HtmlDumper(AbstractFmtDumper):
+    def __init__(self, **kwargs):
+        super().__init__()
+        from html import escape
+        from nested_diff import fmt
+        self.html_opts = {
+            'lang': 'en',
+            'title': 'Nested diff',
+        }
+        self.html_opts.update(kwargs.pop('html_opts', {}))
+
+        self.formatter = fmt.HtmlFormatter(**self.get_opts(kwargs))
+
+        if 'header' not in self.html_opts:
+            self.html_opts['header'] = (
+                '<!DOCTYPE html><html lang="' + self.html_opts['lang'] +
+                '"><head><title>' + escape(self.html_opts['title']) +
+                '</title><style>' + self.formatter.get_css() +
+                '</style></head><body>'
+            )
+        if 'footer' not in self.html_opts:
+            self.html_opts['footer'] = '</body></html>'
+
+    def encode(self, data):
+        return self.formatter.format(
+            data,
+            header=self.html_opts['header'],
+            footer=self.html_opts['footer'],
+        )
 
 
 class TermDumper(AbstractFmtDumper):

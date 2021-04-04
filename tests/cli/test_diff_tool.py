@@ -133,6 +133,44 @@ def test_multiline_disabled(capsys, expected, fullname):
     assert expected == captured.out
 
 
+def test_html_ofmt(capsys, expected, fullname):
+    nested_diff.diff_tool.App(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.json', shared=True),
+        '--ofmt', 'html',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
+def test_html_ofmt_opts(capsys, expected, fullname):
+    nested_diff.diff_tool.App(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.json', shared=True),
+        '--ofmt', 'html',
+        '--ofmt-opts', '{"html_opts": {"lang": "es", "title": "<título>"}}',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
+def test_html_ofmt_wrappings(capsys, expected, fullname):
+    nested_diff.diff_tool.App(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.json', shared=True),
+        '--ofmt', 'html',
+        '--ofmt-opts', '{"html_opts": {"header": "<html>", "footer": "</html>", "title": "ignored"}}',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
 def test_text_ofmt(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
