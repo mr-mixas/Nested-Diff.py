@@ -5,22 +5,23 @@ class Custom(object):
     def __init__(self, value=None):
         self.value = value
 
-    def __diff__(self, other, **kwargs):
-        ret = diff(self.value, other.value, **kwargs)
+    def __diff__(self, other, differ):
+        dif = differ.diff(self.value, other.value)
 
-        if 'U' in ret:
-            ret = {'U': self}
-        elif ret:
-            ret = {'D': self.__class__(ret)}
+        if 'U' in dif:
+            return {'U': self}
 
-        return ret
+        if dif:
+            return {'D': self.__class__(value=dif)}
 
-    def __patch__(self, ndiff):
+        return dif
+
+    def __patch__(self, ndiff, patcher):
         if 'N' in ndiff:
             return ndiff['N']
 
         if 'D' in ndiff:
-            self.value = ndiff['D'].value['N']
+            self.value = patcher.patch(self.value, ndiff['D'].value)
 
         return self
 

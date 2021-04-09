@@ -96,8 +96,8 @@ class Differ(object):
         default is `False`.
 
         `diff_method` method with such name (if object have one) from first
-        diffed object will be called for diff. Second diffed object and all
-        Differ opts will be passed as arguments, diff expected for output.
+        diffed object will be called for diff. Second diffed object and current
+        differ will be passed as arguments, diff expected for output.
         Disabled (`None`) by default.
 
         `multiline_diff_context` defines amount of context lines for multiline
@@ -141,20 +141,9 @@ class Differ(object):
         """
         if self.__diff_method is not None:
             try:
-                method = a.__getattribute__(self.__diff_method)
+                return a.__getattribute__(self.__diff_method)(b, self)
             except AttributeError:
                 pass
-            else:
-                return method(
-                    b,
-                    A=self.op_a,
-                    N=self.op_n,
-                    O=self.op_o,  # noqa: E741
-                    R=self.op_r,
-                    U=self.op_u,
-                    trimR=self.op_trim_r,
-                    diff_method=self.__diff_method,
-                )
 
         if a.__class__ is b.__class__:
             # it's faster to compare pickled dumps and dig differences
@@ -430,7 +419,8 @@ class Patcher(object):
 
         Optional arguments:
         `patch_method` method with such name, if patched object have one, will
-        be called with patch as argument. Patched object expected for output.
+        be called with patch and current patcher as arguments. Patched object
+        expected for output.
         Disabled (`None`) by default.
 
         """
@@ -470,11 +460,10 @@ class Patcher(object):
         """
         if self.__patch_method is not None:
             try:
-                method = target.__getattribute__(self.__patch_method)
+                return target.__getattribute__(self.__patch_method)(
+                    ndiff, self)
             except AttributeError:
                 pass
-            else:
-                return method(ndiff)
 
         if 'D' in ndiff:
             return self.get_patcher(
