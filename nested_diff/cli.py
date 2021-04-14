@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019,2020,2021 Michael Samoglyadov
+# Copyright 2019-2021 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Common stuff for cli tools.
+"""Common stuff for cli tools."""
 
-"""
 import argparse
 import os
 import sys
@@ -26,10 +24,8 @@ import nested_diff
 
 
 class App(object):
-    """
-    Base class for command line tools
+    """Base class for command line tools."""
 
-    """
     default_ifmt = 'auto'
     default_ofmt = 'auto'
 
@@ -125,10 +121,7 @@ class App(object):
 
     @staticmethod
     def guess_fmt(fp, default, ignore_fps=(sys.stdin, sys.stdout, sys.stderr)):
-        """
-        Guess format of a file object based on its extention.
-
-        """
+        """Guess format of a file object based on its extention."""
         if fp in ignore_fps:
             return default
 
@@ -163,6 +156,7 @@ class App(object):
     def override_excepthook():
         """
         Change default exit code for unhandled exceptions from 1 to 127.
+
         Mainly for diff tool (version control systems treat 1 as difference
         in files).
 
@@ -178,10 +172,8 @@ class App(object):
 
 
 class Dumper(object):
-    """
-    Base class for data dumpers
+    """Base class for data dumpers."""
 
-    """
     tty_final_new_line = False
 
     def encode(self, data):
@@ -201,10 +193,8 @@ class Dumper(object):
 
 
 class Loader(object):
-    """
-    Base class for data loaders
+    """Base class for data loaders."""
 
-    """
     def decode(self, data):
         raise NotImplementedError
 
@@ -218,12 +208,13 @@ class Loader(object):
 
 class JsonDumper(Dumper):
     """
-    JSON dumper
+    JSON dumper.
 
     All kwargs passed directly to `json.JSONEncoder`
     `indent` is set to 3 and `sort_keys` to `True` if absent in kwargs
 
     """
+
     tty_final_new_line = True
 
     def __init__(self, **kwargs):
@@ -244,11 +235,12 @@ class JsonDumper(Dumper):
 
 class JsonLoader(Loader):
     """
-    JSON loader
+    JSON loader.
 
     All kwargs passed directly to `json.JSONDecoder`
 
     """
+
     def __init__(self, **kwargs):
         super().__init__()
 
@@ -261,9 +253,12 @@ class JsonLoader(Loader):
 
 class IniDumper(Dumper):
     """
-    INI dumper
+    INI dumper.
+
+    All kwargs passed directly to `configparser.ConfigParser`
 
     """
+
     def __init__(self, **kwargs):
         super().__init__()
 
@@ -281,14 +276,17 @@ class IniDumper(Dumper):
 
 class IniLoader(Loader):
     """
-    INI loader
+    INI loader.
+
+    All kwargs passed directly to `configparser.ConfigParser`
 
     """
+
     def __init__(self, **kwargs):
         super().__init__()
 
-        from configparser import ConfigParser
-        self.decoder = ConfigParser(**kwargs)
+        import configparser
+        self.decoder = configparser.ConfigParser(**kwargs)
 
     def decode(self, data):
         self.decoder.read_string(data)
@@ -307,12 +305,13 @@ class IniLoader(Loader):
 
 class YamlDumper(Dumper):
     """
-    YAML dumper
+    YAML dumper.
 
     All kwargs passed directly to `yaml.safe_dump()`
     `default_flow_style` is set to `False` if absent in kwargs
 
     """
+
     def __init__(self, **kwargs):
         super().__init__()
 
@@ -331,11 +330,12 @@ class YamlDumper(Dumper):
 
 class YamlLoader(Loader):
     """
-    YAML loader
+    YAML loader.
 
     All kwargs passed directly to `yaml.safe_load()`
 
     """
+
     def __init__(self, **kwargs):
         super().__init__()
 

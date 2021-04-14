@@ -14,20 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Formatters for Nested Diff.
+"""Formatters for Nested Diff."""
 
-"""
 import html
 
 import nested_diff
 
 
 class AbstractFormatter(nested_diff.Iterator):
-    """
-    Base class for nested diff formatters
+    """Base class for nested diff formatters."""
 
-    """
     def __init__(self, indent='  ', line_separator='\n', **kwargs):
         super().__init__(**kwargs)
 
@@ -77,10 +73,7 @@ class AbstractFormatter(nested_diff.Iterator):
         self.__emitters = {}
 
     def get_emitter(self, diff, depth=0):
-        """
-        Return apropriate tokens emitter for diff extention.
-
-        """
+        """Return apropriate tokens emitter for diff extention."""
         try:
             return self.__emitters[diff['E'].__class__](diff, depth=depth)
         except KeyError:
@@ -88,10 +81,7 @@ class AbstractFormatter(nested_diff.Iterator):
 
     @staticmethod
     def get_unified_diff_range(start, stop):
-        """
-        Return unified diff lines range.
-
-        """
+        """Return unified diff lines range."""
         length = stop - start
 
         if length > 1:
@@ -100,25 +90,17 @@ class AbstractFormatter(nested_diff.Iterator):
         return str(start + 1)
 
     def format(self, diff, **kwargs):
-        """
-        Return completely formatted diff
-
-        """
+        """Return completely formatted diff as string."""
         return ''.join(self.emit_tokens(diff, **kwargs))
 
     def set_emitter(self, type_, method):
-        """
-        Set tokens emitter for diff extention.
-
-        """
+        """Set tokens emitter for diff extention."""
         self.__emitters[type_] = method
 
 
 class TextFormatter(AbstractFormatter):
-    """
-    Produce human friendly text diff with indenting formatting.
+    """Produce human friendly text diff with indenting formatting."""
 
-    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -127,10 +109,7 @@ class TextFormatter(AbstractFormatter):
         self.set_emitter(str, self.emit_miltiline_tokens)
 
     def emit_miltiline_tokens(self, diff, depth=0):
-        """
-        Yield unified diff for multiline strings.
-
-        """
+        """Yield unified diff for multiline strings."""
         indent = self.indent * depth
 
         for subdiff in diff['D']:
@@ -152,10 +131,7 @@ class TextFormatter(AbstractFormatter):
                     yield self.line_separator
 
     def emit_set_tokens(self, diff, depth=0):
-        """
-        Yield tokens for set's and frozenset's diff
-
-        """
+        """Yield tokens for set's and frozenset's diff."""
         indent = self.indent * depth
 
         for subdiff in diff['D']:
@@ -168,6 +144,7 @@ class TextFormatter(AbstractFormatter):
                     break
 
     def emit_type_header(self, diff, depth=0):
+        """Yield header for non-builtin types."""
         yield self.val_line_prefix['E']
         yield self.indent * depth
         yield self.type_prefix
@@ -176,10 +153,7 @@ class TextFormatter(AbstractFormatter):
         yield self.line_separator
 
     def emit_tokens(self, diff, depth=0, header='', footer=''):
-        """
-        Yield formatted diff token by token
-
-        """
+        """Yield formatted diff token by token."""
         yield header
 
         stack = [self.get_iterator(diff)]
@@ -223,10 +197,7 @@ class TextFormatter(AbstractFormatter):
         yield footer
 
     def repr_key(self, key, tag, diff_type):
-        """
-        Return string representation for key/index
-
-        """
+        """Return string representation for key/index."""
         yield self.obj_prefix[diff_type]
         yield key.__repr__()
         yield self.obj_suffix[diff_type]
@@ -237,10 +208,7 @@ class TextFormatter(AbstractFormatter):
 
     @staticmethod
     def repr_value(val, tag):
-        """
-        Return string representation for value
-
-        """
+        """Return string representation for value."""
         yield val.__repr__()
 
 
@@ -252,6 +220,7 @@ class HtmlFormatter(TextFormatter):
     produce.
 
     """
+
     def __init__(self, *args, line_separator='', **kwargs):
         super().__init__(*args, line_separator=line_separator, **kwargs)
 
@@ -300,10 +269,7 @@ class HtmlFormatter(TextFormatter):
         )
 
     def emit_tokens(self, diff, depth=0, header='', footer=''):
-        """
-        Yield formatted diff token by token.
-
-        """
+        """Yield formatted diff token by token."""
         yield from super().emit_tokens(
             diff,
             depth=depth,
@@ -312,10 +278,7 @@ class HtmlFormatter(TextFormatter):
         )
 
     def repr_key(self, key, tag, diff_type):
-        """
-        Return string representation for key/index
-
-        """
+        """Return string representation for key/index."""
         yield self.key_prefix[tag]
         yield self.obj_prefix[diff_type]
         yield html.escape(key.__repr__())
@@ -328,20 +291,15 @@ class HtmlFormatter(TextFormatter):
         yield self.val_suffix[tag]
 
     def repr_value(self, val, tag):
-        """
-        Return string representation for value
-
-        """
+        """Return string representation for value."""
         yield self.val_prefix[tag]
         yield html.escape(val.__repr__())
         yield self.val_suffix[tag]
 
 
 class TermFormatter(TextFormatter):
-    """
-    Same as TextFormatter but with term colors.
+    """Same as TextFormatter but with term colors."""
 
-    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

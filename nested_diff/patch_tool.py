@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019,2020 Michael Samoglyadov
+# Copyright 2019-2021 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Patch tool for nested diff.
+"""Patch tool for nested diff."""
 
-"""
 import argparse
 import nested_diff.cli
 
 
 class App(nested_diff.cli.App):
-    """
-    Patch tool for nested data structures
+    """Patch tool for nested data structures."""
 
-    """
     def dump(self, file_, data, fmt):
         if fmt == 'auto':
             fmt = self.guess_fmt(file_, 'json')
@@ -44,7 +40,7 @@ class App(nested_diff.cli.App):
     @staticmethod
     def patch(target, diff):
         """
-        Return patched object
+        Return patched object.
 
         :param target: object to patch.
         :param diff: nested diff.
@@ -68,4 +64,5 @@ class App(nested_diff.cli.App):
 
 
 def cli():
+    """Cli tool entry point."""
     return App().run()

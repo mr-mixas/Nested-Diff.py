@@ -101,7 +101,7 @@ assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 >>>
 ```
 
-## Diff format
+## Diff structure
 
 Diff is a dict and may contain following keys:
 

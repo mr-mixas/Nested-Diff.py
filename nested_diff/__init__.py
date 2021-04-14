@@ -14,11 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Recursive diff for nested structures, implementation of
-https://github.com/mr-mixas/Nested-Diff
+"""Recursive diff and patch for nested structures."""
 
-"""
 from difflib import SequenceMatcher
 from pickle import dumps
 
@@ -54,7 +51,6 @@ class Differ(object):
     in this case.
 
     Example:
-
     a:  {"one": [5,7]}
     b:  {"one": [5], "two": 2}
     opts: U=False  # omit unchanged items
@@ -83,6 +79,7 @@ class Differ(object):
     compared by values.
 
     """
+
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E741
                  trimR=False, diff_method=None, multiline_diff_context=-1):
         """
@@ -128,12 +125,11 @@ class Differ(object):
 
     def diff(self, a, b):
         """
-        Compute diff for two arbitrary objects.
+        Return diff for two arbitrary objects.
 
         This method is a dispatcher and calls registered diff method for each
         diffed values pair according to their type. `diff__default` called for
-        unequal and not registered types. Args and kwargs passed to called
-        method as is.
+        unequal and not registered types. Args passed to called method as is.
 
         :param a: First object to diff.
         :param b: Second object to diff.
@@ -156,10 +152,7 @@ class Differ(object):
         return self.diff__default(a, b)
 
     def diff__default(self, a, b):
-        """
-        Return default diff.
-
-        """
+        """Return default diff."""
         dif = {}
 
         if self.op_n:
@@ -171,7 +164,7 @@ class Differ(object):
 
     def diff_dict(self, a, b):
         """
-        Compute diff for two dicts.
+        Return diff for two dicts.
 
         :param a: First dict to diff.
         :param b: Second dict to diff.
@@ -211,7 +204,7 @@ class Differ(object):
 
     def diff_list(self, a, b):
         """
-        Compute diff for two lists.
+        Return diff for two lists.
 
         :param a: First list to diff.
         :param b: Second list to diff.
@@ -273,8 +266,8 @@ class Differ(object):
         return {}
 
     def diff_multiline(self, a, b):
-        """
-        Compute diff for multiline strings.
+        r"""
+        Return diff for multiline strings.
 
         Result is a unified diff formatted as usual nested diff structure with
         'I' tagged subdiffs to contain hunks headers.
@@ -329,7 +322,7 @@ class Differ(object):
 
     def diff_set(self, a, b):
         """
-        Compute diff for two [frozen]sets.
+        Return diff for two [frozen]sets.
 
         :param a: First set to diff.
         :param b: Second set to diff.
@@ -365,7 +358,7 @@ class Differ(object):
 
     def diff_tuple(self, a, b):
         """
-        Compute diff for two tuples.
+        Return diff for two tuples.
 
         :param a: First tuple to diff.
         :param b: Second tuple to diff.
@@ -409,10 +402,8 @@ class Differ(object):
 
 
 class Patcher(object):
-    """
-    Patch objects using nested diff.
+    """Patch objects using nested diff."""
 
-    """
     def __init__(self, patch_method=None):
         """
         Construct Patcher.
@@ -604,10 +595,8 @@ class Patcher(object):
 
 
 class Iterator(object):
-    """
-    Nested diff iterator.
+    """Nested diff iterator."""
 
-    """
     def __init__(self, sort_keys=False):
         """
         Construct iterator.
@@ -718,9 +707,7 @@ class Iterator(object):
 
 def diff(a, b, **kwargs):
     """
-    Compute recursive diff for two passed objects.
-
-    Wrapper around Differ.diff() for backward compatibility.
+    Return recursive diff for two passed objects.
 
     :param a: First object to diff.
     :param b: Second object to diff.
@@ -734,8 +721,6 @@ def diff(a, b, **kwargs):
 def patch(target, ndiff, **kwargs):
     """
     Return patched object.
-
-    Wrapper around Patcher.patch() for backward compatibility.
 
     :param target: Object to patch.
     :param ndiff: Nested diff.

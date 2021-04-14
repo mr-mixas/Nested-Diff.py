@@ -14,10 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Nested diff command line tool.
+"""Nested diff command line tool."""
 
-"""
 import argparse
 import sys
 
@@ -26,16 +24,14 @@ import nested_diff.cli
 
 
 class App(nested_diff.cli.App):
-    """
-    Diff tool for nested data structures
+    """Diff tool for nested data structures."""
 
-    """
     supported_ifmts = ('auto', 'ini', 'json', 'yaml')
     supported_ofmts = ('auto', 'html', 'json', 'term', 'text', 'yaml')
 
     def diff(self, a, b):
         """
-        Return diff for passed objects
+        Return diff for passed objects.
 
         :param a: First object to diff.
         :param b: Second object to diff.
@@ -122,6 +118,8 @@ class App(nested_diff.cli.App):
 
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):
+    """Base class for diff dumpers."""
+
     def encode(self, data):
         return self.encoder.format(data)
 
@@ -132,6 +130,8 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 
 
 class HtmlDumper(AbstractFmtDumper):
+    """Human friendly HTML dumper for nested diff."""
+
     def __init__(self, **kwargs):
         super().__init__()
         from html import escape
@@ -163,6 +163,8 @@ class HtmlDumper(AbstractFmtDumper):
 
 
 class TermDumper(AbstractFmtDumper):
+    """Same as TextDumper but with ANSI term colors."""
+
     def __init__(self, **kwargs):
         super().__init__()
         from nested_diff import fmt
@@ -170,6 +172,8 @@ class TermDumper(AbstractFmtDumper):
 
 
 class TextDumper(AbstractFmtDumper):
+    """Human friendly text dumper for nested diff."""
+
     def __init__(self, **kwargs):
         super().__init__()
         from nested_diff import fmt
@@ -177,4 +181,5 @@ class TextDumper(AbstractFmtDumper):
 
 
 def cli():
+    """Cli tool entry point."""
     return App().run()

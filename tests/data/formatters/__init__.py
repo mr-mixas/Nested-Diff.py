@@ -1,7 +1,4 @@
-"""
-python specific tests
-
-"""
+"""Python specific tests."""
 from tests.data import standard, specific
 
 
