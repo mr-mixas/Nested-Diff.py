@@ -253,12 +253,12 @@ class HtmlFormatter(TextFormatter):
     def get_css():
         return (
             '.dif-body {font-family: monospace; white-space: pre}'
-            ' .dif-kA {background-color: #cfc; font-weight: bold}'
+            ' .dif-kA {background-color: #cfc}'
             ' .dif-kD {color: #000}'
             ' .dif-kE {color: #00b}'
             ' .dif-kN {color: #000}'
             ' .dif-kO {color: #000}'
-            ' .dif-kR {background-color: #fcc; font-weight: bold}'
+            ' .dif-kR {background-color: #fcc}'
             ' .dif-kU {color: #777}'
             ' .dif-kX0-0 {color: #707}'
             ' .dif-vA {background-color: #dfd}'
