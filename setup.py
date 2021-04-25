@@ -41,6 +41,12 @@ setuptools.setup(
             'nested_patch=nested_diff.patch_tool:cli',
         ],
     },
+    extras_require={
+        'cli': [
+            'pyyaml',
+            'toml',
+        ],
+    },
     include_package_data=True,
     zip_safe=False,
 )

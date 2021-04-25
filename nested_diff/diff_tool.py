@@ -26,8 +26,7 @@ import nested_diff.cli
 class App(nested_diff.cli.App):
     """Diff tool for nested data structures."""
 
-    supported_ifmts = ('auto', 'ini', 'json', 'yaml')
-    supported_ofmts = ('auto', 'html', 'json', 'term', 'text', 'yaml')
+    supported_ofmts = ('auto', 'html', 'json', 'term', 'toml', 'text', 'yaml')
 
     def diff(self, a, b):
         """

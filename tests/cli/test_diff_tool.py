@@ -1,5 +1,6 @@
 import json
 import pytest
+import sys
 
 from unittest import mock
 
@@ -188,6 +189,19 @@ def test_term_ofmt(capsys, expected, fullname):
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
         '--ofmt', 'term',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert expected == captured.out
+
+
+@pytest.mark.skipif(sys.version_info < (3, 6), reason='different keys order')
+def test_toml_fmt(capsys, expected, fullname):
+    nested_diff.diff_tool.App(args=(
+        fullname('dict.a.toml', shared=True),
+        fullname('dict.b.toml', shared=True),
+        '--ofmt', 'toml',
     )).run()
 
     captured = capsys.readouterr()

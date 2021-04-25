@@ -29,8 +29,8 @@ class App(object):
     default_ifmt = 'auto'
     default_ofmt = 'auto'
 
-    supported_ifmts = ('auto', 'ini', 'json', 'yaml')
-    supported_ofmts = ('auto', 'ini', 'json', 'yaml')
+    supported_ifmts = ('auto', 'ini', 'json', 'toml', 'yaml')
+    supported_ofmts = ('auto', 'ini', 'json', 'toml', 'yaml')
 
     version = nested_diff.__version__
 
@@ -116,6 +116,8 @@ class App(object):
             return YamlDumper(**kwargs)
         elif fmt == 'ini':
             return IniDumper(**kwargs)
+        elif fmt == 'toml':
+            return TomlDumper(**kwargs)
 
         raise RuntimeError('Unsupported output format: ' + fmt)
 
@@ -140,6 +142,8 @@ class App(object):
             return YamlLoader(**kwargs)
         elif fmt == 'ini':
             return IniLoader(**kwargs)
+        elif fmt == 'toml':
+            return TomlLoader(**kwargs)
 
         raise RuntimeError('Unsupported input format: ' + fmt)
 
@@ -301,6 +305,32 @@ class IniLoader(Loader):
             self.decoder.remove_section(section)
 
         return out
+
+
+class TomlDumper(Dumper):
+    """TOML dumper."""
+
+    def __init__(self, **kwargs):
+        super().__init__()
+
+        import toml
+        self.codec = toml
+
+    def encode(self, data):
+        return self.codec.dumps(data)
+
+
+class TomlLoader(Loader):
+    """TOML loader."""
+
+    def __init__(self, **kwargs):
+        super().__init__()
+
+        import toml
+        self.codec = toml
+
+    def decode(self, data):
+        return self.codec.loads(data)
 
 
 class YamlDumper(Dumper):
