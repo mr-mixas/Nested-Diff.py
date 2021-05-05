@@ -21,12 +21,20 @@ import html
 import nested_diff
 
 
-class AbstractFormatter(nested_diff.Iterator):
+class AbstractFormatter(object):
     """Base class for nested diff formatters."""
 
     def __init__(self, indent='  ', line_separator='\n', **kwargs):
-        super().__init__(**kwargs)
+        """
+        Construct diff formatter.
 
+        :param indent: prefix for each level of diff.
+        :line_separator: text lines delimiter.
+
+        Rest kwargs are passed to nested_diff.Iterator as is.
+
+        """
+        self.iterator = nested_diff.Iterator(**kwargs)
         self.indent = indent
         self.line_separator = line_separator
 
@@ -156,16 +164,7 @@ class TextFormatter(AbstractFormatter):
         """Yield formatted diff token by token."""
         yield header
 
-        stack = [self.get_iterator(diff)]
-
-        while stack:
-            try:
-                diff, key, subdiff = next(stack[-1])
-            except StopIteration:
-                stack.pop()
-                depth -= 1
-                continue
-
+        for diff, key, subdiff, depth in self.iterator.iterate(diff, depth):
             # emit value
             if 'E' in diff:
                 yield from self.emit_type_header(diff, depth=depth)
@@ -182,17 +181,13 @@ class TextFormatter(AbstractFormatter):
                 continue
 
             # emit key
-            diff_type = diff['D'].__class__
             for tag in self.tags:
                 if tag in subdiff:
                     yield self.key_line_prefix[tag]
                     yield self.indent * depth
-                    yield from self.repr_key(key, tag, diff_type)
+                    yield from self.repr_key(key, tag, diff['D'].__class__)
                     yield self.line_separator
                     break
-
-            depth += 1
-            stack.append(self.get_iterator(subdiff))
 
         yield footer
 
