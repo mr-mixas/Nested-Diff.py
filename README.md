@@ -7,11 +7,13 @@ Recursive diff and patch for nested structures
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 [![License](https://img.shields.io/pypi/l/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 
+**[Live Demo](https://nesteddiff.pythonanywhere.com/)**
+
 ## Install
 
 `pip install nested_diff`
 
-## Command line tools examples
+## Command line tools
 
 ```
 mixas:~/$ cat a.json b.json
@@ -26,7 +28,7 @@ mixas:~/$ nested_diff a.json b.json --ofmt json > patch.json
 mixas:~/$ nested_patch a.json patch.json
 ```
 
-## Library usage examples
+## Library usage
 
 ```
 >>> from nested_diff import diff, patch
@@ -46,37 +48,6 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 >>> c = patch(c, diff(c, d))
 >>> assert c == d
-```
-
-### Subclassing
-
-```
-from nested_diff import Differ
-
-
-class CustomDiffer(Differ):
-    """
-    Use custom precision for floats.
-
-    """
-    def __init__(self, float_precision=2, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.set_differ(float, self.diff_float)
-        self.float_precision = float_precision
-
-    def diff_float(self, a, b):
-        if round(a, self.float_precision) == round(b, self.float_precision):
-            return {'U': a} if self.op_u else {}
-
-        return super().diff__default(a, b)
-
-
-differ = CustomDiffer(float_precision=1, U=False)
-
-a = [0.001, 0.01, 0.1]
-b = [0.002, 0.02, 0.2]
-
-assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 ```
 
 ### Formatting diffs
@@ -99,6 +70,35 @@ assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 -   1
 +   0
 >>>
+```
+
+### Subclassing
+
+```
+from nested_diff import Differ
+
+
+class CustomDiffer(Differ):
+    """Differ with custom precision for floats."""
+
+    def __init__(self, float_precision=2, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.set_differ(float, self.diff_float)
+        self.float_precision = float_precision
+
+    def diff_float(self, a, b):
+        if round(a, self.float_precision) == round(b, self.float_precision):
+            return {'U': a} if self.op_u else {}
+
+        return super().diff__default(a, b)
+
+
+differ = CustomDiffer(float_precision=1, U=False)
+
+a = [0.001, 0.01, 0.1]
+b = [0.002, 0.02, 0.2]
+
+assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 ```
 
 ## Diff structure

@@ -3,10 +3,8 @@ from nested_diff import Differ
 
 def test_subclassing():
     class CustomDiffer(Differ):
-        """
-        Use custom precision for floats.
+        """Differ with custom precision for floats."""
 
-        """
         def __init__(self, float_precision=2, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.set_differ(float, self.diff_float)
