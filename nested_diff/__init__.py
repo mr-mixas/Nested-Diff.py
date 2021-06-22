@@ -303,17 +303,14 @@ class Differ(object):
 
             for op, i1, i2, j1, j2 in group:
                 if op == 'equal':
-                    for line in lines_a[i1:i2]:
-                        dif.append({'U': line})
+                    dif.extend({'U': line} for line in lines_a[i1:i2])
                     continue
 
-                if op in {'replace', 'delete'}:
-                    for line in lines_a[i1:i2]:
-                        dif.append({'R': line})
+                if op != 'insert':
+                    dif.extend({'R': line} for line in lines_a[i1:i2])
 
-                if op in {'replace', 'insert'}:
-                    for line in lines_b[j1:j2]:
-                        dif.append({'A': line})
+                if op != 'delete':
+                    dif.extend({'A': line} for line in lines_b[j1:j2])
 
         if dif:
             return {'D': dif, 'E': a.__class__()}
