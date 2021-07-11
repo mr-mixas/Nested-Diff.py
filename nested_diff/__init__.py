@@ -119,7 +119,7 @@ class Differ(object):
             tuple: self.diff_tuple,
         }
 
-        if multiline_diff_context >= 0:
+        if multiline_diff_context >= 0 and self.op_n and self.op_o:
             self.__differs[str] = self.diff_multiline
             self.multiline_diff_context = multiline_diff_context
 

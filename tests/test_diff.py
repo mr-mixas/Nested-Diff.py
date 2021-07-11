@@ -56,3 +56,12 @@ def test_different_object_attributes():
     d = diff(a, b)
 
     assert {'N': b, 'O': a} == d
+
+
+def test_str_multiline_diff_disabled_when_ON_disabled():
+    a = ['a']
+    b = ['a\nb']
+
+    assert {'D': [{'O': 'a'}]} == diff(a, b, N=False, multiline_diff_context=3)
+    assert {'D': [{'N': 'a\nb'}]} == diff(a, b, O=False, multiline_diff_context=3)
+    assert {} == diff(a, b, N=False, O=False, multiline_diff_context=3)
