@@ -335,15 +335,13 @@ class Differ(object):
         dif = []
 
         for i in a.union(b):
-            if i in a and i in b:
-                if self.op_u:
-                    dif.append({'U': i})
-
-            elif i in a:  # removed
-                if self.op_r:
+            if i in a:
+                if i in b:
+                    if self.op_u:
+                        dif.append({'U': i})
+                elif self.op_r:
                     # ignore trimR opt here: value required for removal
                     dif.append({'R': i})
-
             else:  # added
                 if self.op_a:
                     dif.append({'A': i})
@@ -370,8 +368,10 @@ class Differ(object):
         """
         dif = self.diff_list(a, b)
 
-        if 'D' in dif:
+        try:
             dif['D'] = tuple(dif['D'])
+        except KeyError:
+            pass
 
         return dif
 
@@ -457,10 +457,11 @@ class Patcher(object):
             return self.get_patcher(
                 ndiff['E' if 'E' in ndiff else 'D'].__class__,
             )(target, ndiff)
-        elif 'N' in ndiff:
-            return ndiff['N']
 
-        return target
+        try:
+            return ndiff['N']
+        except KeyError:
+            return target
 
     def patch_dict(self, target, ndiff):
         """
@@ -528,16 +529,16 @@ class Patcher(object):
                 idx = subdiff['I'][0] + offset
             elif 'A' in subdiff:
                 target.insert(idx, subdiff['A'])
-                offset = offset + 1
-                idx = idx + 1
+                offset += 1
+                idx += 1
             elif 'R' in subdiff:
                 if target.pop(idx) != subdiff['R']:
                     raise ValueError('Removing line does not match')
-                offset = offset - 1
+                offset -= 1
             elif 'U' in subdiff:
                 if target[idx] != subdiff['U']:
                     raise ValueError('Unchanged line does not match')
-                idx = idx + 1
+                idx += 1
             else:
                 raise ValueError('Unsupported operation')
 
@@ -643,8 +644,10 @@ class Iterator(object):
         idx = 0
 
         for item in ndiff['D']:
-            if 'I' in item:
+            try:
                 idx = item['I']
+            except KeyError:
+                pass
 
             yield ndiff, idx, item
 
