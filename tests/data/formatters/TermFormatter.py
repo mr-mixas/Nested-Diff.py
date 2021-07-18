@@ -387,6 +387,9 @@ RESULTS = {
     'tuples_lcs_noOU': {
         'result': '\x1b[1;32m+ (0)\x1b[0m\n\x1b[32m+   0\x1b[0m\n  (2)\x1b[0m\n\x1b[32m+   3\x1b[0m\n\x1b[1;31m- (3)\x1b[0m\n\x1b[31m-   5\x1b[0m\n',
     },
+    'type_headers_disabled': {
+        'result': '\x1b[35m  @@ -1,2 +1,2 @@\x1b[0m\n\x1b[31m- two\x1b[0m\n\x1b[32m+ 2\x1b[0m\n  lines\x1b[0m\n',
+    },
     'undef_vs_0': {
         'result': '\x1b[31m- None\x1b[0m\n\x1b[32m+ 0\x1b[0m\n',
     },

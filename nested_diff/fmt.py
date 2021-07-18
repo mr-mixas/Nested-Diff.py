@@ -109,8 +109,10 @@ class AbstractFormatter(object):
 class TextFormatter(AbstractFormatter):
     """Produce human friendly text diff with indenting formatting."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, type_headers=True, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.type_headers = type_headers
 
         self.set_emitter(frozenset, self.emit_set_tokens)
         self.set_emitter(set, self.emit_set_tokens)
@@ -167,7 +169,8 @@ class TextFormatter(AbstractFormatter):
         for diff, key, subdiff, depth in self.iterator.iterate(diff, depth):
             # emit value
             if 'E' in diff:
-                yield from self.emit_type_header(diff, depth=depth)
+                if self.type_headers:
+                    yield from self.emit_type_header(diff, depth=depth)
                 yield from self.get_emitter(diff, depth=depth)
                 continue
 

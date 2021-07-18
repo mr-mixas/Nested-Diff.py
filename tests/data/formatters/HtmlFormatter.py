@@ -387,6 +387,9 @@ RESULTS = {
     'tuples_lcs_noOU': {
         'result': '<div class="dif-body"><div>+ <span class="dif-kA">(0)</span></div><div>+   <span class="dif-vA">0</span></div><div>  <span class="dif-kN">(2)</span></div><div>+   <span class="dif-vN">3</span></div><div>- <span class="dif-kR">(3)</span></div><div>-   <span class="dif-vR">5</span></div></div>',
     },
+    'type_headers_disabled': {
+        'result': '<div class="dif-body"><div>  <span class="dif-kX0-0">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
+    },
     'undef_vs_0': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">0</span></div></div>',
     },

@@ -387,6 +387,9 @@ RESULTS = {
     'tuples_lcs_noOU': {
         'result': '+ (0)\n+   0\n  (2)\n+   3\n- (3)\n-   5\n',
     },
+    'type_headers_disabled': {
+        'result': '  @@ -1,2 +1,2 @@\n- two\n+ 2\n  lines\n',
+    },
     'undef_vs_0': {
         'result': '- None\n+ 0\n',
     },
