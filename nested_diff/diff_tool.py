@@ -28,23 +28,28 @@ class App(nested_diff.cli.App):
 
     supported_ofmts = ('auto', 'html', 'json', 'term', 'toml', 'text', 'yaml')
 
-    def diff(self, a, b):
+    def diff(self, a, b, **kwargs):
         """
         Return diff for passed objects.
 
         :param a: First object to diff.
         :param b: Second object to diff.
 
+        kwargs will be merged (with higher priority) with cli options passed
+        to Differ().
+
         """
-        return nested_diff.diff(
-            a, b,
-            multiline_diff_context=self.args.text_ctx,
-            A=self.args.A,
-            N=self.args.N,
-            O=self.args.O,  # noqa: E741
-            R=self.args.R,
-            U=self.args.U,
-        )
+        diff_opts = {
+            'multiline_diff_context': self.args.text_ctx,
+            'A': self.args.A,
+            'N': self.args.N,
+            'O': self.args.O,  # noqa: E741
+            'R': self.args.R,
+            'U': self.args.U,
+        }
+        diff_opts.update(kwargs)
+
+        return nested_diff.diff(a, b, **diff_opts)
 
     def get_optional_args_parser(self):
         parser = super().get_optional_args_parser()

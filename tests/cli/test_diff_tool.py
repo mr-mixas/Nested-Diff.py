@@ -32,6 +32,24 @@ def test_default_diff_with_tty(capsys, expected, fullname, stringio_tty):
     assert expected == captured.out
 
 
+def test_diff_method_kwargs_override(capsys, expected, fullname):
+    class TestApp(nested_diff.diff_tool.App):
+        def diff(self, a, b, **kwargs):
+            return super().diff(a, b, A=0, U=1)
+
+    TestApp(args=(
+        fullname('lists.a.json', shared=True),
+        fullname('lists.b.yaml', shared=True),
+        '-A', '1',
+        '-U', '0',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+
+    assert expected == captured.out
+
+
 def test_enable_U_ops(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
