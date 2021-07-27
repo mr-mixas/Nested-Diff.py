@@ -20,9 +20,8 @@ jobs:
         # to catch os specific errors
         - os: macos-latest
           python-version: '3.x'
-# FIXME: unicode related diff in html formatter fails tests on win
-#        - os: windows-latest
-#          python-version: '3.x'
+        - os: windows-latest
+          python-version: '3.x'
     steps:
     - uses: actions/checkout@v2
 

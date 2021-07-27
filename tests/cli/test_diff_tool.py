@@ -164,6 +164,10 @@ def test_html_ofmt(capsys, expected, fullname):
     assert expected == captured.out
 
 
+@pytest.mark.skipif(
+    sys.platform == 'win32',
+    reason='win use non utf-8 encoding by default, we have utf-8 only sample',
+)
 def test_html_ofmt_opts(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
