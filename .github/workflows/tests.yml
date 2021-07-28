@@ -1,7 +1,7 @@
 name: tests
 on: ["push", "pull_request"]
 jobs:
-  build:
+  tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -13,15 +13,17 @@ jobs:
         - 3.8
         - pypy-3.6
         - pypy-3.7
+        tox-env: ['essential']
         include:
         - os: ubuntu-latest
           python-version: '3.x'
-
-        # to catch os specific errors
+          tox-env: coverage
         - os: macos-latest
           python-version: '3.x'
+          tox-env: linters
         - os: windows-latest
           python-version: '3.x'
+          tox-env: essential
     steps:
     - uses: actions/checkout@v2
 
@@ -35,13 +37,13 @@ jobs:
         pip install --quiet --upgrade pip setuptools
         pip install --quiet --upgrade tox
 
-    - name: Test with tox
-      if: ${{ matrix.python-version != '3.8' }}
+    - name: Run test without coverage
+      if: ${{ matrix.tox-env != 'coverage' }}
       run: |
-        tox -e py
+        tox -e ${{ matrix.tox-env }}
 
-    - name: Test with tox and coveralls
-      if: ${{ matrix.python-version == '3.8' }}
+    - name: Run tests with coverage
+      if: ${{ matrix.tox-env == 'coverage' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
