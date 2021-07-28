@@ -11,7 +11,7 @@ def get_tests():
             'diff': {'D': [{'R': 1}, {'U': 2}, {'A': 3}], 'E': frozenset()},
         },
         'mixed_specific_structures': {
-            'a': (tuple(), set()),
+            'a': ((), set()),
             'b': (frozenset(), {True}),
             'diff': {'D': ({'N': frozenset(), 'O': ()}, {'D': [{'A': True}], 'E': set()})},
         },
@@ -191,11 +191,11 @@ def get_tests():
             'diff_opts': {'trimR': True},
         },
         'sets_empty_diff': {
-            'a': set((1,)),
-            'b': set((1, 2)),
+            'a': {1},
+            'b': {1, 2},
             'diff': {},
             'diff_opts': {'A': False, 'U': False},
-            'patched': set((1,)),
+            'patched': {1},
         },
         'str_multiline_with_multiline_mode_off': {
             'a': 'A\nB',

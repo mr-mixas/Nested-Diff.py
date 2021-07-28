@@ -50,7 +50,7 @@ def test_diff_method_kwargs_override(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_enable_U_ops(capsys, expected, fullname):
+def test_enable_U_ops(capsys, expected, fullname):  # noqa N802
     nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.b.json', shared=True),
@@ -265,7 +265,7 @@ def test_exit_code_diff_absent(fullname):
     assert code == 0
 
 
-def test_exit_code_diff_absent_U_opt_enabled(fullname):
+def test_exit_code_diff_absent_U_opt_enabled(fullname):  # noqa N802
     code = nested_diff.diff_tool.App(args=(
         fullname('lists.a.json', shared=True),
         fullname('lists.a.json', shared=True),

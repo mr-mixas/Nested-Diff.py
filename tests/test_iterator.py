@@ -109,7 +109,7 @@ def test_list_diff():
     assert expected == got
 
 
-def test_list_diff__noU():
+def test_list_diff__noU():  # noqa N802
     a = [0, [1], 3]
     b = [0, [1, 2], 3]
     d = diff(a, b, U=False)
@@ -140,13 +140,13 @@ def test_set_diff():
 
 
 def test_custom_containers():
-    class custom_container(tuple):
+    class CustomContainer(tuple):
         pass
 
-    d = {'D': custom_container([{'O': 0, 'N': 1}])}
+    d = {'D': CustomContainer([{'O': 0, 'N': 1}])}
 
     it = Iterator()
-    it.set_iterator(custom_container, it.iterate_sequence_diff)
+    it.set_iterator(CustomContainer, it.iterate_sequence_diff)
 
     expected = [
         (d, 0, d['D'][0], 0),
@@ -159,10 +159,10 @@ def test_custom_containers():
 
 
 def test_unknown_containers():
-    class unknown_container(tuple):
+    class UnknownContainer(tuple):
         pass
 
-    d = {'D': unknown_container([{'O': 0, 'N': 1}])}
+    d = {'D': UnknownContainer([{'O': 0, 'N': 1}])}
 
     expected = [(d, None, None, 0)]  # final (not iterated)
 

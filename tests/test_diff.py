@@ -58,7 +58,7 @@ def test_different_object_attributes():
     assert {'N': b, 'O': a} == d
 
 
-def test_str_multiline_diff_disabled_when_ON_disabled():
+def test_str_multiline_diff_disabled_when_ON_disabled():  # noqa N802
     a = ['a']
     b = ['a\nb']
 

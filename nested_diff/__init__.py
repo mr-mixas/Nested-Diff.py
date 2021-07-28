@@ -80,7 +80,7 @@ class Differ(object):
 
     """
 
-    def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E741
+    def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
                  trimR=False, diff_method=None, multiline_diff_context=-1):
         """
         Construct Differ.

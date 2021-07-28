@@ -97,7 +97,7 @@ class AbstractFormatter(object):
 
         return str(start + 1)
 
-    def format(self, diff, **kwargs):
+    def format(self, diff, **kwargs):  # noqa A003
         """Return completely formatted diff as string."""
         return ''.join(self.emit_tokens(diff, **kwargs))
 
