@@ -346,11 +346,17 @@ class YamlDumper(Dumper):
         super().__init__()
 
         import yaml
-        self.codec = yaml
-        self.codec_opts = self.get_opts(kwargs)
+        try:
+            from yaml import CSafeDumper as YamlDumper
+        except ImportError:
+            from yaml import SafeDumper as YamlDumper
+
+        self.yaml = yaml
+        self.yaml_dumper = YamlDumper
+        self.opts = self.get_opts(kwargs)
 
     def encode(self, data):
-        return self.codec.safe_dump(data, **self.codec_opts)
+        return self.yaml.dump(data, Dumper=self.yaml_dumper, **self.opts)
 
     @staticmethod
     def get_opts(opts):
@@ -370,8 +376,14 @@ class YamlLoader(Loader):
         super().__init__()
 
         import yaml
-        self.codec = yaml
-        self.codec_opts = self.get_opts(kwargs)
+        try:
+            from yaml import CSafeLoader as YamlLoader
+        except ImportError:
+            from yaml import SafeLoader as YamlLoader
+
+        self.yaml = yaml
+        self.yaml_loader = YamlLoader
+        self.opts = self.get_opts(kwargs)
 
     def decode(self, data):
-        return self.codec.safe_load(data, **self.codec_opts)
+        return self.yaml.load(data, Loader=self.yaml_loader, **self.opts)
