@@ -172,8 +172,8 @@ class Differ(object):
         >>> a = {'one': 1, 'two': 2, 'three': 3}
         >>> b = {'one': 1, 'two': 42}
         >>>
-        >>> Differ(O=False, U=False).diff_dicts(a, b)
-        {'D': {'two': {'N': 42}, 'three': {'R': 3}}}
+        >>> Differ(O=False, U=False).diff_dict(a, b)
+        {'D': {'three': {'R': 3}, 'two': {'N': 42}}}
         >>>
 
         """
@@ -212,7 +212,7 @@ class Differ(object):
         >>> a = [0,1,2,3]
         >>> b = [  1,2,4,5]
         >>>
-        >>> Differ(O=False, U=False).diff_lists(a, b)
+        >>> Differ(O=False, U=False).diff_list(a, b)
         {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]}
         >>>
 
@@ -327,7 +327,7 @@ class Differ(object):
         >>> a = {1, 2}
         >>> b = {2, 3}
         >>>
-        >>> Differ(U=False).diff_sets(a, b)
+        >>> Differ(U=False).diff_set(a, b)
         {'D': [{'R': 1}, {'A': 3}], 'E': set()}
         >>>
 
@@ -361,7 +361,7 @@ class Differ(object):
         >>> a = (  1,2,4,5)
         >>> b = (0,1,2,3)
         >>>
-        >>> Differ(O=False, U=False).diff_tuples(a, b)
+        >>> Differ(O=False, U=False).diff_tuple(a, b)
         {'D': ({'A': 0}, {'N': 3, 'I': 2}, {'R': 5})}
         >>>
 

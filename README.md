@@ -37,10 +37,10 @@ mixas:~/$ nested_patch a.json patch.json
 >>> b = {'one': 1, 'two': 42}
 >>>
 >>> diff(a, b)
-{'D': {'three': {'R': 3}, 'two': {'O': 2, 'N': 42}, 'one': {'U': 1}}}
+{'D': {'three': {'R': 3}, 'two': {'N': 42, 'O': 2}, 'one': {'U': 1}}}
 >>>
 >>> diff(a, b, O=False, U=False)
-{'D': {'two': {'N': 42}, 'three': {'R': 3}}}
+{'D': {'three': {'R': 3}, 'two': {'N': 42}}}
 >>>
 >>>
 >>> c = [0,1,2,3]
@@ -48,6 +48,7 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 >>> c = patch(c, diff(c, d))
 >>> assert c == d
+>>>
 ```
 
 ### Formatting diffs
@@ -62,6 +63,7 @@ mixas:~/$ nested_patch a.json patch.json
 >>> d = diff(a, b, U=False, multiline_diff_context=3)
 >>> print(TextFormatter().format(d))
   {'two'}
+#   <str>
     @@ -1,3 +1,2 @@
     some
     text
@@ -69,6 +71,7 @@ mixas:~/$ nested_patch a.json patch.json
   {'one'}
 -   1
 +   0
+<BLANKLINE>
 >>>
 ```
 
