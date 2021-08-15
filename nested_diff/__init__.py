@@ -18,7 +18,7 @@
 
 from difflib import SequenceMatcher
 from pickle import dumps
-
+from warnings import warn
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
@@ -95,7 +95,8 @@ class Differ(object):
         `diff_method` method with such name (if object have one) from first
         diffed object will be called for diff. Second diffed object and current
         differ will be passed as arguments, diff expected for output.
-        Disabled (`None`) by default.
+        Disabled (`None`) by default. This option is deprecated and will be
+        removed in the next release.
 
         `multiline_diff_context` defines amount of context lines for multiline
         string diffs, multiline diffs disabled when value is negative.
@@ -136,6 +137,8 @@ class Differ(object):
 
         """
         if self.__diff_method is not None:
+            warn('diff internal methods are deprecated and will be removed in'
+                 ' the next release', DeprecationWarning, stacklevel=2)
             try:
                 return a.__getattribute__(self.__diff_method)(b, self)
             except AttributeError:
@@ -409,7 +412,8 @@ class Patcher(object):
         `patch_method` method with such name, if patched object have one, will
         be called with patch and current patcher as arguments. Patched object
         expected for output.
-        Disabled (`None`) by default.
+        Disabled (`None`) by default. This option is deprecated and will be
+        removed in the next release.
 
         """
         self.__patch_method = patch_method
@@ -447,6 +451,8 @@ class Patcher(object):
 
         """
         if self.__patch_method is not None:
+            warn('patch internal methods are deprecated and will be removed in'
+                 ' the next release', DeprecationWarning, stacklevel=2)
             try:
                 return target.__getattribute__(self.__patch_method)(
                     ndiff, self)
