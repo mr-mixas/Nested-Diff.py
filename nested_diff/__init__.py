@@ -121,7 +121,7 @@ class Differ(object):
         }
 
         if multiline_diff_context >= 0 and self.op_n and self.op_o:
-            self.__differs[str] = self.diff_multiline
+            self.__differs[str] = self.diff_text
             self.multiline_diff_context = multiline_diff_context
 
     def diff(self, a, b):
@@ -269,21 +269,25 @@ class Differ(object):
         return {}
 
     def diff_multiline(self, a, b):
-        r"""
-        Return diff for multiline strings.
+        warn('Differ.diff_multiline method is deprecated and will be removed'
+             'in the next release', DeprecationWarning, stacklevel=2)
+        return self.diff_text(self, a, b)
 
-        Result is a unified diff formatted as usual nested diff structure with
-        'I' tagged subdiffs to contain hunks headers.
+    def diff_text(self, a, b):
+        r"""
+        Return diff for texts (multiline strings).
+
+        Result is a unified-like diff formatted as nested diff structure, with
+        'I' tagged subdiffs containing hunks headers.
 
         :param a: First string to diff.
         :param b: Second string to diff.
 
-        >>> a = 'A\nB\nC'
-        >>> b = 'A\nC'
+        >>> a = 'one'
+        >>> b = 'one\ntwo'
         >>>
-        >>> Differ(multiline_diff_context=3).diff_multiline(a, b)
-        {'D': [{'I': [0, 3, 0, 2]}, {'U': 'A'}, {'R': 'B'}, {'U': 'C'}],
-         'E': ''}
+        >>> Differ(multiline_diff_context=3).diff_text(a, b)
+        {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': ''}
 
         """
         lines_a = a.split('\n', -1)
