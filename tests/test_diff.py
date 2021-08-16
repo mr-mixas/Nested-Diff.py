@@ -58,10 +58,10 @@ def test_different_object_attributes():
     assert {'N': b, 'O': a} == d
 
 
-def test_str_multiline_diff_disabled_when_ON_disabled():  # noqa N802
+def test_text_diff_disabled_when_ON_disabled():  # noqa N802
     a = ['a']
     b = ['a\nb']
 
-    assert {'D': [{'O': 'a'}]} == diff(a, b, N=False, multiline_diff_context=3)
-    assert {'D': [{'N': 'a\nb'}]} == diff(a, b, O=False, multiline_diff_context=3)
-    assert {} == diff(a, b, N=False, O=False, multiline_diff_context=3)
+    assert {'D': [{'O': 'a'}]} == diff(a, b, N=False, text_diff_ctx=3)
+    assert {'D': [{'N': 'a\nb'}]} == diff(a, b, O=False, text_diff_ctx=3)
+    assert {} == diff(a, b, N=False, O=False, text_diff_ctx=3)

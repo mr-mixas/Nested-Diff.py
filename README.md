@@ -60,7 +60,7 @@ mixas:~/$ nested_patch a.json patch.json
 >>> a = {'one': 1, 'two': 'some\ntext\ninside'}
 >>> b = {'one': 0, 'two': 'some\ntext'}
 >>>
->>> d = diff(a, b, U=False, multiline_diff_context=3)
+>>> d = diff(a, b, U=False, text_diff_ctx=3)
 >>> print(TextFormatter().format(d))
   {'two'}
 #   <str>

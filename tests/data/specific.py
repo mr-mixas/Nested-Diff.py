@@ -15,7 +15,7 @@ def get_tests():
             'b': (frozenset(), {True}),
             'diff': {'D': ({'N': frozenset(), 'O': ()}, {'D': [{'A': True}], 'E': set()})},
         },
-        'multiline_empty_vs_multiline': {
+        'empty_string_vs_text': {
             'a': '',
             'b': 'A\nB',
             'diff': {
@@ -27,9 +27,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_empty_line_added': {
+        'line_added_to_empty_string': {
             'a': '',
             'b': '\n',
             'diff': {
@@ -40,15 +40,15 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_equal': {
+        'text_equal': {
             'a': 'A\nB\nC',
             'b': 'A\nB\nC',
             'diff': {},
-            'diff_opts': {'U': False, 'multiline_diff_context': 3},
+            'diff_opts': {'U': False, 'text_diff_ctx': 3},
         },
-        'multiline_lcs': {
+        'text_lcs': {
             'a': 'A\nB\nC',
             'b': 'A\nC',
             'diff': {
@@ -60,9 +60,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_line_added': {
+        'text_line_added': {
             'a': 'B\nC',
             'b': 'A\nB\nC',
             'diff': {
@@ -74,9 +74,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_line_changed': {
+        'text_line_changed': {
             'a': 'A\nB\nC',
             'b': 'A\nb\nC',
             'diff': {
@@ -89,9 +89,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_line_changed_ctx_0': {
+        'text_line_changed_ctx_0': {
             'a': 'A\nB\nC',
             'b': 'A\nb\nC',
             'diff': {
@@ -102,9 +102,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 0},
+            'diff_opts': {'text_diff_ctx': 0},
         },
-        'multiline_line_removed': {
+        'text_line_removed': {
             'a': 'A\nB\nC',
             'b': 'A\nC',
             'diff': {
@@ -116,9 +116,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_multiple_hunks': {
+        'text_multiple_hunks': {
             'a': 'A\nB\nC',
             'b': 'A\nA\nB',
             'diff': {
@@ -130,9 +130,9 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 0},
+            'diff_opts': {'text_diff_ctx': 0},
         },
-        'multiline_trailing_newlines': {
+        'text_trailing_newlines': {
             'a': 'A\nB\n',
             'b': 'A\nb\n',
             'diff': {
@@ -145,11 +145,11 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
-        'multiline_vs_empty': {
-            'b': '',
+        'text_vs_empty_string': {
             'a': 'A\nB',
+            'b': '',
             'diff': {
                 'D': [
                     {'I': [0, 2, 0, 1]},
@@ -159,7 +159,7 @@ def get_tests():
                 ],
                 'E': '',
             },
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
         'set_extended': {
             'a': {1},
@@ -197,17 +197,17 @@ def get_tests():
             'diff_opts': {'A': False, 'U': False},
             'patched': {1},
         },
-        'str_multiline_with_multiline_mode_off': {
+        'text_diff_disabled': {
             'a': 'A\nB',
             'b': 'B\nC',
             'diff': {'N': 'B\nC', 'O': 'A\nB'},
-            'diff_opts': {'multiline_diff_context': -1},
+            'diff_opts': {'text_diff_ctx': -1},
         },
-        'str_single_line_on_multiline_mode': {
+        'simple_strings_in_text_mode': {
             'a': 'bar',
             'b': 'baz',
             'diff': {'N': 'baz', 'O': 'bar'},
-            'diff_opts': {'multiline_diff_context': 3},
+            'diff_opts': {'text_diff_ctx': 3},
         },
         'str_vs_bytes': {
             'a': 'a',

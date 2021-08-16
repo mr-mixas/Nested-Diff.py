@@ -42,7 +42,7 @@ def get_tests():
             'a': 'two\nlines',
             'b': '2\nlines',
             'diff': {'D': [{'I': [0, 2, 0, 2]}, {'R': 'two'}, {'A': '2'}, {'U': 'lines'}], 'E': ''},
-            'diff_opts': {'multiline_diff_context': 2},
+            'diff_opts': {'text_diff_ctx': 2},
             'formatter_opts': {'type_headers': False},
         },
         'wrapping_text': {

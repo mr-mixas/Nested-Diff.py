@@ -38,8 +38,8 @@ class AbstractFormatter(object):
         self.indent = indent
         self.line_separator = line_separator
 
-        self.multiline_header_prefix = '@@ -'
-        self.multiline_header_suffix = ' @@'
+        self.unified_header_prefix = '@@ -'
+        self.unified_header_suffix = ' @@'
 
         self.obj_prefix = {
             dict: '{',
@@ -116,10 +116,10 @@ class TextFormatter(AbstractFormatter):
 
         self.set_emitter(frozenset, self.emit_set_tokens)
         self.set_emitter(set, self.emit_set_tokens)
-        self.set_emitter(str, self.emit_miltiline_tokens)
+        self.set_emitter(str, self.emit_text_diff_tokens)
 
-    def emit_miltiline_tokens(self, diff, depth=0):
-        """Yield unified diff for multiline strings."""
+    def emit_text_diff_tokens(self, diff, depth=0):
+        """Yield unified text diff."""
         indent = self.indent * depth
 
         for subdiff in diff['D']:
@@ -130,11 +130,11 @@ class TextFormatter(AbstractFormatter):
 
                     value = subdiff[tag]
                     if tag == 'I':
-                        yield self.multiline_header_prefix
+                        yield self.unified_header_prefix
                         yield self.get_unified_diff_range(value[0], value[1])
                         yield ' +'
                         yield self.get_unified_diff_range(value[2], value[3])
-                        yield self.multiline_header_suffix
+                        yield self.unified_header_suffix
                     else:
                         yield from self.repr_string(value, tag)
 
@@ -224,8 +224,8 @@ class HtmlFormatter(TextFormatter):
 
         self.line_separator = '</div>' + self.line_separator
 
-        self.multiline_header_prefix = '<span class="dif-kX0-0">@@ -'
-        self.multiline_header_suffix = ' @@</span>'
+        self.unified_header_prefix = '<span class="dif-kX0-0">@@ -'
+        self.unified_header_suffix = ' @@</span>'
 
         for key, val in self.key_line_prefix.items():
             self.key_line_prefix[key] = '<div>' + val

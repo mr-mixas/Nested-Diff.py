@@ -81,7 +81,8 @@ class Differ(object):
     """
 
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
-                 trimR=False, diff_method=None, multiline_diff_context=-1):
+                 trimR=False, diff_method=None, text_diff_ctx=-1,
+                 multiline_diff_context=-1):
         """
         Construct Differ.
 
@@ -98,8 +99,8 @@ class Differ(object):
         Disabled (`None`) by default. This option is deprecated and will be
         removed in the next release.
 
-        `multiline_diff_context` defines amount of context lines for multiline
-        string diffs, multiline diffs disabled when value is negative.
+        `text_diff_ctx` defines amount of context lines for text (multiline
+        strings) diffs, disabled entirely when value is negative.
 
         """
         self.__diff_method = diff_method
@@ -120,9 +121,19 @@ class Differ(object):
             tuple: self.diff_tuple,
         }
 
-        if multiline_diff_context >= 0 and self.op_n and self.op_o:
+        if multiline_diff_context >= 0:
+            warn('`multiline_diff_context` is deprecated and will be removed'
+                 ' in the next release, use `text_diff_ctx` instead',
+                 DeprecationWarning, stacklevel=2)
+            if text_diff_ctx < 0:
+                text_diff_ctx = multiline_diff_context
+            else:
+                raise TypeError('`multiline_diff_context` and `text_diff_ctx`'
+                                ' can not be used together')
+
+        if text_diff_ctx >= 0 and self.op_n and self.op_o:
             self.__differs[str] = self.diff_text
-            self.multiline_diff_context = multiline_diff_context
+            self.text_diff_ctx = text_diff_ctx
 
     def diff(self, a, b):
         """
@@ -286,7 +297,7 @@ class Differ(object):
         >>> a = 'one'
         >>> b = 'one\ntwo'
         >>>
-        >>> Differ(multiline_diff_context=3).diff_text(a, b)
+        >>> Differ(text_diff_ctx=3).diff_text(a, b)
         {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': ''}
 
         """
@@ -300,7 +311,7 @@ class Differ(object):
         self.lcs.set_seq1(lines_a)
         self.lcs.set_seq2(lines_b)
 
-        for group in self.lcs.get_grouped_opcodes(self.multiline_diff_context):
+        for group in self.lcs.get_grouped_opcodes(self.text_diff_ctx):
             dif.append({
                 'I': [
                     group[0][1], group[-1][2],

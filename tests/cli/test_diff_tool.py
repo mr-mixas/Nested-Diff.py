@@ -105,10 +105,10 @@ def test_ini_ifmt(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_multiline_default(capsys, expected, fullname):
+def test_text_default(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
-        fullname('multiline.a.json', shared=True),
-        fullname('multiline.b.json', shared=True),
+        fullname('text.a.json', shared=True),
+        fullname('text.b.json', shared=True),
     )).run()
 
     captured = capsys.readouterr()
@@ -116,10 +116,10 @@ def test_multiline_default(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_multiline_default_term(capsys, expected, fullname):
+def test_text_default_term(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
-        fullname('multiline.a.json', shared=True),
-        fullname('multiline.b.json', shared=True),
+        fullname('text.a.json', shared=True),
+        fullname('text.b.json', shared=True),
         '--ofmt', 'term',
     )).run()
 
@@ -128,10 +128,10 @@ def test_multiline_default_term(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_multiline_context_0(capsys, expected, fullname):
+def test_text_context_0(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
-        fullname('multiline.a.json', shared=True),
-        fullname('multiline.b.json', shared=True),
+        fullname('text.a.json', shared=True),
+        fullname('text.b.json', shared=True),
         '--text-ctx', '0',
     )).run()
 
@@ -140,10 +140,10 @@ def test_multiline_context_0(capsys, expected, fullname):
     assert expected == captured.out
 
 
-def test_multiline_disabled(capsys, expected, fullname):
+def test_text_disabled(capsys, expected, fullname):
     nested_diff.diff_tool.App(args=(
-        fullname('multiline.a.json', shared=True),
-        fullname('multiline.b.json', shared=True),
+        fullname('text.a.json', shared=True),
+        fullname('text.b.json', shared=True),
         '--text-ctx', '-1',
     )).run()
 

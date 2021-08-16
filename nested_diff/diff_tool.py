@@ -40,7 +40,7 @@ class App(nested_diff.cli.App):
 
         """
         diff_opts = {
-            'multiline_diff_context': self.args.text_ctx,
+            'text_diff_ctx': self.args.text_ctx,
             'A': self.args.A,
             'N': self.args.N,
             'O': self.args.O,  # noqa: E741
@@ -59,8 +59,8 @@ class App(nested_diff.cli.App):
             default=3,
             metavar='NUM',
             type=int,
-            help='amount of context lines for multiline strings diffs; '
-                 'negative value will disable multiline diffs, default is '
+            help='amount of context lines for text (multiline strings) diffs; '
+                 'negative value will disable such diffs, default is '
                  '"%(default)s"',
         )
 

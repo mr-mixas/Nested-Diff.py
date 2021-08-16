@@ -105,6 +105,9 @@ RESULTS = {
     'empty_string_vs_0': {
         'result': "- ''\n+ 0\n",
     },
+    'empty_string_vs_text': {
+        'result': '# <str>\n  @@ -1 +1,2 @@\n- \n+ A\n+ B\n',
+    },
     'empty_string_vs_undef': {
         'result': "- ''\n+ None\n",
     },
@@ -128,6 +131,9 @@ RESULTS = {
     },
     'hashes_with_one_different_value_noO': {
         'result': "  {'one'}\n+   2\n",
+    },
+    'line_added_to_empty_string': {
+        'result': '# <str>\n  @@ -1 +1,2 @@\n  \n+ \n',
     },
     'list_with_one_item_vs_empty_list': {
         'result': '- [0]\n-   0\n',
@@ -182,39 +188,6 @@ RESULTS = {
     },
     'mixed_specific_structures': {
         'result': '  (0)\n-   ()\n+   frozenset()\n  (1)\n#   <set>\n+   True\n',
-    },
-    'multiline_empty_line_added': {
-        'result': '# <str>\n  @@ -1 +1,2 @@\n  \n+ \n',
-    },
-    'multiline_empty_vs_multiline': {
-        'result': '# <str>\n  @@ -1 +1,2 @@\n- \n+ A\n+ B\n',
-    },
-    'multiline_equal': {
-        'result': '',
-    },
-    'multiline_lcs': {
-        'result': '# <str>\n  @@ -1,3 +1,2 @@\n  A\n- B\n  C\n',
-    },
-    'multiline_line_added': {
-        'result': '# <str>\n  @@ -1,2 +1,3 @@\n+ A\n  B\n  C\n',
-    },
-    'multiline_line_changed': {
-        'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  C\n',
-    },
-    'multiline_line_changed_ctx_0': {
-        'result': '# <str>\n  @@ -2 +2 @@\n- B\n+ b\n',
-    },
-    'multiline_line_removed': {
-        'result': '# <str>\n  @@ -1,3 +1,2 @@\n  A\n- B\n  C\n',
-    },
-    'multiline_multiple_hunks': {
-        'result': '# <str>\n  @@ -1 +1 @@\n+ A\n  @@ -3 +4 @@\n- C\n',
-    },
-    'multiline_trailing_newlines': {
-        'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  \n',
-    },
-    'multiline_vs_empty': {
-        'result': '# <str>\n  @@ -1,2 +1 @@\n- A\n- B\n+ \n',
     },
     'nested_hashes': {
         'result': "+ {'four'}\n+   4\n  {'one'}\n    1\n- {'three'}\n-   3\n  {'two'}\n    {'nine'}\n-     9\n+     8\n    {'ten'}\n      10\n",
@@ -345,10 +318,7 @@ RESULTS = {
     'sets_lcs_trimR': {
         'result': '# <set>\n- 1\n  2\n+ 3\n',
     },
-    'str_multiline_with_multiline_mode_off': {
-        'result': "- 'A\\nB'\n+ 'B\\nC'\n",
-    },
-    'str_single_line_on_multiline_mode': {
+    'simple_strings_in_text_mode': {
         'result': "- 'bar'\n+ 'baz'\n",
     },
     'str_vs_bytes': {
@@ -377,6 +347,36 @@ RESULTS = {
     },
     'sublist_filled_noA': {
         'result': '',
+    },
+    'text_diff_disabled': {
+        'result': "- 'A\\nB'\n+ 'B\\nC'\n",
+    },
+    'text_equal': {
+        'result': '',
+    },
+    'text_lcs': {
+        'result': '# <str>\n  @@ -1,3 +1,2 @@\n  A\n- B\n  C\n',
+    },
+    'text_line_added': {
+        'result': '# <str>\n  @@ -1,2 +1,3 @@\n+ A\n  B\n  C\n',
+    },
+    'text_line_changed': {
+        'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  C\n',
+    },
+    'text_line_changed_ctx_0': {
+        'result': '# <str>\n  @@ -2 +2 @@\n- B\n+ b\n',
+    },
+    'text_line_removed': {
+        'result': '# <str>\n  @@ -1,3 +1,2 @@\n  A\n- B\n  C\n',
+    },
+    'text_multiple_hunks': {
+        'result': '# <str>\n  @@ -1 +1 @@\n+ A\n  @@ -3 +4 @@\n- C\n',
+    },
+    'text_trailing_newlines': {
+        'result': '# <str>\n  @@ -1,3 +1,3 @@\n  A\n- B\n+ b\n  \n',
+    },
+    'text_vs_empty_string': {
+        'result': '# <str>\n  @@ -1,2 +1 @@\n- A\n- B\n+ \n',
     },
     'tuple_extended': {
         'result': '  (0)\n    1\n+ (1)\n+   2\n',
