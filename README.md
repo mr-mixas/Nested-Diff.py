@@ -1,17 +1,19 @@
 # Nested-Diff.py
 
-Recursive diff and patch for nested structures
+Recursive diff and patch for nested structures **[Live Demo](https://nesteddiff.pythonanywhere.com/)**
 
 [![Tests Status](https://github.com/mr-mixas/Nested-Diff.py/actions/workflows/tests.yml/badge.svg)](https://github.com/mr-mixas/Nested-Diff.py/actions?query=branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 [![License](https://img.shields.io/pypi/l/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 
-**[Live Demo](https://nesteddiff.pythonanywhere.com/)**
-
 ## Install
 
 `pip install nested_diff`
+
+For extra formats support (YAML, TOML) in cli tools, use
+
+`pip install nested_diff[cli]`
 
 ## Command line tools
 
@@ -120,8 +122,8 @@ Diff is a dict and may contain following keys:
 
 Diff metadata alternates with actual data; simple types specified as is, dicts,
 lists and tuples contain subdiffs for their items with native for such types
-addressing: indexes for lists and tuples and keys for dictionaries. Each status
-type, except `D`. `E` and `I`, may be omitted during diff computation. `E` tag
+addressing: indexes for lists and tuples and keys for dictionaries. Any status
+type, except `D`, `E` and `I` may be omitted during diff computation. `E` tag
 is used with `D` when entity unable to contain diff by itself (set, frozenset);
 `D` contain a list of subdiffs in this case.
 

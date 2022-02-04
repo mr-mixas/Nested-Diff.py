@@ -45,7 +45,7 @@ class Differ(object):
     Diff metadata alternates with actual data; simple types specified as is,
     dicts, lists and tuples contain subdiffs for their items with native for
     such types addressing: indexes for lists and tuples and keys for
-    dictionaries. Each status type, except `D`. `E` and `I`, may be omitted
+    dictionaries. Any status type, except `D`, `E` and `I` may be omitted
     during diff computation. `E` tag is used with `D` when entity unable to
     contain diff by itself (set, frozenset); `D` contain a list of subdiffs
     in this case.
