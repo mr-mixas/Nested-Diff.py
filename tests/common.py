@@ -9,11 +9,18 @@ def do_test_function(test, func):
         with test['raises']:
             func(test)
     else:
-        # ensure diff is correct
-        diff_opts = test.get('diff_opts', {})
-        diff_should_be = nested_diff.diff(test['a'], test['b'], **diff_opts)
-        if test.get('diff', {}) != diff_should_be:
-            raise ValueError(diff_should_be)
+        try:
+            a = test['a']
+            b = test['b']
+        except KeyError:  # initial values may absent in some test cases
+            pass
+        else:
+            # ensure diff is correct
+            diff_opts = test.get('diff_opts', {})
+            diff_should_be = nested_diff.diff(a, b, **diff_opts)
+
+            if test.get('diff', {}) != diff_should_be:
+                raise ValueError(diff_should_be)
 
         assert test['result'] == func(test)
 

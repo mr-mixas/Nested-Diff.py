@@ -61,10 +61,17 @@ class AbstractFormatter(object):
             'U': '  ',
         }
         self.val_line_prefix = self.key_line_prefix.copy()
+        self.val_line_prefix['C'] = '# '
         self.val_line_prefix['E'] = '# '
         self.val_line_prefix['I'] = '  '
         self.val_line_prefix['O'] = '- '
         self.val_line_prefix['N'] = '+ '
+
+        self.val_prefix = {key: '' for key in self.val_line_prefix}
+        self.val_prefix['E'] = '<'
+
+        self.val_suffix = {key: '' for key in self.val_line_prefix}
+        self.val_suffix['E'] = '>'
 
         self.tags = (  # diff tags to format, sequence is important
             'D',
@@ -74,9 +81,6 @@ class AbstractFormatter(object):
             'A',
             'U',
         )
-
-        self.type_prefix = '<'
-        self.type_suffix = '>'
 
         self.__emitters = {}
 
@@ -109,10 +113,10 @@ class AbstractFormatter(object):
 class TextFormatter(AbstractFormatter):
     """Produce human friendly text diff with indenting formatting."""
 
-    def __init__(self, *args, type_headers=True, **kwargs):
+    def __init__(self, *args, type_hints=True, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.type_headers = type_headers
+        self.type_hints = type_hints
 
         self.set_emitter(frozenset, self.emit_set_tokens)
         self.set_emitter(set, self.emit_set_tokens)
@@ -153,13 +157,26 @@ class TextFormatter(AbstractFormatter):
                     yield self.line_separator
                     break
 
-    def emit_type_header(self, diff, depth=0):
-        """Yield header for non-builtin types."""
-        yield self.val_line_prefix['E']
+    def emit_comment(self, diff, depth=0):
+        """Yield diff comment parts."""
+        try:
+            comment = diff['C']
+            tag = 'C'
+        except KeyError:
+            if not self.type_hints:
+                return
+
+            try:
+                comment = diff['E'].__class__.__name__
+                tag = 'E'
+            except KeyError:
+                return
+
+        yield self.val_line_prefix[tag]
         yield self.indent * depth
-        yield self.type_prefix
-        yield diff['E'].__class__.__name__
-        yield self.type_suffix
+        yield self.val_prefix[tag]
+        yield comment
+        yield self.val_suffix[tag]
         yield self.line_separator
 
     def emit_tokens(self, diff, depth=0, header='', footer=''):
@@ -167,10 +184,10 @@ class TextFormatter(AbstractFormatter):
         yield header
 
         for diff, key, subdiff, depth in self.iterator.iterate(diff, depth):
+            yield from self.emit_comment(diff, depth=depth)
+
             # emit value
             if 'E' in diff:
-                if self.type_headers:
-                    yield from self.emit_type_header(diff, depth=depth)
                 yield from self.get_emitter(diff, depth=depth)
                 continue
 
@@ -232,20 +249,17 @@ class HtmlFormatter(TextFormatter):
         for key, val in self.val_line_prefix.items():
             self.val_line_prefix[key] = '<div>' + val
 
-        self.type_prefix = '<span class="dif-kE">&lt;'
-        self.type_suffix = '&gt;</span>'
-
         self.key_prefix = {}
         self.key_suffix = {}
         for key in self.key_line_prefix:
             self.key_prefix[key] = '<span class="dif-k' + key + '">'
             self.key_suffix[key] = '</span>'
 
-        self.val_prefix = {}
-        self.val_suffix = {}
-        for key in self.val_line_prefix:
-            self.val_prefix[key] = '<span class="dif-v' + key + '">'
-            self.val_suffix[key] = '</span>'
+        for key, val in self.val_prefix.items():
+            self.val_prefix[key] = ('<span class="dif-v' + key + '">' +
+                                    html.escape(val))
+        for key, val in self.val_suffix.items():
+            self.val_suffix[key] = html.escape(val) + '</span>'
 
     @staticmethod
     def get_css():
@@ -253,13 +267,14 @@ class HtmlFormatter(TextFormatter):
             '.dif-body {font-family: monospace; white-space: pre}'
             ' .dif-kA {background-color: #cfc}'
             ' .dif-kD {color: #000}'
-            ' .dif-kE {color: #00b}'
             ' .dif-kN {color: #000}'
             ' .dif-kO {color: #000}'
             ' .dif-kR {background-color: #fcc}'
             ' .dif-kU {color: #777}'
             ' .dif-kX0-0 {color: #707}'
             ' .dif-vA {background-color: #dfd}'
+            ' .dif-vC {color: #00b}'
+            ' .dif-vE {color: #00b}'
             ' .dif-vN {background-color: #dfd}'
             ' .dif-vO {background-color: #fdd}'
             ' .dif-vR {background-color: #fdd}'
@@ -307,6 +322,7 @@ class TermFormatter(TextFormatter):
         self.key_line_prefix['R'] = '\033[1;31m' + self.key_line_prefix['R']
 
         self.val_line_prefix['A'] = '\033[32m' + self.val_line_prefix['A']
+        self.val_line_prefix['C'] = '\033[34m' + self.val_line_prefix['C']
         self.val_line_prefix['E'] = '\033[34m' + self.val_line_prefix['E']
         self.val_line_prefix['I'] = '\033[35m' + self.val_line_prefix['I']
         self.val_line_prefix['N'] = '\033[32m' + self.val_line_prefix['N']

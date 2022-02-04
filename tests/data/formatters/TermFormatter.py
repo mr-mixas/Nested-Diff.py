@@ -45,6 +45,15 @@ RESULTS = {
     'brackets': {
         'result': "  {'('}\x1b[0m\n\x1b[31m-   ')'\x1b[0m\n\x1b[32m+   '('\x1b[0m\n  {'<'}\x1b[0m\n\x1b[31m-   '>'\x1b[0m\n\x1b[32m+   '<'\x1b[0m\n  {'['}\x1b[0m\n\x1b[31m-   ']'\x1b[0m\n\x1b[32m+   '['\x1b[0m\n  {'{'}\x1b[0m\n\x1b[31m-   '}'\x1b[0m\n\x1b[32m+   '{'\x1b[0m\n",
     },
+    'comment_is_empty_string': {
+        'result': "\x1b[34m# \x1b[0m\n\x1b[31m- 'old'\x1b[0m\n\x1b[32m+ 'new'\x1b[0m\n",
+    },
+    'comment_vs_type_hint': {
+        'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,2 +1,2 @@\x1b[0m\n\x1b[31m- two\x1b[0m\n\x1b[32m+ 2\x1b[0m\n  lines\x1b[0m\n',
+    },
+    'comments': {
+        'result': "\x1b[34m# C-D\x1b[0m\n  {'k'}\x1b[0m\n\x1b[34m#   C-NO\x1b[0m\n\x1b[31m-   'v'\x1b[0m\n\x1b[32m+   'V'\x1b[0m\n",
+    },
     'deeply_nested_hash_vs_empty_hash': {
         'result': "\x1b[1;31m- {'one'}\x1b[0m\n\x1b[31m-   {'two': {'three': 3}}\x1b[0m\n",
     },
@@ -387,7 +396,7 @@ RESULTS = {
     'tuples_lcs_noOU': {
         'result': '\x1b[1;32m+ (0)\x1b[0m\n\x1b[32m+   0\x1b[0m\n  (2)\x1b[0m\n\x1b[32m+   3\x1b[0m\n\x1b[1;31m- (3)\x1b[0m\n\x1b[31m-   5\x1b[0m\n',
     },
-    'type_headers_disabled': {
+    'type_hints_disabled': {
         'result': '\x1b[35m  @@ -1,2 +1,2 @@\x1b[0m\n\x1b[31m- two\x1b[0m\n\x1b[32m+ 2\x1b[0m\n  lines\x1b[0m\n',
     },
     'undef_vs_0': {

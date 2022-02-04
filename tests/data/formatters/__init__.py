@@ -21,6 +21,27 @@ def get_tests():
                 },
             },
         },
+        'comments': {
+            'diff': {'D': {'k': {'N': 'V', 'O': 'v', 'C': 'C-NO'}}, 'C': 'C-D'},
+        },
+        'comment_vs_type_hint': {
+            'diff': {
+                'D': [
+                    {'I': [0, 2, 0, 2]},
+                    {'R': 'two'},
+                    {'A': '2'},
+                    {'U': 'lines'},
+                ],
+                'E': '',
+                'H': 'Comment should win',
+            },
+            'diff_opts': {'multiline_diff_context': 2},
+            'formatter_opts': {'type_hints': True},  # type hint should be ignored
+        },
+        'comment_is_empty_string': {
+            # empty comments should be preserved
+            'diff': {'C': '', 'N': 'new', 'O': 'old'},
+        },
         'escaped_symbols': {
             'a': {'\n': '\r\n'},
             'b': {'\n': '\n'},
@@ -38,12 +59,12 @@ def get_tests():
             },
             'formatter_opts': {'sort_keys': True},
         },
-        'type_headers_disabled': {
+        'type_hints_disabled': {
             'a': 'two\nlines',
             'b': '2\nlines',
             'diff': {'D': [{'I': [0, 2, 0, 2]}, {'R': 'two'}, {'A': '2'}, {'U': 'lines'}], 'E': ''},
             'diff_opts': {'text_diff_ctx': 2},
-            'formatter_opts': {'type_headers': False},
+            'formatter_opts': {'type_hints': False},
         },
         'wrapping_text': {
             'a': 0,

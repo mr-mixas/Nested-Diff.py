@@ -45,6 +45,15 @@ RESULTS = {
     'brackets': {
         'result': "  {'('}\n-   ')'\n+   '('\n  {'<'}\n-   '>'\n+   '<'\n  {'['}\n-   ']'\n+   '['\n  {'{'}\n-   '}'\n+   '{'\n",
     },
+    'comment_is_empty_string': {
+        'result': "# \n- 'old'\n+ 'new'\n",
+    },
+    'comment_vs_type_hint': {
+        'result': '# <str>\n  @@ -1,2 +1,2 @@\n- two\n+ 2\n  lines\n',
+    },
+    'comments': {
+        'result': "# C-D\n  {'k'}\n#   C-NO\n-   'v'\n+   'V'\n",
+    },
     'deeply_nested_hash_vs_empty_hash': {
         'result': "- {'one'}\n-   {'two': {'three': 3}}\n",
     },
@@ -387,7 +396,7 @@ RESULTS = {
     'tuples_lcs_noOU': {
         'result': '+ (0)\n+   0\n  (2)\n+   3\n- (3)\n-   5\n',
     },
-    'type_headers_disabled': {
+    'type_hints_disabled': {
         'result': '  @@ -1,2 +1,2 @@\n- two\n+ 2\n  lines\n',
     },
     'undef_vs_0': {

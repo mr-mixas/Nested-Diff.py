@@ -45,6 +45,15 @@ RESULTS = {
     'brackets': {
         'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;(&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;)&#x27;</span></div><div>+   <span class="dif-vN">&#x27;(&#x27;</span></div><div>  <span class="dif-kO">{&#x27;&lt;&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;&gt;&#x27;</span></div><div>+   <span class="dif-vN">&#x27;&lt;&#x27;</span></div><div>  <span class="dif-kO">{&#x27;[&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;]&#x27;</span></div><div>+   <span class="dif-vN">&#x27;[&#x27;</span></div><div>  <span class="dif-kO">{&#x27;{&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;}&#x27;</span></div><div>+   <span class="dif-vN">&#x27;{&#x27;</span></div></div>',
     },
+    'comment_is_empty_string': {
+        'result': '<div class="dif-body"><div># <span class="dif-vC"></span></div><div>- <span class="dif-vO">&#x27;old&#x27;</span></div><div>+ <span class="dif-vN">&#x27;new&#x27;</span></div></div>',
+    },
+    'comment_vs_type_hint': {
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
+    },
+    'comments': {
+        'result': '<div class="dif-body"><div># <span class="dif-vC">C-D</span></div><div>  <span class="dif-kO">{&#x27;k&#x27;}</span></div><div>#   <span class="dif-vC">C-NO</span></div><div>-   <span class="dif-vO">&#x27;v&#x27;</span></div><div>+   <span class="dif-vN">&#x27;V&#x27;</span></div></div>',
+    },
     'deeply_nested_hash_vs_empty_hash': {
         'result': '<div class="dif-body"><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</span></div></div>',
     },
@@ -106,7 +115,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;&#x27;</span></div><div>+ <span class="dif-vN">0</span></div></div>',
     },
     'empty_string_vs_text': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1,2 @@</span></div><div>- <span class="dif-vR"></span></div><div>+ <span class="dif-vA">A</span></div><div>+ <span class="dif-vA">B</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1,2 @@</span></div><div>- <span class="dif-vR"></span></div><div>+ <span class="dif-vA">A</span></div><div>+ <span class="dif-vA">B</span></div></div>',
     },
     'empty_string_vs_undef': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;&#x27;</span></div><div>+ <span class="dif-vN">None</span></div></div>',
@@ -115,10 +124,10 @@ RESULTS = {
         'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;\\n&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;\\r\\n&#x27;</span></div><div>+   <span class="dif-vN">&#x27;\\n&#x27;</span></div></div>',
     },
     'frozenset_extended': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;frozenset&gt;</span></div><div>  <span class="dif-vU">1</span></div><div>+ <span class="dif-vA">2</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;frozenset&gt;</span></div><div>  <span class="dif-vU">1</span></div><div>+ <span class="dif-vA">2</span></div></div>',
     },
     'frozensets_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;frozenset&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;frozenset&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
     },
     'hash_with_one_key_vs_empty_hash': {
         'result': '<div class="dif-body"><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">1</span></div></div>',
@@ -133,7 +142,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div>  <span class="dif-kN">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-vN">2</span></div></div>',
     },
     'line_added_to_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1,2 @@</span></div><div>  <span class="dif-vU"></span></div><div>+ <span class="dif-vA"></span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1,2 @@</span></div><div>  <span class="dif-vU"></span></div><div>+ <span class="dif-vA"></span></div></div>',
     },
     'list_with_one_item_vs_empty_list': {
         'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div></div>',
@@ -187,7 +196,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div>  <span class="dif-kN">[0]</span></div><div>+   <span class="dif-vN">1</span></div></div>',
     },
     'mixed_specific_structures': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">(0)</span></div><div>-   <span class="dif-vO">()</span></div><div>+   <span class="dif-vN">frozenset()</span></div><div>  <span class="dif-kD">(1)</span></div><div>#   <span class="dif-kE">&lt;set&gt;</span></div><div>+   <span class="dif-vA">True</span></div></div>',
+        'result': '<div class="dif-body"><div>  <span class="dif-kO">(0)</span></div><div>-   <span class="dif-vO">()</span></div><div>+   <span class="dif-vN">frozenset()</span></div><div>  <span class="dif-kD">(1)</span></div><div>#   <span class="dif-vE">&lt;set&gt;</span></div><div>+   <span class="dif-vA">True</span></div></div>',
     },
     'nested_hashes': {
         'result': '<div class="dif-body"><div>+ <span class="dif-kA">{&#x27;four&#x27;}</span></div><div>+   <span class="dif-vA">4</span></div><div>  <span class="dif-kU">{&#x27;one&#x27;}</span></div><div>    <span class="dif-vU">1</span></div><div>- <span class="dif-kR">{&#x27;three&#x27;}</span></div><div>-   <span class="dif-vR">3</span></div><div>  <span class="dif-kD">{&#x27;two&#x27;}</span></div><div>    <span class="dif-kO">{&#x27;nine&#x27;}</span></div><div>-     <span class="dif-vO">9</span></div><div>+     <span class="dif-vN">8</span></div><div>    <span class="dif-kU">{&#x27;ten&#x27;}</span></div><div>      <span class="dif-vU">10</span></div></div>',
@@ -301,22 +310,22 @@ RESULTS = {
         'result': '<div class="dif-body"><div>-       <span class="dif-vO">0</span></div><div>+       <span class="dif-vN">1</span></div></div>',
     },
     'set_extended': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;set&gt;</span></div><div>  <span class="dif-vU">1</span></div><div>+ <span class="dif-vA">2</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>  <span class="dif-vU">1</span></div><div>+ <span class="dif-vA">2</span></div></div>',
     },
     'sets_empty_diff': {
         'result': '<div class="dif-body"></div>',
     },
     'sets_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
     },
     'sets_lcs_noAR': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;set&gt;</span></div><div>  <span class="dif-vU">2</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>  <span class="dif-vU">2</span></div></div>',
     },
     'sets_lcs_noU': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>+ <span class="dif-vA">3</span></div></div>',
     },
     'sets_lcs_trimR': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
     },
     'simple_strings_in_text_mode': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;bar&#x27;</span></div><div>+ <span class="dif-vN">&#x27;baz&#x27;</span></div></div>',
@@ -355,28 +364,28 @@ RESULTS = {
         'result': '<div class="dif-body"></div>',
     },
     'text_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_line_added': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1,3 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vU">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1,3 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vU">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_line_changed': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_line_changed_ctx_0': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -2 +2 @@</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -2 +2 @@</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div></div>',
     },
     'text_line_removed': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_multiple_hunks': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-kX0-0">@@ -3 +4 @@</span></div><div>- <span class="dif-vR">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-kX0-0">@@ -3 +4 @@</span></div><div>- <span class="dif-vR">C</span></div></div>',
     },
     'text_trailing_newlines': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU"></span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU"></span></div></div>',
     },
     'text_vs_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-kE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1 @@</span></div><div>- <span class="dif-vR">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA"></span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1 @@</span></div><div>- <span class="dif-vR">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA"></span></div></div>',
     },
     'tuple_extended': {
         'result': '<div class="dif-body"><div>  <span class="dif-kU">(0)</span></div><div>    <span class="dif-vU">1</span></div><div>+ <span class="dif-kA">(1)</span></div><div>+   <span class="dif-vA">2</span></div></div>',
@@ -387,7 +396,7 @@ RESULTS = {
     'tuples_lcs_noOU': {
         'result': '<div class="dif-body"><div>+ <span class="dif-kA">(0)</span></div><div>+   <span class="dif-vA">0</span></div><div>  <span class="dif-kN">(2)</span></div><div>+   <span class="dif-vN">3</span></div><div>- <span class="dif-kR">(3)</span></div><div>-   <span class="dif-vR">5</span></div></div>',
     },
-    'type_headers_disabled': {
+    'type_hints_disabled': {
         'result': '<div class="dif-body"><div>  <span class="dif-kX0-0">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
     },
     'undef_vs_0': {

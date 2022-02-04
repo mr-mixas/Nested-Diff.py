@@ -109,6 +109,7 @@ assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
 Diff is a dict and may contain following keys:
 
 * `A` stands for 'added', it's value - added item.
+* `C` is for comments; optional, value - arbitrary string.
 * `D` means 'different' and contains subdiff.
 * `E` diffed entity (optional), value - empty instance of entity's class.
 * `I` index for sequence item, used only when prior item was omitted.
