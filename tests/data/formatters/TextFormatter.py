@@ -39,7 +39,7 @@ RESULTS = {
     'a_vs_b': {
         'result': "- 'a'\n+ 'b'\n",
     },
-    'absent_emitter': {
+    'absent_yielder': {
         'raises': NotImplementedError,
     },
     'brackets': {

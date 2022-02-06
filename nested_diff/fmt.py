@@ -82,12 +82,12 @@ class AbstractFormatter(object):
             'U',
         )
 
-        self.__emitters = {}
+        self.__yielders = {}
 
-    def get_emitter(self, diff, depth=0):
-        """Return apropriate tokens emitter for diff extention."""
+    def get_yielder(self, diff, depth=0):
+        """Return apropriate yielder for diff extention."""
         try:
-            return self.__emitters[diff['E'].__class__](diff, depth=depth)
+            return self.__yielders[diff['E'].__class__](diff, depth=depth)
         except KeyError:
             raise NotImplementedError from None
 
@@ -103,11 +103,11 @@ class AbstractFormatter(object):
 
     def format(self, diff, **kwargs):  # noqa A003
         """Return completely formatted diff as string."""
-        return ''.join(self.emit_tokens(diff, **kwargs))
+        return ''.join(self.yield_diff(diff, **kwargs))
 
-    def set_emitter(self, type_, method):
-        """Set tokens emitter for diff extention."""
-        self.__emitters[type_] = method
+    def set_yielder(self, type_, method):
+        """Set yielder for diff extention."""
+        self.__yielders[type_] = method
 
 
 class TextFormatter(AbstractFormatter):
@@ -118,11 +118,11 @@ class TextFormatter(AbstractFormatter):
 
         self.type_hints = type_hints
 
-        self.set_emitter(frozenset, self.emit_set_tokens)
-        self.set_emitter(set, self.emit_set_tokens)
-        self.set_emitter(str, self.emit_text_diff_tokens)
+        self.set_yielder(frozenset, self.yield_set_diff)
+        self.set_yielder(set, self.yield_set_diff)
+        self.set_yielder(str, self.yield_text_diff)
 
-    def emit_text_diff_tokens(self, diff, depth=0):
+    def yield_text_diff(self, diff, depth=0):
         """Yield unified text diff."""
         indent = self.indent * depth
 
@@ -140,12 +140,12 @@ class TextFormatter(AbstractFormatter):
                         yield self.get_unified_diff_range(value[2], value[3])
                         yield self.unified_header_suffix
                     else:
-                        yield from self.repr_string(value, tag)
+                        yield from self.yield_string(value, tag)
 
                     yield self.line_separator
 
-    def emit_set_tokens(self, diff, depth=0):
-        """Yield tokens for set's and frozenset's diff."""
+    def yield_set_diff(self, diff, depth=0):
+        """Yield set and frozenset diff."""
         indent = self.indent * depth
 
         for subdiff in diff['D']:
@@ -153,12 +153,12 @@ class TextFormatter(AbstractFormatter):
                 if tag in subdiff:
                     yield self.val_line_prefix[tag]
                     yield indent
-                    yield from self.repr_value(subdiff[tag], tag)
+                    yield from self.yield_value(subdiff[tag], tag)
                     yield self.line_separator
                     break
 
-    def emit_comment(self, diff, depth=0):
-        """Yield diff comment parts."""
+    def yield_comment(self, diff, depth=0):
+        """Yield diff comment."""
         try:
             comment = diff['C']
             tag = 'C'
@@ -179,16 +179,16 @@ class TextFormatter(AbstractFormatter):
         yield self.val_suffix[tag]
         yield self.line_separator
 
-    def emit_tokens(self, diff, depth=0, header='', footer=''):
-        """Yield formatted diff token by token."""
+    def yield_diff(self, diff, depth=0, header='', footer=''):
+        """Yield formatted diff."""
         yield header
 
         for diff, key, subdiff, depth in self.iterator.iterate(diff, depth):
-            yield from self.emit_comment(diff, depth=depth)
+            yield from self.yield_comment(diff, depth=depth)
 
-            # emit value
+            # value
             if 'E' in diff:
-                yield from self.get_emitter(diff, depth=depth)
+                yield from self.get_yielder(diff, depth=depth)
                 continue
 
             if subdiff is None:
@@ -196,34 +196,35 @@ class TextFormatter(AbstractFormatter):
                     if tag in diff:
                         yield self.val_line_prefix[tag]
                         yield self.indent * depth
-                        yield from self.repr_value(diff[tag], tag)
+                        yield from self.yield_value(diff[tag], tag)
                         yield self.line_separator
                 continue
 
-            # emit key
+            # key
             for tag in self.tags:
                 if tag in subdiff:
                     yield self.key_line_prefix[tag]
                     yield self.indent * depth
-                    yield from self.repr_key(key, tag, diff['D'].__class__)
+                    yield from self.yield_key(key, tag, diff['D'].__class__)
                     yield self.line_separator
                     break
 
         yield footer
 
-    def repr_key(self, key, tag, diff_type):
-        """Return string representation for key/index."""
+    def yield_key(self, key, tag, diff_type):
+        """Yield key/index representation."""
         yield self.obj_prefix[diff_type]
         yield key.__repr__()
         yield self.obj_suffix[diff_type]
 
     @staticmethod
-    def repr_string(val, tag):
+    def yield_string(val, tag):
+        """Yield string representation."""
         yield val
 
     @staticmethod
-    def repr_value(val, tag):
-        """Return string representation for value."""
+    def yield_value(val, tag):
+        """Yield value representation."""
         yield val.__repr__()
 
 
@@ -281,30 +282,31 @@ class HtmlFormatter(TextFormatter):
             ' .dif-vU {color: #777}'
         )
 
-    def emit_tokens(self, diff, depth=0, header='', footer=''):
-        """Yield formatted diff token by token."""
-        yield from super().emit_tokens(
+    def yield_diff(self, diff, depth=0, header='', footer=''):
+        """Yield formatted diff parts."""
+        yield from super().yield_diff(
             diff,
             depth=depth,
             header=header + '<div class="dif-body">',
             footer='</div>' + footer,
         )
 
-    def repr_key(self, key, tag, diff_type):
-        """Return string representation for key/index."""
+    def yield_key(self, key, tag, diff_type):
+        """Yield key/index representation."""
         yield self.key_prefix[tag]
         yield self.obj_prefix[diff_type]
         yield html.escape(key.__repr__())
         yield self.obj_suffix[diff_type]
         yield self.key_suffix[tag]
 
-    def repr_string(self, val, tag):
+    def yield_string(self, val, tag):
+        """Yield string representation."""
         yield self.val_prefix[tag]
         yield html.escape(val)
         yield self.val_suffix[tag]
 
-    def repr_value(self, val, tag):
-        """Return string representation for value."""
+    def yield_value(self, val, tag):
+        """Yield value representation."""
         yield self.val_prefix[tag]
         yield html.escape(val.__repr__())
         yield self.val_suffix[tag]

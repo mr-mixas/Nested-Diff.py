@@ -39,7 +39,7 @@ RESULTS = {
     'a_vs_b': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;a&#x27;</span></div><div>+ <span class="dif-vN">&#x27;b&#x27;</span></div></div>',
     },
-    'absent_emitter': {
+    'absent_yielder': {
         'raises': NotImplementedError,
     },
     'brackets': {

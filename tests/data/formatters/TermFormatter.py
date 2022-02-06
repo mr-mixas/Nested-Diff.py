@@ -39,7 +39,7 @@ RESULTS = {
     'a_vs_b': {
         'result': "\x1b[31m- 'a'\x1b[0m\n\x1b[32m+ 'b'\x1b[0m\n",
     },
-    'absent_emitter': {
+    'absent_yielder': {
         'raises': NotImplementedError,
     },
     'brackets': {
