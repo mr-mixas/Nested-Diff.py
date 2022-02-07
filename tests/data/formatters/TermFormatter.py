@@ -51,6 +51,9 @@ RESULTS = {
     'comment_vs_type_hint': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,2 +1,2 @@\x1b[0m\n\x1b[31m- two\x1b[0m\n\x1b[32m+ 2\x1b[0m\n  lines\x1b[0m\n',
     },
+    'comment_with_HTML_tags': {
+        'result': "\x1b[34m# <h1>comment</h1>\x1b[0m\n  'same'\x1b[0m\n",
+    },
     'comments': {
         'result': "\x1b[34m# C-D\x1b[0m\n  {'k'}\x1b[0m\n\x1b[34m#   C-NO\x1b[0m\n\x1b[31m-   'v'\x1b[0m\n\x1b[32m+   'V'\x1b[0m\n",
     },

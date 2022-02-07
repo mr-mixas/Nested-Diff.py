@@ -51,6 +51,9 @@ RESULTS = {
     'comment_vs_type_hint': {
         'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
     },
+    'comment_with_HTML_tags': {
+        'result': '<div class="dif-body"><div># <span class="dif-vC">&lt;h1&gt;comment&lt;/h1&gt;</span></div><div>  <span class="dif-vU">&#x27;same&#x27;</span></div></div>',
+    },
     'comments': {
         'result': '<div class="dif-body"><div># <span class="dif-vC">C-D</span></div><div>  <span class="dif-kO">{&#x27;k&#x27;}</span></div><div>#   <span class="dif-vC">C-NO</span></div><div>-   <span class="dif-vO">&#x27;v&#x27;</span></div><div>+   <span class="dif-vN">&#x27;V&#x27;</span></div></div>',
     },

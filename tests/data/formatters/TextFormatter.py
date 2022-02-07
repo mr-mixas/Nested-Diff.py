@@ -51,6 +51,9 @@ RESULTS = {
     'comment_vs_type_hint': {
         'result': '# <str>\n  @@ -1,2 +1,2 @@\n- two\n+ 2\n  lines\n',
     },
+    'comment_with_HTML_tags': {
+        'result': "# <h1>comment</h1>\n  'same'\n",
+    },
     'comments': {
         'result': "# C-D\n  {'k'}\n#   C-NO\n-   'v'\n+   'V'\n",
     },

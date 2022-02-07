@@ -183,7 +183,7 @@ class TextFormatter(AbstractFormatter):
         yield self.val_line_prefix[tag]
         yield self.indent * depth
         yield self.val_prefix[tag]
-        yield comment
+        yield self.format_string(comment)
         yield self.val_suffix[tag]
         yield self.line_separator
 

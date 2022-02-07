@@ -42,6 +42,9 @@ def get_tests():
             # empty comments should be preserved
             'diff': {'C': '', 'N': 'new', 'O': 'old'},
         },
+        'comment_with_HTML_tags': {
+            'diff': {'U': 'same', 'C': '<h1>comment</h1>'},
+        },
         'escaped_symbols': {
             'a': {'\n': '\r\n'},
             'b': {'\n': '\n'},
