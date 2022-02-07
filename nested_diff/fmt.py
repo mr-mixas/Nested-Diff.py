@@ -60,6 +60,10 @@ class AbstractFormatter(object):
             'R': '- ',
             'U': '  ',
         }
+
+        self.key_prefix = {key: '' for key in self.key_line_prefix}
+        self.key_suffix = self.key_prefix.copy()
+
         self.val_line_prefix = self.key_line_prefix.copy()
         self.val_line_prefix['C'] = '# '
         self.val_line_prefix['E'] = '# '
@@ -68,9 +72,9 @@ class AbstractFormatter(object):
         self.val_line_prefix['N'] = '+ '
 
         self.val_prefix = {key: '' for key in self.val_line_prefix}
-        self.val_prefix['E'] = '<'
+        self.val_suffix = self.val_prefix.copy()
 
-        self.val_suffix = {key: '' for key in self.val_line_prefix}
+        self.val_prefix['E'] = '<'
         self.val_suffix['E'] = '>'
 
         self.tags = (  # diff tags to format, sequence is important
@@ -140,7 +144,9 @@ class TextFormatter(AbstractFormatter):
                         yield self.get_unified_diff_range(value[2], value[3])
                         yield self.unified_header_suffix
                     else:
-                        yield from self.yield_string(value, tag)
+                        yield self.val_prefix[tag]
+                        yield self.format_string(value)
+                        yield self.val_suffix[tag]
 
                     yield self.line_separator
 
@@ -153,7 +159,9 @@ class TextFormatter(AbstractFormatter):
                 if tag in subdiff:
                     yield self.val_line_prefix[tag]
                     yield indent
-                    yield from self.yield_value(subdiff[tag], tag)
+                    yield self.val_prefix[tag]
+                    yield self.format_value(subdiff[tag])
+                    yield self.val_suffix[tag]
                     yield self.line_separator
                     break
 
@@ -196,7 +204,9 @@ class TextFormatter(AbstractFormatter):
                     if tag in diff:
                         yield self.val_line_prefix[tag]
                         yield self.indent * depth
-                        yield from self.yield_value(diff[tag], tag)
+                        yield self.val_prefix[tag]
+                        yield self.format_value(diff[tag])
+                        yield self.val_suffix[tag]
                         yield self.line_separator
                 continue
 
@@ -205,27 +215,30 @@ class TextFormatter(AbstractFormatter):
                 if tag in subdiff:
                     yield self.key_line_prefix[tag]
                     yield self.indent * depth
-                    yield from self.yield_key(key, tag, diff['D'].__class__)
+                    yield self.key_prefix[tag]
+                    yield self.obj_prefix[diff['D'].__class__]
+                    yield self.format_key(key)
+                    yield self.obj_suffix[diff['D'].__class__]
+                    yield self.key_suffix[tag]
                     yield self.line_separator
                     break
 
         yield footer
 
-    def yield_key(self, key, tag, diff_type):
-        """Yield key/index representation."""
-        yield self.obj_prefix[diff_type]
-        yield key.__repr__()
-        yield self.obj_suffix[diff_type]
+    @staticmethod
+    def format_key(key):
+        """Return key/index representation."""
+        return key.__repr__()
 
     @staticmethod
-    def yield_string(val, tag):
-        """Yield string representation."""
-        yield val
+    def format_string(val):
+        """Return string representation."""
+        return val
 
     @staticmethod
-    def yield_value(val, tag):
-        """Yield value representation."""
-        yield val.__repr__()
+    def format_value(val):
+        """Return value representation."""
+        return val.__repr__()
 
 
 class HtmlFormatter(TextFormatter):
@@ -250,8 +263,6 @@ class HtmlFormatter(TextFormatter):
         for key, val in self.val_line_prefix.items():
             self.val_line_prefix[key] = '<div>' + val
 
-        self.key_prefix = {}
-        self.key_suffix = {}
         for key in self.key_line_prefix:
             self.key_prefix[key] = '<span class="dif-k' + key + '">'
             self.key_suffix[key] = '</span>'
@@ -291,25 +302,17 @@ class HtmlFormatter(TextFormatter):
             footer='</div>' + footer,
         )
 
-    def yield_key(self, key, tag, diff_type):
-        """Yield key/index representation."""
-        yield self.key_prefix[tag]
-        yield self.obj_prefix[diff_type]
-        yield html.escape(key.__repr__())
-        yield self.obj_suffix[diff_type]
-        yield self.key_suffix[tag]
+    def format_key(self, key):
+        """Return key/index representation."""
+        return html.escape(super().format_key(key))
 
-    def yield_string(self, val, tag):
-        """Yield string representation."""
-        yield self.val_prefix[tag]
-        yield html.escape(val)
-        yield self.val_suffix[tag]
+    def format_string(self, val):
+        """Return string representation."""
+        return html.escape(super().format_string(val))
 
-    def yield_value(self, val, tag):
-        """Yield value representation."""
-        yield self.val_prefix[tag]
-        yield html.escape(val.__repr__())
-        yield self.val_suffix[tag]
+    def format_value(self, val):
+        """Return value representation."""
+        return html.escape(super().format_value(val))
 
 
 class TermFormatter(TextFormatter):
