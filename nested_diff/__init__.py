@@ -268,11 +268,6 @@ class Differ(object):
 
         return {}
 
-    def diff_multiline(self, a, b):
-        warn('Differ.diff_multiline method is deprecated and will be removed'
-             'in the next release', DeprecationWarning, stacklevel=2)
-        return self.diff_text(self, a, b)
-
     def diff_text(self, a, b):
         r"""
         Return diff for texts (multiline strings).
@@ -427,7 +422,7 @@ class Patcher(object):
             frozenset: self.patch_frozenset,
             list: self.patch_list,
             set: self.patch_set,
-            str: self.patch_multiline,
+            str: self.patch_text,
             tuple: self.patch_tuple,
         }
 
@@ -519,9 +514,9 @@ class Patcher(object):
 
         return target
 
-    def patch_multiline(self, target, ndiff):
+    def patch_text(self, target, ndiff):
         """
-        Return patched multiline string.
+        Return patched text (multiline string).
 
         Unlike GNU patch, this algorithm does not implement any heuristics and
         patch target in straightforward way: get position from hunk header and
