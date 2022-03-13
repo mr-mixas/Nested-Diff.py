@@ -18,7 +18,6 @@
 
 from difflib import SequenceMatcher
 from pickle import dumps
-from warnings import warn
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
@@ -81,7 +80,7 @@ class Differ(object):
     """
 
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
-                 trimR=False, diff_method=None, text_diff_ctx=-1):
+                 trimR=False, text_diff_ctx=-1):
         """
         Construct Differ.
 
@@ -92,17 +91,10 @@ class Differ(object):
         `trimR` when True will drop (replace by `None`) removed data from diff;
         default is `False`.
 
-        `diff_method` method with such name (if object have one) from first
-        diffed object will be called for diff. Second diffed object and current
-        differ will be passed as arguments, diff expected for output.
-        Disabled (`None`) by default. This option is deprecated and will be
-        removed in the next release.
-
         `text_diff_ctx` defines amount of context lines for text (multiline
         strings) diffs, disabled entirely when value is negative.
 
         """
-        self.__diff_method = diff_method
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
         self.op_a = A
@@ -136,14 +128,6 @@ class Differ(object):
         :param b: Second object to diff.
 
         """
-        if self.__diff_method is not None:
-            warn('diff internal methods are deprecated and will be removed in'
-                 ' the next release', DeprecationWarning, stacklevel=2)
-            try:
-                return a.__getattribute__(self.__diff_method)(b, self)
-            except AttributeError:
-                pass
-
         if a.__class__ is b.__class__:
             # it's faster to compare pickled dumps and dig differences
             # afterwards than recursively diff each pair of objects
@@ -403,20 +387,8 @@ class Differ(object):
 class Patcher(object):
     """Patch objects using nested diff."""
 
-    def __init__(self, patch_method=None):
-        """
-        Construct Patcher.
-
-        Optional arguments:
-        `patch_method` method with such name, if patched object have one, will
-        be called with patch and current patcher as arguments. Patched object
-        expected for output.
-        Disabled (`None`) by default. This option is deprecated and will be
-        removed in the next release.
-
-        """
-        self.__patch_method = patch_method
-
+    def __init__(self):
+        """Construct Patcher."""
         self.__patchers = {
             dict: self.patch_dict,
             frozenset: self.patch_frozenset,
@@ -449,15 +421,6 @@ class Patcher(object):
         :param ndiff: Nested diff.
 
         """
-        if self.__patch_method is not None:
-            warn('patch internal methods are deprecated and will be removed in'
-                 ' the next release', DeprecationWarning, stacklevel=2)
-            try:
-                return target.__getattribute__(self.__patch_method)(
-                    ndiff, self)
-            except AttributeError:
-                pass
-
         if 'D' in ndiff:
             return self.get_patcher(
                 ndiff['E' if 'E' in ndiff else 'D'].__class__,
