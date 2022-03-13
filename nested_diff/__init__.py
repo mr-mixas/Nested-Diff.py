@@ -81,8 +81,7 @@ class Differ(object):
     """
 
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
-                 trimR=False, diff_method=None, text_diff_ctx=-1,
-                 multiline_diff_context=-1):
+                 trimR=False, diff_method=None, text_diff_ctx=-1):
         """
         Construct Differ.
 
@@ -120,16 +119,6 @@ class Differ(object):
             set: self.diff_set,
             tuple: self.diff_tuple,
         }
-
-        if multiline_diff_context >= 0:
-            warn('`multiline_diff_context` is deprecated and will be removed'
-                 ' in the next release, use `text_diff_ctx` instead',
-                 DeprecationWarning, stacklevel=2)
-            if text_diff_ctx < 0:
-                text_diff_ctx = multiline_diff_context
-            else:
-                raise TypeError('`multiline_diff_context` and `text_diff_ctx`'
-                                ' can not be used together')
 
         if text_diff_ctx >= 0 and self.op_n and self.op_o:
             self.__differs[str] = self.diff_text

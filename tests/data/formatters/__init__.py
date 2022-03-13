@@ -35,7 +35,6 @@ def get_tests():
                 'E': '',
                 'H': 'Comment should win',
             },
-            'diff_opts': {'multiline_diff_context': 2},
             'formatter_opts': {'type_hints': True},  # type hint should be ignored
         },
         'comment_is_empty_string': {
