@@ -191,7 +191,7 @@ class TextFormatter(AbstractFormatter):
         """Yield formatted diff."""
         yield header
 
-        for diff, key, subdiff, depth in self.iterator.iterate(diff, depth):
+        for diff, key, subdiff, depth in self.iterator.iterate(diff, depth):  # noqa B020
             yield from self.yield_comment(diff, depth=depth)
 
             # value
