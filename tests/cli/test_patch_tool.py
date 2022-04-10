@@ -1,3 +1,4 @@
+import io
 import json
 import pytest
 
@@ -154,3 +155,23 @@ def test_entry_point(capsys):
     captured = capsys.readouterr()
     assert captured.out.startswith('usage: nested_patch')
     assert '' == captured.err
+
+
+def test_stdin_patch(capsys, content, fullname, tmp_path):
+    result_file_name = '{}.got.json'.format(tmp_path)
+    copyfile(
+        fullname('lists.a.json', shared=True),
+        result_file_name,
+    )
+
+    patch = io.StringIO(content(fullname('lists.patch.json', shared=True)))
+
+    with mock.patch('sys.stdin', patch):
+        nested_diff.patch_tool.App(args=(result_file_name, '--ifmt', 'json')).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.out
+    assert '' == captured.err
+
+    assert json.loads(content(fullname('lists.b.json', shared=True))) == \
+        json.loads(content(result_file_name))

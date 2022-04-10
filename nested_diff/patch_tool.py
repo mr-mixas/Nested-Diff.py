@@ -17,6 +17,8 @@
 """Patch tool for nested diff."""
 
 import argparse
+import sys
+
 import nested_diff.cli
 
 
@@ -33,7 +35,13 @@ class App(nested_diff.cli.App):
         parser = super().get_positional_args_parser()
 
         parser.add_argument('target_file')
-        parser.add_argument('patch_file', type=argparse.FileType())
+        parser.add_argument(
+            'patch_file',
+            nargs='?',
+            default=sys.stdin,
+            type=argparse.FileType(),
+            help='optional, STDIN used when omitted',
+        )
 
         return parser
 
