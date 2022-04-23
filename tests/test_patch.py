@@ -1,9 +1,8 @@
 import pytest
 
-from nested_diff import patch
+from nested_diff import diff, patch
 
 from tests.data import standard, specific
-
 
 TESTS = {}
 TESTS.update(standard.get_tests())
@@ -12,7 +11,6 @@ TESTS.update(specific.get_tests())
 
 @pytest.mark.parametrize('name', sorted(TESTS.keys()))
 def test_patch(name):
-    diff = TESTS[name]['diff']
     target = TESTS[name]['a']
 
     try:
@@ -20,7 +18,9 @@ def test_patch(name):
     except KeyError:
         expected = TESTS[name]['b']
 
-    assert expected == patch(target, diff)
+    got = patch(target, TESTS[name]['diff'])
+
+    assert not diff(expected, got, U=False)
 
 
 # Test what doesn't covered by standard tests
