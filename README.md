@@ -77,54 +77,57 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 ```
 
-### Subclassing
+### Customizing
 
 ```
-from nested_diff import Differ
-
-
-class CustomDiffer(Differ):
-    """Differ with custom precision for floats."""
-
-    def __init__(self, float_precision=2, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.set_differ(float, self.diff_float)
-        self.float_precision = float_precision
-
-    def diff_float(self, a, b):
-        if round(a, self.float_precision) == round(b, self.float_precision):
-            return {'U': a} if self.op_u else {}
-
-        return super().diff__default(a, b)
-
-
-differ = CustomDiffer(float_precision=1, U=False)
-
-a = [0.001, 0.01, 0.1]
-b = [0.002, 0.02, 0.2]
-
-assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
+>>> from nested_diff import Differ, handlers
+>>>
+>>> class FloatHanler(handlers.TypeHandler):
+...     handled_type = float
+...
+...     def __init__(self, precision=2, *args, **kwargs):
+...         super().__init__(*args, **kwargs)
+...         self.precision = precision
+...
+...     def diff(self, differ, a, b):
+...         if round(a, self.precision) == round(b, self.precision):
+...             return {'U': a} if differ.op_u else {}
+...
+...         return super().diff(differ, a, b)
+>>>
+>>>
+>>> differ = Differ(U=False)
+>>> differ.set_handler(FloatHanler(precision=1))
+>>>
+>>> a = [0.001, 0.01, 0.1]
+>>> b = [0.002, 0.02, 0.2]
+>>>
+>>> assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
+>>>
 ```
 
 ## Diff structure
 
-Diff is a dict and may contain following keys:
+Diff is a dict and may contain status keys:
 
 * `A` stands for 'added', it's value - added item.
-* `C` is for comments; optional, value - arbitrary string.
 * `D` means 'different' and contains subdiff.
-* `E` diffed entity (optional), value - empty instance of entity's class.
-* `I` index for sequence item, used only when prior item was omitted.
 * `N` is a new value for changed item.
 * `O` is a changed item's old value.
 * `R` key used for removed item.
 * `U` represent unchanged item.
 
+and auxiliary keys:
+
+* `C` comment; optional, value - arbitrary string.
+* `E` diffed entity (optional), value - empty instance of entity's class.
+* `I` index for sequence item, used only when prior item was omitted.
+
 Diff metadata alternates with actual data; simple types specified as is, dicts,
 lists and tuples contain subdiffs for their items with native for such types
-addressing: indexes for lists and tuples and keys for dictionaries. Any status
-type, except `D`, `E` and `I` may be omitted during diff computation. `E` tag
-is used with `D` when entity unable to contain diff by itself (set, frozenset);
+addressing: indexes for lists and tuples, keys for dictionaries. Any status
+key, except `D` may be omitted during diff computation. `E` key is used with
+`D` when entity unable to contain diff by itself (set, frozenset for example);
 `D` contain a list of subdiffs in this case.
 
 ### Annotated example:

@@ -54,6 +54,11 @@ def test_text_unsupported_op():
         )
 
 
+def test_incorrect_diff_format():
+    with pytest.raises(ValueError):
+        patch({}, {'garbage': 'passed'})
+
+
 def test_type_mismatch():
     with pytest.raises(AttributeError):
         patch({}, {'D': [{'A': 1}]})

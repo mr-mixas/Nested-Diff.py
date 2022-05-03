@@ -1,10 +1,76 @@
 from nested_diff import Differ, Patcher
+from nested_diff.handlers import TypeHandler
 
 
 class CustomContainer(object):
     data = None
 
 
+class CustomTypeHandler(TypeHandler):
+    handled_type = CustomContainer
+
+    def diff(self, differ, a, b):
+        diff = differ.diff(a.data, b.data)
+
+        if 'D' in diff:
+            cont = CustomContainer()
+            cont.data = diff.pop('D')
+            diff['D'] = cont
+
+        if 'N' in diff:
+            diff['N'] = b
+
+        if 'O' in diff:
+            diff['O'] = a
+
+        return diff
+
+    def patch(self, patcher, target, diff):
+        if 'D' in diff:
+            diff['D'] = diff['D'].data
+
+        target.data = patcher.patch(target.data, diff)
+
+        return target
+
+
+def test_deeply_different():
+    old = CustomContainer()
+    old.data = ['I', 'am', 'old', 'obj']
+
+    new = CustomContainer()
+    new.data = ['I', 'am', 'new', 'obj']
+
+    differ = Differ(U=False)
+    differ.set_handler(CustomTypeHandler())
+    diff = differ.diff(old, new)
+    assert [{'I': 2, 'N': 'new', 'O': 'old'}] == diff['D'].data
+
+    patcher = Patcher()
+    patcher.set_handler(CustomTypeHandler())
+    old = patcher.patch(old, diff)
+    assert old.data == new.data
+
+
+def test_entire_different():
+    old = CustomContainer()
+    old.data = ['old', 'obj']
+
+    new = CustomContainer()
+    new.data = {'new': 'obj'}
+
+    differ = Differ(U=False)
+    differ.set_handler(CustomTypeHandler())
+    diff = differ.diff(old, new)
+    assert {'O': old, 'N': new} == diff
+
+    patcher = Patcher()
+    patcher.set_handler(CustomTypeHandler())
+    old = patcher.patch(old, diff)
+    assert old.data == new.data
+
+
+# TODO: drop code below wneh handlers related deprecation cycle ended
 class CustomDiffer(Differ):
     def __init__(self, *args, **kwargs):
         super(CustomDiffer, self).__init__(*args, **kwargs)
@@ -41,7 +107,7 @@ class CustomPatcher(Patcher):
         return target
 
 
-def test_deeply_different():
+def test_deeply_different_deprecated():
     old = CustomContainer()
     old.data = ['I', 'am', 'old', 'obj']
 
@@ -55,7 +121,7 @@ def test_deeply_different():
     assert old.data == new.data
 
 
-def test_entire_different():
+def test_entire_different_deprecated():
     old = CustomContainer()
     old.data = ['old', 'obj']
 
