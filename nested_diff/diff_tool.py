@@ -49,6 +49,12 @@ class App(nested_diff.cli.App):
         }
         diff_opts.update(kwargs)
 
+        if diff_opts['R'] == 'trim':
+            diff_opts['R'] = True
+            diff_opts['trimR'] = True
+        else:
+            diff_opts['R'] = int(diff_opts['R'])
+
         differ = nested_diff.Differ(**diff_opts)
 
         if self.args.text_ctx >= 0:
@@ -84,8 +90,9 @@ class App(nested_diff.cli.App):
                             help="show item's new values; enabled by default")
         parser.add_argument('-O', type=int, choices=(0, 1), default=1,
                             help="show item's old values; enabled by default")
-        parser.add_argument('-R', type=int, choices=(0, 1), default=1,
-                            help='Show removed items; enabled by default')
+        parser.add_argument('-R', choices=('0', '1', 'trim'), default=1,
+                            help='Show removed items; enabled (1) by default. '
+                            'Value will be replaced by null when "trim" used')
         parser.add_argument('-U', type=int, choices=(0, 1), default=0,
                             help='show unchanged items; disabled by default')
 

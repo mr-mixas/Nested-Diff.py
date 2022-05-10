@@ -68,6 +68,20 @@ def test_enable_U_ops(capsys, expected, fullname):  # noqa N802
     assert expected == captured.out
 
 
+def test_trimR_ops(capsys, expected, fullname):  # noqa N802
+    exit_code = nested_diff.diff_tool.App(args=(
+        fullname('lists.b.json', shared=True),
+        fullname('lists.a.json', shared=True),
+        '-R=trim', '-R', 'trim',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert exit_code == 1
+
+    assert expected == captured.out
+
+
 def test_output_file(capsys, content, expected, fullname, tmp_path):
     result_file_name = '{}.got'.format(tmp_path)
     exit_code = nested_diff.diff_tool.App(args=(
