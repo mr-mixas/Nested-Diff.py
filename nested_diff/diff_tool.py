@@ -21,6 +21,7 @@ import sys
 
 import nested_diff
 import nested_diff.cli
+import nested_diff.handlers
 
 
 class App(nested_diff.cli.App):
@@ -40,7 +41,6 @@ class App(nested_diff.cli.App):
 
         """
         diff_opts = {
-            'text_diff_ctx': self.args.text_ctx,
             'A': self.args.A,
             'N': self.args.N,
             'O': self.args.O,  # noqa: E741
@@ -49,7 +49,13 @@ class App(nested_diff.cli.App):
         }
         diff_opts.update(kwargs)
 
-        return nested_diff.diff(a, b, **diff_opts)
+        differ = nested_diff.Differ(**diff_opts)
+
+        if self.args.text_ctx >= 0:
+            differ.set_handler(nested_diff.handlers.TextHandler(
+                context=self.args.text_ctx))
+
+        return differ.diff(a, b)
 
     def get_optional_args_parser(self):
         parser = super().get_optional_args_parser()
