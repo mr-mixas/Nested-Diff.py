@@ -162,7 +162,7 @@ class ListHandler(TypeHandler):
     handled_type = list
 
     def __init__(self):
-        """Construct list handler."""
+        """Initialize handler."""
         super().__init__()
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
@@ -401,7 +401,7 @@ class TextHandler(TypeHandler):
 
     def __init__(self, context=3):
         """
-        Construct handler.
+        Initialize handler.
 
         :param context: Amount of context lines.
 

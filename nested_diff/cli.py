@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-2021 Michael Samoglyadov
+# Copyright 2019-2022 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,6 +35,12 @@ class App(object):
     version = nested_diff.__version__
 
     def __init__(self, args=None):
+        """
+        Initialize app.
+
+        :param args: command line arguments; `sys.argv` used by default.
+
+        """
         self.override_excepthook()  # ASAP, but overridable by descendants
 
         self.argparser = self.get_argparser(description=self.__doc__)
@@ -211,17 +217,17 @@ class Loader(object):
 
 
 class JsonDumper(Dumper):
-    """
-    JSON dumper.
-
-    All kwargs passed directly to `json.JSONEncoder`
-    `indent` is set to 3 and `sort_keys` to `True` if absent in kwargs
-
-    """
+    """JSON dumper."""
 
     tty_final_new_line = True
 
     def __init__(self, **kwargs):
+        """
+        Initialize dumper.
+
+        :param kwargs: kwargs passed directly to `json.JSONEncoder`; `indent`
+        is set to 3 and `sort_keys` to `True` if absent in kwargs.
+        """
         super().__init__()
 
         import json
@@ -238,14 +244,15 @@ class JsonDumper(Dumper):
 
 
 class JsonLoader(Loader):
-    """
-    JSON loader.
-
-    All kwargs passed directly to `json.JSONDecoder`
-
-    """
+    """JSON loader."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize loader.
+
+        :param kwargs: kwargs passed directly to `json.JSONDecoder`
+
+        """
         super().__init__()
 
         import json
@@ -256,14 +263,15 @@ class JsonLoader(Loader):
 
 
 class IniDumper(Dumper):
-    """
-    INI dumper.
-
-    All kwargs passed directly to `configparser.ConfigParser`
-
-    """
+    """INI dumper."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize dumper.
+
+        :param kwargs: kwargs passed directly to `configparser.ConfigParser`
+
+        """
         super().__init__()
 
         import configparser
@@ -279,14 +287,15 @@ class IniDumper(Dumper):
 
 
 class IniLoader(Loader):
-    """
-    INI loader.
-
-    All kwargs passed directly to `configparser.ConfigParser`
-
-    """
+    """INI loader."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize loader.
+
+        :param kwargs: kwargs passed directly to `configparser.ConfigParser`
+
+        """
         super().__init__()
 
         import configparser
@@ -311,6 +320,7 @@ class TomlDumper(Dumper):
     """TOML dumper."""
 
     def __init__(self, **kwargs):
+        """Initialize dumper."""
         super().__init__()
 
         import toml
@@ -324,6 +334,7 @@ class TomlLoader(Loader):
     """TOML loader."""
 
     def __init__(self, **kwargs):
+        """Initialize loader."""
         super().__init__()
 
         import toml
@@ -334,15 +345,16 @@ class TomlLoader(Loader):
 
 
 class YamlDumper(Dumper):
-    """
-    YAML dumper.
-
-    All kwargs passed directly to `yaml.safe_dump()`
-    `default_flow_style` is set to `False` if absent in kwargs
-
-    """
+    """YAML dumper."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize dumper.
+
+        :param kwargs: kwargs passed directly to `yaml.dump`;
+        `default_flow_style` is set to `False` if absent in kwargs.
+
+        """
         super().__init__()
 
         import yaml
@@ -365,14 +377,15 @@ class YamlDumper(Dumper):
 
 
 class YamlLoader(Loader):
-    """
-    YAML loader.
-
-    All kwargs passed directly to `yaml.safe_load()`
-
-    """
+    """YAML loader."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize loader.
+
+        :param kwargs: kwargs passed directly to `yaml.safe_load()`.
+
+        """
         super().__init__()
 
         import yaml

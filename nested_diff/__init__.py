@@ -103,7 +103,7 @@ class Differ(object):
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
                  trimR=False, text_diff_ctx=-1, handlers=()):
         """
-        Construct Differ.
+        Initialize Differ.
 
         Optional arguments:
         `A`, `N`, `O`, `R`, `U` are toggles for according diff ops and all
@@ -291,7 +291,7 @@ class Patcher(object):
 
     def __init__(self, handlers=()):
         """
-        Construct Patcher.
+        Initialize Patcher.
 
         :param handlers: List of type handlers.
 
@@ -459,7 +459,7 @@ class Iterator(object):
 
     def __init__(self, handlers=(), sort_keys=False):
         """
-        Construct iterator.
+        Initialize iterator.
 
         If `sort_keys` is `True`, then the output for mappings will be
         sorted by key. Disabled by default.
@@ -595,7 +595,7 @@ def diff(a, b, **kwargs):
     :param a: First object to diff.
     :param b: Second object to diff.
 
-    See `__init__` in Differ class for kwargs specification.
+    kwargs passed to Differ's constructor as is.
 
     """
     return Differ(**kwargs).diff(a, b)
@@ -608,7 +608,7 @@ def patch(target, ndiff, **kwargs):
     :param target: Object to patch.
     :param ndiff: Nested diff.
 
-    See `__init__` in Patcher class for kwargs specification.
+    kwargs passed to Patcher's constructor as is.
 
     """
     return Patcher(**kwargs).patch(target, ndiff)

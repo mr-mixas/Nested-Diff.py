@@ -26,12 +26,12 @@ class AbstractFormatter(object):
 
     def __init__(self, indent='  ', line_separator='\n', **kwargs):
         """
-        Construct diff formatter.
+        Initialize formatter.
 
         :param indent: prefix for each level of diff.
         :line_separator: text lines delimiter.
 
-        Rest kwargs are passed to nested_diff.Iterator as is.
+        Rest kwargs passed to nested_diff.Iterator as is.
 
         """
         self.iterator = nested_diff.Iterator(**kwargs)
@@ -118,6 +118,14 @@ class TextFormatter(AbstractFormatter):
     """Produce human friendly text diff with indenting formatting."""
 
     def __init__(self, *args, type_hints=True, **kwargs):
+        """
+        Initialize formatter.
+
+        :param type_hints: print values types when True.
+
+        Rest args and kwargs passed to base class as is.
+
+        """
         super().__init__(*args, **kwargs)
 
         self.type_hints = type_hints
@@ -243,7 +251,7 @@ class TextFormatter(AbstractFormatter):
 
 class HtmlFormatter(TextFormatter):
     """
-    Produce human friendly html diff with indenting formatting.
+    Produce human friendly HTML diff with indenting formatting.
 
     Text copied from the browser should be exactly the same as TextFormatter
     produce.
@@ -251,6 +259,12 @@ class HtmlFormatter(TextFormatter):
     """
 
     def __init__(self, *args, line_separator='', **kwargs):
+        """
+        Initialize formatter.
+
+        Args and kwargs passed to base class as is.
+
+        """
         super().__init__(*args, line_separator=line_separator, **kwargs)
 
         self.line_separator = '</div>' + self.line_separator
@@ -319,6 +333,12 @@ class TermFormatter(TextFormatter):
     """Same as TextFormatter but with term colors."""
 
     def __init__(self, *args, **kwargs):
+        """
+        Initialize formatter.
+
+        Args and kwargs passed to base class as is.
+
+        """
         super().__init__(*args, **kwargs)
 
         self.line_separator = '\033[0m' + self.line_separator

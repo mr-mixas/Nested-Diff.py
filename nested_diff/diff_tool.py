@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-2021 Michael Samoglyadov
+# Copyright 2019-2022 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -149,16 +149,23 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 class HtmlDumper(AbstractFmtDumper):
     """Human friendly HTML dumper for nested diff."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, html_opts=(('lang', 'en'), ('title', 'Nested diff')),
+                 **kwargs):
+        """
+        Initialize dumper.
+
+        :param html_opts: may contain `header` (default is brief HTML5
+        boilerplate) and `footer` (page closing tags). Also `lang` and `title`
+        supported which define according values for default `header`.
+
+        Rest kwargs passed to `fmt.HtmlFormatter` as is.
+
+        """
         super().__init__()
         from html import escape
         from nested_diff import fmt
-        self.html_opts = {
-            'lang': 'en',
-            'title': 'Nested diff',
-        }
-        self.html_opts.update(kwargs.pop('html_opts', {}))
 
+        self.html_opts = dict(html_opts)
         self.formatter = fmt.HtmlFormatter(**self.get_opts(kwargs))
 
         if 'header' not in self.html_opts:
@@ -183,6 +190,12 @@ class TermDumper(AbstractFmtDumper):
     """Same as TextDumper but with ANSI term colors."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize dumper.
+
+        :param kwargs: passed to `fmt.TermFormatter` as is.
+
+        """
         super().__init__()
         from nested_diff import fmt
         self.encoder = fmt.TermFormatter(**self.get_opts(kwargs))
@@ -192,6 +205,12 @@ class TextDumper(AbstractFmtDumper):
     """Human friendly text dumper for nested diff."""
 
     def __init__(self, **kwargs):
+        """
+        Initialize dumper.
+
+        :param kwargs: passed to `fmt.TextFormatter` as is.
+
+        """
         super().__init__()
         from nested_diff import fmt
         self.encoder = fmt.TextFormatter(**self.get_opts(kwargs))
