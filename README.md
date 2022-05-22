@@ -77,34 +77,7 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 ```
 
-### Customizing
-
-```
->>> from nested_diff import Differ, handlers
->>>
->>> class FloatHanler(handlers.TypeHandler):
-...     handled_type = float
-...
-...     def __init__(self, precision=2, *args, **kwargs):
-...         super().__init__(*args, **kwargs)
-...         self.precision = precision
-...
-...     def diff(self, differ, a, b):
-...         if round(a, self.precision) == round(b, self.precision):
-...             return {'U': a} if differ.op_u else {}
-...
-...         return super().diff(differ, a, b)
->>>
->>>
->>> differ = Differ(U=False)
->>> differ.set_handler(FloatHanler(precision=1))
->>>
->>> a = [0.001, 0.01, 0.1]
->>> b = [0.002, 0.02, 0.2]
->>>
->>> assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
->>>
-```
+See more examples in [HOWTO](./HOWTO.md) and [tests](./tests/)
 
 ## Diff structure
 
@@ -163,6 +136,8 @@ diff:
 Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 ## See Also
+
+[nested diff HOWTO](./HOWTO.md)
 
 [deepdiff](https://pypi.org/project/deepdiff/),
 [jsondiff](https://pypi.org/project/jsondiff/),
