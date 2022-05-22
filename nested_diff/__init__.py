@@ -490,7 +490,7 @@ class Iterator(object):
         warn('`iterate__default` is deprecated and will be removed in'
              ' the next release', DeprecationWarning, stacklevel=2)
 
-        yield from self.default_handler.iterate(self, ndiff)
+        yield from self.default_handler.iterate_diff(self, ndiff)
 
     def iterate_mapping_diff(self, ndiff):
         """
@@ -502,7 +502,7 @@ class Iterator(object):
         warn('`iterate_mapping_diff` is deprecated and will be removed in'
              ' the next release', DeprecationWarning, stacklevel=2)
 
-        yield from _TYPE_HANDLERS[dict].iterate(self, ndiff)
+        yield from _TYPE_HANDLERS[dict].iterate_diff(self, ndiff)
 
     def iterate_sequence_diff(self, ndiff):
         """
@@ -514,7 +514,7 @@ class Iterator(object):
         warn('`iterate_sequence_diff` is deprecated and will be removed in'
              ' the next release', DeprecationWarning, stacklevel=2)
 
-        yield from _TYPE_HANDLERS[list].iterate(self, ndiff)
+        yield from _TYPE_HANDLERS[list].iterate_diff(self, ndiff)
 
     def get_iterator(self, ndiff):
         """
@@ -584,8 +584,8 @@ class Iterator(object):
         :param handler: handlers.TypeHandler.
 
         """
-        self.__iterators[handler.handled_type] = lambda ndiff: handler.iterate(
-            self, ndiff)
+        self.__iterators[handler.handled_type] = \
+            lambda ndiff: handler.iterate_diff(self, ndiff)
 
 
 def diff(a, b, **kwargs):

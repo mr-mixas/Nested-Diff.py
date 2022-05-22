@@ -24,7 +24,7 @@ class TypeHandler(object):
     """
     Base type for type handlers.
 
-    Handlers provide diff, patch and iterate methods for specific type.
+    Handlers provide diff, patch and iterate_diff methods for specific type.
 
     """
 
@@ -65,7 +65,7 @@ class TypeHandler(object):
 
         raise ValueError(diff)
 
-    def iterate(self, iterator, diff):
+    def iterate_diff(self, iterator, diff):
         """
         Iterate over nested diff.
 
@@ -142,7 +142,7 @@ class DictHandler(TypeHandler):
 
         return target
 
-    def iterate(self, iterator, diff):
+    def iterate_diff(self, iterator, diff):
         """
         Iterate over dict diff.
 
@@ -260,7 +260,7 @@ class ListHandler(TypeHandler):
 
         return target
 
-    def iterate(self, iterator, diff):
+    def iterate_diff(self, iterator, diff):
         """
         Iterate over list diff.
 
