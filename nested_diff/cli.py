@@ -55,12 +55,21 @@ class App(object):
         return json.loads(opts)
 
     def dump(self, file_, data, fmt):
+        """
+        Dump data using apropriate format.
+
+        :param file_: File object to dump.
+        :param data: Data to dump.
+        :param fmt: Format used for dump, one of `self.supported_ofmts`.
+
+        """
         self.get_dumper(
             fmt,
             **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
         ).dump(file_, data)
 
     def get_argparser(self, description=None):
+        """Return complete CLI argument parser."""
         return argparse.ArgumentParser(
             description=description,
             parents=(
@@ -70,6 +79,7 @@ class App(object):
         )
 
     def get_optional_args_parser(self):
+        """Return parser for optional part (dash prefixed) of CLI args."""
         parser = argparse.ArgumentParser(add_help=False)
         parser.add_argument(
             '--version',
@@ -112,10 +122,17 @@ class App(object):
 
     @staticmethod
     def get_positional_args_parser():
+        """Return parser for positional part (files etc) of CLI args."""
         return argparse.ArgumentParser(add_help=False)
 
     @staticmethod
     def get_dumper(fmt, **kwargs):
+        """
+        Return data dumper object based on desired format.
+
+        :param kwargs: passed to dumper's constructor as is.
+
+        """
         if fmt == 'json':
             return JsonDumper(**kwargs)
         elif fmt == 'yaml':
@@ -142,6 +159,12 @@ class App(object):
 
     @staticmethod
     def get_loader(fmt, **kwargs):
+        """
+        Return data loader object based on desired format.
+
+        :param kwargs: passed to loader's constructor as is.
+
+        """
         if fmt == 'json':
             return JsonLoader(**kwargs)
         elif fmt == 'yaml':
@@ -154,6 +177,12 @@ class App(object):
         raise RuntimeError('Unsupported input format: ' + fmt)
 
     def load(self, file_):
+        """
+        Load data from file using apropriate loader.
+
+        :param file_: File object to load from.
+
+        """
         if self.args.ifmt == 'auto':
             fmt = self.guess_fmt(file_, 'json')
         else:
@@ -178,6 +207,12 @@ class App(object):
         sys.excepthook = overrided
 
     def run(self):
+        """
+        App object entry point.
+
+        Must be implemented in derivatives.
+
+        """
         raise NotImplementedError
 
 
@@ -187,13 +222,34 @@ class Dumper(object):
     tty_final_new_line = False
 
     def encode(self, data):
+        """
+        Return encoded data.
+
+        :param data: data to encode.
+
+        Must be implemented in derivatives.
+
+        """
         raise NotImplementedError
 
     @staticmethod
     def get_opts(opts):
+        """
+        Return dumper options.
+
+        :param opts: initial options.
+
+        """
         return opts
 
     def dump(self, file_, data):
+        """
+        Encode and write data to file.
+
+        :param file_: File object.
+        :param data: data to write.
+
+        """
         file_.write(self.encode(data))
 
         if self.tty_final_new_line and file_.isatty():
@@ -206,13 +262,33 @@ class Loader(object):
     """Base class for data loaders."""
 
     def decode(self, data):
+        """
+        Return decoded data.
+
+        :param data: data to decode.
+
+        Must be implemented in derivatives.
+
+        """
         raise NotImplementedError
 
     @staticmethod
     def get_opts(opts):
+        """
+        Return loader options.
+
+        :param opts: initial options.
+
+        """
         return opts
 
     def load(self, file_):
+        """
+        Return decoded data loaded from file.
+
+        :param file_: File object.
+
+        """
         return self.decode(file_.read())
 
 
@@ -225,8 +301,8 @@ class JsonDumper(Dumper):
         """
         Initialize dumper.
 
-        :param kwargs: kwargs passed directly to `json.JSONEncoder`; `indent`
-        is set to 3 and `sort_keys` to `True` if absent in kwargs.
+        :param kwargs: options for `json.JSONEncoder`.
+
         """
         super().__init__()
 
@@ -234,10 +310,24 @@ class JsonDumper(Dumper):
         self.encoder = json.JSONEncoder(**self.get_opts(kwargs))
 
     def encode(self, data):
+        """
+        Return JSON encoded data.
+
+        :param data: data to encode.
+
+        """
         return self.encoder.encode(data)
 
     @staticmethod
     def get_opts(opts):
+        """
+        Return dumper options.
+
+        :param opts: initial options.
+
+        `indent` is set to 3 and `sort_keys` to `True` if absent in opts.
+
+        """
         opts.setdefault('indent', 3)
         opts.setdefault('sort_keys', True)
         return opts
@@ -250,7 +340,7 @@ class JsonLoader(Loader):
         """
         Initialize loader.
 
-        :param kwargs: kwargs passed directly to `json.JSONDecoder`
+        :param kwargs: options for `json.JSONDecoder`.
 
         """
         super().__init__()
@@ -259,6 +349,12 @@ class JsonLoader(Loader):
         self.decoder = json.JSONDecoder(**self.get_opts(kwargs))
 
     def decode(self, data):
+        """
+        Return data decoded from JSON.
+
+        :param data: data to decode.
+
+        """
         return self.decoder.decode(data)
 
 
@@ -269,7 +365,7 @@ class IniDumper(Dumper):
         """
         Initialize dumper.
 
-        :param kwargs: kwargs passed directly to `configparser.ConfigParser`
+        :param kwargs: options for `configparser.ConfigParser`.
 
         """
         super().__init__()
@@ -280,6 +376,12 @@ class IniDumper(Dumper):
         self.stringio = io.StringIO()
 
     def encode(self, data):
+        """
+        Return INI encoded data.
+
+        :param data: data to encode.
+
+        """
         self.encoder.read_dict(data)
         self.encoder.write(self.stringio)
 
@@ -293,7 +395,7 @@ class IniLoader(Loader):
         """
         Initialize loader.
 
-        :param kwargs: kwargs passed directly to `configparser.ConfigParser`
+        :param kwargs: options for `configparser.ConfigParser`.
 
         """
         super().__init__()
@@ -302,6 +404,12 @@ class IniLoader(Loader):
         self.decoder = configparser.ConfigParser(**kwargs)
 
     def decode(self, data):
+        """
+        Return data decoded from INI.
+
+        :param data: data to decode.
+
+        """
         self.decoder.read_string(data)
 
         out = {}
@@ -327,6 +435,12 @@ class TomlDumper(Dumper):
         self.codec = toml
 
     def encode(self, data):
+        """
+        Return TOML encoded data.
+
+        :param data: data to encode.
+
+        """
         return self.codec.dumps(data)
 
 
@@ -341,6 +455,12 @@ class TomlLoader(Loader):
         self.codec = toml
 
     def decode(self, data):
+        """
+        Return data decoded from TOML.
+
+        :param data: data to decode.
+
+        """
         return self.codec.loads(data)
 
 
@@ -351,8 +471,7 @@ class YamlDumper(Dumper):
         """
         Initialize dumper.
 
-        :param kwargs: kwargs passed directly to `yaml.dump`;
-        `default_flow_style` is set to `False` if absent in kwargs.
+        :param kwargs: options for `yaml.dump`.
 
         """
         super().__init__()
@@ -368,10 +487,24 @@ class YamlDumper(Dumper):
         self.opts = self.get_opts(kwargs)
 
     def encode(self, data):
+        """
+        Return YAML encoded data.
+
+        :param data: data to encode.
+
+        """
         return self.yaml.dump(data, Dumper=self.yaml_dumper, **self.opts)
 
     @staticmethod
     def get_opts(opts):
+        """
+        Return dumper options.
+
+        :param opts: initial options.
+
+        `default_flow_style` is set to `False` if absent in opts.
+
+        """
         opts.setdefault('default_flow_style', False)
         return opts
 
@@ -383,7 +516,7 @@ class YamlLoader(Loader):
         """
         Initialize loader.
 
-        :param kwargs: kwargs passed directly to `yaml.safe_load()`.
+        :param kwargs: options for `yaml.safe_load`.
 
         """
         super().__init__()
@@ -399,4 +532,10 @@ class YamlLoader(Loader):
         self.opts = self.get_opts(kwargs)
 
     def decode(self, data):
+        """
+        Return data decoded from YAML.
+
+        :param data: data to decode.
+
+        """
         return self.yaml.load(data, Loader=self.yaml_loader, **self.opts)

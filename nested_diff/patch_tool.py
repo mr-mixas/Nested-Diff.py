@@ -26,12 +26,21 @@ class App(nested_diff.cli.App):
     """Patch tool for nested data structures."""
 
     def dump(self, file_, data, fmt):
+        """
+        Dump patched data using apropriate format.
+
+        :param file_: File object to dump.
+        :param data: Data to dump.
+        :param fmt: Format used for dump, one of `self.supported_ofmts`.
+
+        """
         if fmt == 'auto':
             fmt = self.guess_fmt(file_, 'json')
 
         super().dump(file_, data, fmt)
 
     def get_positional_args_parser(self):
+        """Return parser for positional part of CLI args."""
         parser = super().get_positional_args_parser()
 
         parser.add_argument('target_file')
@@ -57,6 +66,7 @@ class App(nested_diff.cli.App):
         return nested_diff.patch(target, diff)
 
     def run(self):
+        """Patch app object entry point."""
         patched = self.patch(
             self.load(argparse.FileType()(self.args.target_file)),
             self.load(self.args.patch_file),

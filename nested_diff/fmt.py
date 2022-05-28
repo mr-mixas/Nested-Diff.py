@@ -289,6 +289,7 @@ class HtmlFormatter(TextFormatter):
 
     @staticmethod
     def get_css():
+        """Return CSS for generated HTML page."""
         return (
             '.dif-body {font-family: monospace; white-space: pre}'
             ' .dif-kA {background-color: #cfc}'

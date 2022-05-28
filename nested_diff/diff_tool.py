@@ -64,6 +64,7 @@ class App(nested_diff.cli.App):
         return differ.diff(a, b)
 
     def get_optional_args_parser(self):
+        """Return parser for optional part (dash prefixed) of CLI args."""
         parser = super().get_optional_args_parser()
 
         parser.add_argument(
@@ -99,6 +100,7 @@ class App(nested_diff.cli.App):
         return parser
 
     def get_positional_args_parser(self):
+        """Return parser for positional part (files etc) of CLI args."""
         parser = super().get_positional_args_parser()
 
         parser.add_argument('file1', type=argparse.FileType())
@@ -107,6 +109,12 @@ class App(nested_diff.cli.App):
         return parser
 
     def get_dumper(self, fmt, **kwargs):
+        """
+        Return data dumper object based on desired format.
+
+        :param kwargs: passed to dumper's constructor as is.
+
+        """
         if fmt == 'auto':
             if self.args.out.isatty():
                 fmt = 'term'
@@ -123,6 +131,7 @@ class App(nested_diff.cli.App):
         return super().get_dumper(fmt, **kwargs)
 
     def run(self):
+        """Diff app object entry point."""
         diff = self.diff(
             self.load(self.args.file1),
             self.load(self.args.file2),
@@ -135,13 +144,27 @@ class App(nested_diff.cli.App):
 
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):
-    """Base class for diff dumpers."""
+    """Base class for diff formatters dumpers."""
 
     def encode(self, data):
+        """
+        Return encoded (formatted) diff.
+
+        :param data: diff data to format.
+
+        """
         return self.encoder.format(data)
 
     @staticmethod
     def get_opts(opts):
+        """
+        Return dumper options.
+
+        :param opts: initial options.
+
+        `sort_keys` is set to `True` if absent in opts.
+
+        """
         opts.setdefault('sort_keys', True)
         return opts
 
@@ -158,7 +181,7 @@ class HtmlDumper(AbstractFmtDumper):
         boilerplate) and `footer` (page closing tags). Also `lang` and `title`
         supported which define according values for default `header`.
 
-        Rest kwargs passed to `fmt.HtmlFormatter` as is.
+        Rest kwargs passed to `fmt.HtmlFormatter`.
 
         """
         super().__init__()
@@ -179,6 +202,12 @@ class HtmlDumper(AbstractFmtDumper):
             self.html_opts['footer'] = '</body></html>'
 
     def encode(self, data):
+        """
+        Return diff formatted as HTML.
+
+        :param data: diff to format.
+
+        """
         return self.formatter.format(
             data,
             header=self.html_opts['header'],
@@ -193,7 +222,7 @@ class TermDumper(AbstractFmtDumper):
         """
         Initialize dumper.
 
-        :param kwargs: passed to `fmt.TermFormatter` as is.
+        :param kwargs: passed to `fmt.TermFormatter`.
 
         """
         super().__init__()

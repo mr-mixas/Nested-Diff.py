@@ -391,6 +391,14 @@ class FrozenSetHandler(SetHandler):
     handled_type = frozenset
 
     def patch(self, patcher, target, diff):
+        """
+        Return patched frozenset.
+
+        :param patcher: nested_diff.Patcher object.
+        :param target: frozenset to patch.
+        :param diff: Nested diff.
+
+        """
         return frozenset(super().patch(patcher, set(target), diff))
 
 
