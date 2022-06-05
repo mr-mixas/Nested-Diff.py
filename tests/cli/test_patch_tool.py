@@ -8,15 +8,15 @@ from shutil import copyfile
 import nested_diff.patch_tool
 
 
-def test_default_patch(capsys, content, fullname, tmp_path):
+def test_default_patch(capsys, content, rpath, tmp_path):
     result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
-        fullname('lists.a.json', shared=True),
+        rpath('shared.lists.a.json'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('lists.patch.yaml', shared=True),
+        rpath('shared.lists.patch.yaml'),
     )).run()
 
     captured = capsys.readouterr()
@@ -24,19 +24,19 @@ def test_default_patch(capsys, content, fullname, tmp_path):
     assert '' == captured.err
     assert exit_code == 0
 
-    assert json.loads(content(fullname('lists.b.json', shared=True))) == \
+    assert json.loads(content(rpath('shared.lists.b.json'))) == \
         json.loads(content(result_file_name))
 
 
-def test_json_ofmt_opts(capsys, content, expected, fullname, tmp_path):
+def test_json_ofmt_opts(capsys, content, expected, rpath, tmp_path):
     result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
-        fullname('lists.a.json', shared=True),
+        rpath('shared.lists.a.json'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('lists.patch.json', shared=True),
+        rpath('shared.lists.patch.json'),
         '--ofmt', 'json',
         '--ofmt-opts', '{"indent": null}',
     )).run()
@@ -49,15 +49,15 @@ def test_json_ofmt_opts(capsys, content, expected, fullname, tmp_path):
     assert json.loads(expected) == json.loads(content(result_file_name))
 
 
-def test_auto_fmts(capsys, content, expected, fullname, tmp_path):
+def test_auto_fmts(capsys, content, expected, rpath, tmp_path):
     result_file_name = '{}.got.yaml'.format(tmp_path)
     copyfile(
-        fullname('lists.a.yaml', shared=True),
+        rpath('shared.lists.a.yaml'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('lists.patch.json', shared=True),
+        rpath('shared.lists.patch.json'),
     )).run()
 
     captured = capsys.readouterr()
@@ -68,15 +68,15 @@ def test_auto_fmts(capsys, content, expected, fullname, tmp_path):
     assert expected == content(result_file_name)
 
 
-def test_yaml_ifmt(capsys, content, fullname, tmp_path):
+def test_yaml_ifmt(capsys, content, rpath, tmp_path):
     result_file_name = '{}.got'.format(tmp_path)
     copyfile(
-        fullname('lists.a.yaml', shared=True),
+        rpath('shared.lists.a.yaml'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('lists.patch.yaml', shared=True),
+        rpath('shared.lists.patch.yaml'),
         '--ifmt', 'yaml',
         '--ofmt', 'json',
     )).run()
@@ -87,19 +87,19 @@ def test_yaml_ifmt(capsys, content, fullname, tmp_path):
     assert exit_code == 0
 
     # output is json by default
-    assert json.loads(content(fullname('lists.b.json', shared=True))) == \
+    assert json.loads(content(rpath('shared.lists.b.json'))) == \
         json.loads(content(result_file_name))
 
 
-def test_yaml_ofmt(capsys, content, expected, fullname, tmp_path):
+def test_yaml_ofmt(capsys, content, expected, rpath, tmp_path):
     result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
-        fullname('lists.a.json', shared=True),
+        rpath('shared.lists.a.json'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('lists.patch.json', shared=True),
+        rpath('shared.lists.patch.json'),
         '--ofmt', 'yaml',
     )).run()
 
@@ -111,15 +111,15 @@ def test_yaml_ofmt(capsys, content, expected, fullname, tmp_path):
     assert expected == content(result_file_name)
 
 
-def test_ini_ofmt(capsys, content, fullname, tmp_path):
+def test_ini_ofmt(capsys, content, rpath, tmp_path):
     result_file_name = '{}.got.ini'.format(tmp_path)
     copyfile(
-        fullname('a.ini', shared=True),
+        rpath('shared.a.ini'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('ini.patch.json', shared=True),
+        rpath('shared.ini.patch.json'),
         '--ofmt', 'ini',
     )).run()
 
@@ -128,19 +128,19 @@ def test_ini_ofmt(capsys, content, fullname, tmp_path):
     assert '' == captured.err
     assert exit_code == 0
 
-    expected = content(fullname('b.ini', shared=True))
+    expected = content(rpath('shared.b.ini'))
     assert expected == content(result_file_name)
 
 
-def test_toml_fmt(capsys, content, fullname, tmp_path):
+def test_toml_fmt(capsys, content, rpath, tmp_path):
     result_file_name = '{}.got.toml'.format(tmp_path)
     copyfile(
-        fullname('dict.a.toml', shared=True),
+        rpath('shared.dict.a.toml'),
         result_file_name,
     )
     exit_code = nested_diff.patch_tool.App(args=(
         result_file_name,
-        fullname('dict.patch.toml', shared=True),
+        rpath('shared.dict.patch.toml'),
     )).run()
 
     captured = capsys.readouterr()
@@ -148,7 +148,7 @@ def test_toml_fmt(capsys, content, fullname, tmp_path):
     assert '' == captured.err
     assert exit_code == 0
 
-    expected = content(fullname('dict.b.toml', shared=True))
+    expected = content(rpath('shared.dict.b.toml'))
     assert expected == content(result_file_name)
 
 
@@ -164,14 +164,14 @@ def test_entry_point(capsys):
     assert '' == captured.err
 
 
-def test_stdin_patch(capsys, content, fullname, tmp_path):
+def test_stdin_patch(capsys, content, rpath, tmp_path):
     result_file_name = '{}.got.json'.format(tmp_path)
     copyfile(
-        fullname('lists.a.json', shared=True),
+        rpath('shared.lists.a.json'),
         result_file_name,
     )
 
-    patch = io.StringIO(content(fullname('lists.patch.json', shared=True)))
+    patch = io.StringIO(content(rpath('shared.lists.patch.json')))
 
     with mock.patch('sys.stdin', patch):
         exit_code = nested_diff.patch_tool.App(
@@ -182,7 +182,7 @@ def test_stdin_patch(capsys, content, fullname, tmp_path):
     assert '' == captured.err
     assert exit_code == 0
 
-    assert json.loads(content(fullname('lists.b.json', shared=True))) == \
+    assert json.loads(content(rpath('shared.lists.b.json'))) == \
         json.loads(content(result_file_name))
 
 

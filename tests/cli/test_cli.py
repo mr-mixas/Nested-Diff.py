@@ -49,7 +49,7 @@ def test_dumper_dump_final_new_line_without_tty(stringio):
     assert 'text' == stringio.getvalue()
 
 
-def test_exit_code_wrong_args(fullname):
+def test_exit_code_wrong_args():
     with pytest.raises(SystemExit) as e:
         cli.App(args=('--unsupported-option')).run()
 
