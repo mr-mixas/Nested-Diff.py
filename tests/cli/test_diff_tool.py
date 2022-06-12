@@ -333,3 +333,40 @@ def test_entry_point(capsys):
     captured = capsys.readouterr()
     assert captured.out.startswith('usage: nested_diff')
     assert '' == captured.err
+
+
+def test_diff_single_arg(capsys, rpath):
+    with pytest.raises(SystemExit) as e:
+        nested_diff.diff_tool.App(args=[rpath('shared.lists.a.json')]).run()
+
+    assert e.value.code == 2
+
+
+def test_diff_several_args(capsys, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.lists.a.json'),
+        rpath('shared.lists.b.json'),
+        rpath('shared.lists.a.json'),
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert exit_code == 1
+
+    # can't use expected file here because of path sep on windows
+    assert captured.out.startswith('--- tests')
+
+
+def test_diff_several_args_tty(capsys, rpath, stringio_tty):
+    app = nested_diff.diff_tool.App(args=(
+        rpath('shared.lists.a.json'),
+        rpath('shared.lists.b.json'),
+        rpath('shared.lists.a.json'),
+    ))
+    app.args.out = stringio_tty
+    exit_code = app.run()
+
+    assert '' == capsys.readouterr().err
+    assert exit_code == 1
+
+    assert stringio_tty.getvalue().startswith('\033[33m--- tests')

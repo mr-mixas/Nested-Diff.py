@@ -103,8 +103,12 @@ class App(nested_diff.cli.App):
         """Return parser for positional part (files etc) of CLI args."""
         parser = super().get_positional_args_parser()
 
-        parser.add_argument('file1', type=argparse.FileType())
-        parser.add_argument('file2', type=argparse.FileType())
+        parser.add_argument(
+            'files',
+            metavar='file',
+            nargs='+',
+            type=argparse.FileType(),
+        )
 
         return parser
 
@@ -132,13 +136,37 @@ class App(nested_diff.cli.App):
 
     def run(self):
         """Diff app object entry point."""
-        diff = self.diff(
-            self.load(self.args.file1),
-            self.load(self.args.file2),
-        )
-        exit_code = 0 if not diff or 'U' in diff else 1
+        if len(self.args.files) < 2:
+            self.argparser.error('Two or more arguments expected')
 
-        self.dump(self.args.out, diff, self.args.ofmt)
+        return self.run_diff()
+
+    def run_diff(self):
+        """Compute and print diff."""
+        if len(self.args.files) > 2:
+            if self.args.out.isatty():
+                header_template = '\033[33m--- {a}\n+++ {b}\033[0m\n'
+            else:
+                header_template = '--- {a}\n+++ {b}\n'
+        else:
+            header_template = ''
+
+        a = None
+        exit_code = 0
+
+        for file_ in self.args.files:
+            b = {'name': file_.name, 'data': self.load(file_)}
+
+            if a is not None:
+                diff = self.diff(a['data'], b['data'])
+
+                if diff and 'U' not in diff:
+                    exit_code = 1
+
+                header = header_template.format(a=a['name'], b=b['name'])
+                self.dump(self.args.out, diff, self.args.ofmt, header=header)
+
+            a = b
 
         return exit_code
 

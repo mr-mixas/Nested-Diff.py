@@ -54,19 +54,27 @@ class App(object):
         import json
         return json.loads(opts)
 
-    def dump(self, file_, data, fmt):
+    def dump(self, file_, data, fmt, header='', footer=''):
         """
         Dump data using apropriate format.
 
         :param file_: File object to dump.
         :param data: Data to dump.
         :param fmt: Format used for dump, one of `self.supported_ofmts`.
+        :param header: Optional leading string.
+        :param footer: Optional trailing string.
 
         """
+        if header:
+            file_.write(header)
+
         self.get_dumper(
             fmt,
             **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
         ).dump(file_, data)
+
+        if footer:
+            file_.write(footer)
 
     def get_argparser(self, description=None):
         """Return complete CLI argument parser."""
@@ -247,7 +255,7 @@ class Dumper(object):
         Encode and write data to file.
 
         :param file_: File object.
-        :param data: data to write.
+        :param data: Data to write.
 
         """
         file_.write(self.encode(data))
