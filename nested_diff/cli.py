@@ -506,6 +506,8 @@ class YamlDumper(Dumper):
 
         """
         opts.setdefault('default_flow_style', False)
+        opts.setdefault('explicit_start', True)
+
         return opts
 
 
