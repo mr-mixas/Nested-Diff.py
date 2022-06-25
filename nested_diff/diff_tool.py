@@ -92,6 +92,12 @@ class App(nested_diff.cli.App):
             help='output file; STDOUT is used if omitted',
         )
 
+        parser.add_argument(
+            '-q', '--quiet',
+            action='store_true',
+            help="don't show diff, exit code is the only difference indicator",
+        )
+
         parser.add_argument('-A', type=int, choices=(0, 1), default=1,
                             help='show added items; enabled by default')
         parser.add_argument('-N', type=int, choices=(0, 1), default=1,
@@ -172,6 +178,9 @@ class App(nested_diff.cli.App):
 
                 if diff and 'U' not in diff:
                     exit_code = 1
+
+                if self.args.quiet:
+                    continue
 
                 header = header_template.format(a=a['name'], b=b['name'])
                 self.dump(self.args.out, diff, self.args.ofmt, header=header)

@@ -304,6 +304,20 @@ def test_yaml_ofmt(capsys, expected, rpath):
     assert expected == captured.out
 
 
+def test_quiet_diff(capsys, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.lists.a.json'),
+        rpath('shared.lists.b.yaml'),
+        '--quiet',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert exit_code == 1
+
+    assert '' == captured.out
+
+
 def test_exit_code_diff_absent(rpath):
     exit_code = nested_diff.diff_tool.App(args=(
         rpath('shared.lists.a.json'),
