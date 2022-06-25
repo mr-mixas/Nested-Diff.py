@@ -68,6 +68,13 @@ class App(nested_diff.cli.App):
         parser = super().get_optional_args_parser()
 
         parser.add_argument(
+            '--show',
+            action='store_true',
+            help="don't diff arguments, just format and show them; nested "
+                 'diffs expected on input',
+        )
+
+        parser.add_argument(
             '--text-ctx',
             default=3,
             metavar='NUM',
@@ -136,8 +143,11 @@ class App(nested_diff.cli.App):
 
     def run(self):
         """Diff app object entry point."""
+        if self.args.show:
+            return self.run_format()
+
         if len(self.args.files) < 2:
-            self.argparser.error('Two or more arguments expected')
+            self.argparser.error('Two or more arguments expected for diff')
 
         return self.run_diff()
 
@@ -169,6 +179,26 @@ class App(nested_diff.cli.App):
             a = b
 
         return exit_code
+
+    def run_format(self):
+        """Format and print diff."""
+        if len(self.args.files) > 1:
+            if self.args.out.isatty():
+                header_template = '\033[33m=== {filename}\033[0m\n'
+            else:
+                header_template = '=== {filename}\n'
+        else:
+            header_template = ''
+
+        for file_ in self.args.files:
+            self.dump(
+                self.args.out,
+                self.load(file_),
+                self.args.ofmt,
+                header=header_template.format(filename=file_.name),
+            )
+
+        return 0
 
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):

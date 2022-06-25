@@ -370,3 +370,45 @@ def test_diff_several_args_tty(capsys, rpath, stringio_tty):
     assert exit_code == 1
 
     assert stringio_tty.getvalue().startswith('\033[33m--- tests')
+
+
+def test_show_single_arg(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.ini.patch.json'),
+        '--show',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert exit_code == 0
+
+    assert expected == captured.out
+
+
+def test_show_several_args(capsys, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.ini.patch.json'),
+        rpath('shared.ini.patch.json'),
+        '--show',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert '' == captured.err
+    assert exit_code == 0
+
+    assert captured.out.startswith('=== tests')
+
+
+def test_show_several_args_tty(capsys, rpath, stringio_tty):
+    app = nested_diff.diff_tool.App(args=(
+        rpath('shared.ini.patch.json'),
+        rpath('shared.ini.patch.json'),
+        '--show',
+    ))
+    app.args.out = stringio_tty
+    exit_code = app.run()
+
+    assert '' == capsys.readouterr().err
+    assert exit_code == 0
+
+    assert stringio_tty.getvalue().startswith('\033[33m=== tests')
