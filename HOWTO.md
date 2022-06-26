@@ -63,8 +63,7 @@ Example:
 
 ## How to use nested\_diff tool with git
 
-Ensure `nested_diff` command available, otherwise install it with `pip`
-(relogin may be required afterwards):
+Ensure `nested_diff` command available, otherwise install it with `pip`:
 
 `pip install --user nested_diff[cli]`
 
@@ -77,5 +76,4 @@ Add to `.gitconfig` following section:
 
 and `ndiff = difftool --no-prompt --tool nested_diff` to section `[aliases]`.
 
-Now `ndiff` subcommand available which may be used instead of `diff` when
-nested diff required.
+Now `ndiff` subcommand available and may be used in the same manner as `diff`.

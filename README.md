@@ -1,6 +1,6 @@
 # Nested-Diff.py
 
-Recursive diff and patch for nested structures **[Live Demo](https://nesteddiff.pythonanywhere.com/)**
+Recursive diff and patch for nested structures. **[Live Demo](https://nesteddiff.pythonanywhere.com/)**
 
 [![Tests Status](https://github.com/mr-mixas/Nested-Diff.py/actions/workflows/tests.yml/badge.svg)](https://github.com/mr-mixas/Nested-Diff.py/actions?query=branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
@@ -77,7 +77,7 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 ```
 
-See more examples in [HOWTO](./HOWTO.md) and [tests](./tests/)
+See more examples in [HOWTO](./HOWTO.md) and [tests](./tests/).
 
 ## Diff structure
 
@@ -137,7 +137,7 @@ Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.
 
 ## See Also
 
-[nested diff HOWTO](./HOWTO.md)
+[HOWTO](./HOWTO.md)
 
 [deepdiff](https://pypi.org/project/deepdiff/),
 [jsondiff](https://pypi.org/project/jsondiff/),
