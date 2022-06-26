@@ -214,6 +214,13 @@ def get_tests():
             'diff_opts': {'R': False},
             'patched': {'one': 1},
         },
+        'hashes_with_different_value_onlyU': {
+            'a': {'one': 1, 'two': 2},
+            'b': {'one': 1, 'two': 0},
+            'diff': {'D': {'one': {'U': 1}}},
+            'diff_opts': {'A': False, 'N': False, 'O': False, 'R': False},
+            'patched': {'one': 1, 'two': 2},
+        },
         'hashes_with_one_different_value_noN': {
             'a': {'one': 1},
             'b': {'one': 2},

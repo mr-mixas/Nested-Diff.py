@@ -138,6 +138,9 @@ RESULTS = {
     'hash_with_one_key_vs_empty_hash_noR': {
         'result': '<div class="dif-body"></div>',
     },
+    'hashes_with_different_value_onlyU': {
+        'result': '<div class="dif-body"><div>  <span class="dif-kU">{&#x27;one&#x27;}</span></div><div>    <span class="dif-vU">1</span></div></div>',
+    },
     'hashes_with_one_different_value_noN': {
         'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vO">1</span></div></div>',
     },

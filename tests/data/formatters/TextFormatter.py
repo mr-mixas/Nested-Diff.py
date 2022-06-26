@@ -138,6 +138,9 @@ RESULTS = {
     'hash_with_one_key_vs_empty_hash_noR': {
         'result': '',
     },
+    'hashes_with_different_value_onlyU': {
+        'result': "  {'one'}\n    1\n",
+    },
     'hashes_with_one_different_value_noN': {
         'result': "  {'one'}\n-   1\n",
     },
