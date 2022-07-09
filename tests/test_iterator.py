@@ -1,22 +1,6 @@
 from nested_diff import Iterator, diff
 
 
-def test_get_iterator__final_diff():
-    got = list(Iterator().get_iterator({'U': 1}))
-    assert [({'U': 1}, None, None)] == got
-
-
-def test_get_iterator__nested_diff():
-    d = {'D': [{'U': 1}, {'A': 2}]}
-    expected = [
-        (d, 0, {'U': 1}),
-        (d, 1, {'A': 2}),
-    ]
-
-    got = list(Iterator().get_iterator(d))
-    assert expected == got
-
-
 def test_scalar_diff():
     a = 0
     b = 1
@@ -135,25 +119,6 @@ def test_set_diff():
     ]
 
     got = list(Iterator().iterate(d))
-
-    assert expected == got
-
-
-def test_custom_containers():
-    class CustomContainer(tuple):
-        pass
-
-    d = {'D': CustomContainer([{'O': 0, 'N': 1}])}
-
-    it = Iterator()
-    it.set_iterator(CustomContainer, it.iterate_sequence_diff)
-
-    expected = [
-        (d, 0, d['D'][0], 0),
-        (d['D'][0], None, None, 1),
-    ]
-
-    got = list(it.iterate(d))
 
     assert expected == got
 
