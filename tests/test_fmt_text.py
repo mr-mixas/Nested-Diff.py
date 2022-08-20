@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff.fmt import TextFormatter
+from nested_diff.formatters import TextFormatter
 
 import tests.data.formatters
 import tests.data.formatters.TextFormatter

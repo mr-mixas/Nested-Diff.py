@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff.fmt import HtmlFormatter
+from nested_diff.formatters import HtmlFormatter
 
 import tests.data.formatters
 import tests.data.formatters.HtmlFormatter

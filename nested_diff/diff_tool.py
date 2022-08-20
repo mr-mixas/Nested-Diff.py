@@ -253,10 +253,10 @@ class HtmlDumper(AbstractFmtDumper):
         """
         super().__init__()
         from html import escape
-        from nested_diff import fmt
+        from nested_diff.formatters import HtmlFormatter
 
         self.html_opts = dict(html_opts)
-        self.formatter = fmt.HtmlFormatter(**self.get_opts(kwargs))
+        self.formatter = HtmlFormatter(**self.get_opts(kwargs))
 
         if 'header' not in self.html_opts:
             self.html_opts['header'] = (
@@ -293,8 +293,8 @@ class TermDumper(AbstractFmtDumper):
 
         """
         super().__init__()
-        from nested_diff import fmt
-        self.encoder = fmt.TermFormatter(**self.get_opts(kwargs))
+        from nested_diff.formatters import TermFormatter
+        self.encoder = TermFormatter(**self.get_opts(kwargs))
 
 
 class TextDumper(AbstractFmtDumper):
@@ -308,8 +308,8 @@ class TextDumper(AbstractFmtDumper):
 
         """
         super().__init__()
-        from nested_diff import fmt
-        self.encoder = fmt.TextFormatter(**self.get_opts(kwargs))
+        from nested_diff.formatters import TextFormatter
+        self.encoder = TextFormatter(**self.get_opts(kwargs))
 
 
 def cli():
