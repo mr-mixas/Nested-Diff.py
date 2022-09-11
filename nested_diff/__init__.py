@@ -16,7 +16,6 @@
 
 """Recursive diff and patch for nested structures."""
 
-from pickle import dumps
 from warnings import warn
 
 import nested_diff.handlers
@@ -36,6 +35,11 @@ _TYPE_HANDLERS = (
     nested_diff.handlers.TupleHandler(),
     nested_diff.handlers.SetHandler(),
     nested_diff.handlers.FrozenSetHandler(),
+
+    nested_diff.handlers.IntHandler(),
+    nested_diff.handlers.FloatHandler(),
+    nested_diff.handlers.StrHandler(),
+    nested_diff.handlers.BytesHandler(),
 )
 
 
@@ -127,26 +131,24 @@ class Differ(object):
 
     def diff(self, a, b):
         """
-        Return diff for two arbitrary objects.
+        Return equality flag and diff for two arbitrary objects.
 
-        This method calls registered handler for each diffed values pair
-        according their type. Default handler called for objects with different
-        or not registered types.
+        This method calls registered handler according diffed objects type.
+        Default handler called for objects with different types or when no
+        handler registered for such type.
 
         :param a: First object to diff.
         :param b: Second object to diff.
 
         """
-        if a.__class__ is b.__class__:
-            # it's faster to compare pickled dumps and dig differences
-            # afterwards than recursively diff each pair of objects
-            if a is b or dumps(a, -1) == dumps(b, -1):
-                return {'U': a} if self.op_u else {}
+        if a is b:
+            return True, {'U': a} if self.op_u else {}
 
+        if a.__class__ is b.__class__:
             try:
                 return self.__differs[a.__class__](self, a, b)
             except KeyError:
-                return self.default_handler.diff(self, a, b)
+                pass
 
         return self.default_handler.diff(self, a, b)
 
@@ -309,7 +311,7 @@ def diff(a, b, text_diff_ctx=-1, **kwargs):
         differ.set_handler(nested_diff.handlers.TextHandler(
             context=text_diff_ctx))
 
-    return differ.diff(a, b)
+    return differ.diff(a, b)[1]
 
 
 def patch(target, ndiff, **kwargs):

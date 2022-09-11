@@ -10,7 +10,7 @@ class CustomTypeHandler(TypeHandler):
     handled_type = CustomContainer
 
     def diff(self, differ, a, b):
-        diff = differ.diff(a.data, b.data)
+        equal, diff = differ.diff(a.data, b.data)
 
         if 'D' in diff:
             cont = CustomContainer()
@@ -23,7 +23,7 @@ class CustomTypeHandler(TypeHandler):
         if 'O' in diff:
             diff['O'] = a
 
-        return diff
+        return equal, diff
 
     def patch(self, patcher, target, diff):
         if 'D' in diff:
@@ -43,7 +43,8 @@ def test_deeply_different():
 
     differ = Differ(U=False)
     differ.set_handler(CustomTypeHandler())
-    diff = differ.diff(old, new)
+    equal, diff = differ.diff(old, new)
+    assert equal is False
     assert [{'I': 2, 'N': 'new', 'O': 'old'}] == diff['D'].data
 
     patcher = Patcher()
@@ -61,7 +62,8 @@ def test_entire_different():
 
     differ = Differ(U=False)
     differ.set_handler(CustomTypeHandler())
-    diff = differ.diff(old, new)
+    equal, diff = differ.diff(old, new)
+    assert equal is False
     assert {'O': old, 'N': new} == diff
 
     patcher = Patcher()

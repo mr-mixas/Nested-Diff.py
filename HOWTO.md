@@ -24,7 +24,7 @@ But when initial objects must remain unchanged custom handlers may be used:
 ...
 ...     def diff(self, differ, a, b):
 ...         if round(a, self.precision) == round(b, self.precision):
-...             return {'U': a} if differ.op_u else {}
+...             return True, {'U': a} if differ.op_u else {}
 ...
 ...         return super().diff(differ, a, b)
 >>>
@@ -35,29 +35,7 @@ But when initial objects must remain unchanged custom handlers may be used:
 >>> a = [0.001, 0.01, 0.1]
 >>> b = [0.002, 0.02, 0.2]
 >>>
->>> assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
->>>
-```
-
-Subclassing `Differ` is useful when objects with unequal types compared.
-Example:
-```
->>> from nested_diff import Differ
->>>
->>> class CustomDiffer(Differ):
-...     def adjust_values(self, data):
-...         return {k: int(v) for k, v in data.items()}
-...
-...     def diff(self, a, b):
-...         return super().diff(
-...             self.adjust_values(a),
-...             self.adjust_values(b),
-...         )
->>>
->>> a = {'one': 1, 'two': 2.0}
->>> b = {'one': '1', 'two': 2}
->>>
->>> assert CustomDiffer(U=False).diff(a, b) == {}  # no diff
+>>> assert differ.diff(a, b) == (False, {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]})
 >>>
 ```
 

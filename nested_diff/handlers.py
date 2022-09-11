@@ -22,7 +22,7 @@ from pickle import dumps
 
 class TypeHandler(object):
     """
-    Base type for type handlers.
+    Base class for type handlers.
 
     Handlers provide diff, patch and iterate_diff methods for specific type.
 
@@ -32,7 +32,7 @@ class TypeHandler(object):
 
     def diff(self, differ, a, b):
         """
-        Return diff for two objects.
+        Return equality flag and diff for two objects.
 
         :param differ: nested_diff.Differ object.
         :param a: First dict to diff.
@@ -40,13 +40,19 @@ class TypeHandler(object):
 
         """
         diff = {}
+        equal = True
 
-        if differ.op_n:
-            diff['N'] = b
-        if differ.op_o:
-            diff['O'] = a
+        if dumps(a, -1) == dumps(b, -1):
+            if differ.op_u:
+                diff['U'] = a
+        else:
+            if differ.op_n:
+                diff['N'] = b
+            if differ.op_o:
+                diff['O'] = a
+            equal = False
 
-        return diff
+        return equal, diff
 
     def patch(self, patcher, target, diff):
         """
@@ -76,6 +82,58 @@ class TypeHandler(object):
         yield diff, None, None
 
 
+class ScalarHandler(TypeHandler):
+    """Base class for scalar handlers."""
+
+    def diff(self, differ, a, b):
+        """
+        Return diff for two scalar objects.
+
+        :param differ: nested_diff.Differ object.
+        :param a: First dict to diff.
+        :param b: Second dict to diff.
+
+        """
+        diff = {}
+        equal = True
+
+        if a == b:
+            if differ.op_u:
+                diff['U'] = a
+        else:
+            if differ.op_n:
+                diff['N'] = b
+            if differ.op_o:
+                diff['O'] = a
+            equal = False
+
+        return equal, diff
+
+
+class IntHandler(ScalarHandler):
+    """int handler."""
+
+    handled_type = int
+
+
+class FloatHandler(ScalarHandler):
+    """float handler."""
+
+    handled_type = float
+
+
+class StrHandler(ScalarHandler):
+    """str handler."""
+
+    handled_type = str
+
+
+class BytesHandler(ScalarHandler):
+    """bytes handler."""
+
+    handled_type = bytes
+
+
 class DictHandler(TypeHandler):
     """dict handler."""
 
@@ -83,7 +141,7 @@ class DictHandler(TypeHandler):
 
     def diff(self, differ, a, b):
         """
-        Return diff for two dicts.
+        Return equality flag and diff for two dicts.
 
         :param differ: nested_diff.Differ object.
         :param a: First dict to diff.
@@ -95,10 +153,11 @@ class DictHandler(TypeHandler):
         >>> b = {'one': 1, 'two': 42}
         >>>
         >>> Differ(handlers=[DictHandler()], O=False, U=False).diff(a, b)
-        {'D': {'three': {'R': 3}, 'two': {'N': 42}}}
+        (False, {'D': {'three': {'R': 3}, 'two': {'N': 42}}})
         >>>
         """
         diff = {}
+        equal = True
 
         for key in set(a).union(b):
             try:
@@ -108,20 +167,33 @@ class DictHandler(TypeHandler):
                 except KeyError:  # removed
                     if differ.op_r:
                         diff[key] = {'R': None if differ.op_trim_r else old}
+
+                    equal = False
                     continue
             except KeyError:  # added
                 if differ.op_a:
                     diff[key] = {'A': b[key]}
+
+                equal = False
                 continue
 
-            subdiff = differ.diff(old, new)
+            subequal, subdiff = differ.diff(old, new)
+
+            if not subequal:
+                equal = False
+
             if subdiff:
                 diff[key] = subdiff
 
         if diff:
-            return {'D': diff}
+            if equal:
+                diff = {'U': a}
+            else:
+                diff = {'D': diff}
+        elif equal and differ.op_u:
+            diff = {'U': a}
 
-        return diff
+        return equal, diff
 
     def patch(self, patcher, target, diff):
         """
@@ -168,7 +240,7 @@ class ListHandler(TypeHandler):
 
     def diff(self, differ, a, b):
         """
-        Return diff for two lists.
+        Return equality flag and diff for two lists.
 
         :param differ: nested_diff.Differ object.
         :param a: First list to diff.
@@ -180,19 +252,20 @@ class ListHandler(TypeHandler):
         >>> b = [  1,2,4,5]
         >>>
         >>> Differ(handlers=[ListHandler()], O=False, U=False).diff(a, b)
-        {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]}
+        (False, {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]})
         >>>
         """
         self.lcs.set_seq1(tuple(dumps(i, -1) for i in a))
         self.lcs.set_seq2(tuple(dumps(i, -1) for i in b))
 
         diff = []
+        equal = True
         i = j = 0
         force_index = False
 
         for ai, bj, _ in self.lcs.get_matching_blocks():
             while i < ai and j < bj:
-                subdiff = differ.diff(a[i], b[j])
+                subequal, subdiff = differ.diff(a[i], b[j])
                 if subdiff:
                     diff.append(subdiff)
                     if force_index:
@@ -200,6 +273,9 @@ class ListHandler(TypeHandler):
                         force_index = False
                 else:
                     force_index = True
+
+                if not subequal:
+                    equal = False
 
                 i += 1
                 j += 1
@@ -213,6 +289,7 @@ class ListHandler(TypeHandler):
                 else:
                     force_index = True
 
+                equal = False
                 i += 1
 
             while j < bj:  # added
@@ -224,12 +301,17 @@ class ListHandler(TypeHandler):
                 else:
                     force_index = True
 
+                equal = False
                 j += 1
 
         if diff:
-            return {'D': diff}
+            if equal:
+                return equal, {'U': a}
+            return equal, {'D': diff}
+        elif equal and differ.op_u:
+            return equal, {'U': a}
 
-        return {}
+        return equal, {}
 
     def patch(self, patcher, target, diff):
         """
@@ -287,7 +369,7 @@ class TupleHandler(ListHandler):
 
     def diff(self, differ, a, b):
         """
-        Return diff for two tuples.
+        Return equality flag and diff for two tuples.
 
         :param differ: nested_diff.Differ object.
         :param a: First tuple to diff.
@@ -299,17 +381,17 @@ class TupleHandler(ListHandler):
         >>> b = (0,1,2,3)
         >>>
         >>> Differ(handlers=[TupleHandler()], O=False, U=False).diff(a, b)
-        {'D': ({'A': 0}, {'N': 3, 'I': 2}, {'R': 5})}
+        (False, {'D': ({'A': 0}, {'N': 3, 'I': 2}, {'R': 5})})
         >>>
         """
-        diff = super().diff(differ, a, b)
+        equal, diff = super().diff(differ, a, b)
 
         try:
             diff['D'] = tuple(diff['D'])
         except KeyError:
             pass
 
-        return diff
+        return equal, diff
 
     def patch(self, patcher, target, diff):
         """
@@ -342,10 +424,11 @@ class SetHandler(TypeHandler):
         >>> b = {2, 3}
         >>>
         >>> Differ(handlers=[SetHandler()], U=False).diff(a, b)
-        {'D': [{'R': 1}, {'A': 3}], 'E': set()}
+        (False, {'D': [{'R': 1}, {'A': 3}], 'E': set()})
         >>>
         """
         diff = []
+        equal = True
 
         for i in a.union(b):
             if i in a:
@@ -355,14 +438,16 @@ class SetHandler(TypeHandler):
                 elif differ.op_r:
                     # ignore trimR opt here: value required for removal
                     diff.append({'R': i})
+                    equal = False
             else:  # added
                 if differ.op_a:
                     diff.append({'A': i})
+                equal = False
 
         if diff:
-            return {'D': diff, 'E': a.__class__()}
+            return equal, {'D': diff, 'E': a.__class__()}
 
-        return {}
+        return equal, {}
 
     def patch(self, patcher, target, diff):
         """
@@ -403,7 +488,7 @@ class FrozenSetHandler(SetHandler):
 
 
 class TextHandler(TypeHandler):
-    """Text (multiline string) handler."""
+    """text (multiline string) handler."""
 
     handled_type = str
 
@@ -420,7 +505,7 @@ class TextHandler(TypeHandler):
 
     def diff(self, differ, a, b):
         r"""
-        Return diff for texts (multiline strings).
+        Return equality flag and diff for texts (multiline strings).
 
         Result is a unified-like diff formatted as nested diff structure, with
         'I' tagged subdiffs containing hunks headers.
@@ -435,7 +520,8 @@ class TextHandler(TypeHandler):
         >>> b = 'one\ntwo'
         >>>
         >>> Differ(handlers=[TextHandler()]).diff(a, b)
-        {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': ''}
+        (False,
+         {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': ''})
         >>>
         """
         lines_a = a.split('\n', -1)
@@ -445,6 +531,8 @@ class TextHandler(TypeHandler):
             return super().diff(differ, a, b)
 
         diff = []
+        equal = True
+
         self.lcs.set_seq1(lines_a)
         self.lcs.set_seq2(lines_b)
 
@@ -461,6 +549,8 @@ class TextHandler(TypeHandler):
                     diff.extend({'U': line} for line in lines_a[i1:i2])
                     continue
 
+                equal = False
+
                 if op != 'insert':
                     diff.extend({'R': line} for line in lines_a[i1:i2])
 
@@ -468,9 +558,9 @@ class TextHandler(TypeHandler):
                     diff.extend({'A': line} for line in lines_b[j1:j2])
 
         if diff:
-            return {'D': diff, 'E': a.__class__()}
+            return equal, {'D': diff, 'E': a.__class__()}
 
-        return {}
+        return equal, {}
 
     def patch(self, patcher, target, diff):
         """
@@ -478,7 +568,7 @@ class TextHandler(TypeHandler):
 
         Unlike GNU patch, this algorithm does not implement any heuristics and
         patch target in straightforward way: get position from hunk header and
-        apply changes specified in hunk.
+        apply changes specified in a hunk.
 
         :param patcher: nested_diff.Patcher object.
         :param target: string to patch.

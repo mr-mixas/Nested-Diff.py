@@ -31,7 +31,7 @@ class App(nested_diff.cli.App):
 
     def diff(self, a, b, **kwargs):
         """
-        Return diff for passed objects.
+        Return equality flag and diff for passed objects.
 
         :param a: First object to diff.
         :param b: Second object to diff.
@@ -174,9 +174,9 @@ class App(nested_diff.cli.App):
             b = {'name': file_.name, 'data': self.load(file_)}
 
             if a is not None:
-                diff = self.diff(a['data'], b['data'])
+                equal, diff = self.diff(a['data'], b['data'])
 
-                if diff and 'U' not in diff:
+                if not equal:
                     exit_code = 1
 
                 if self.args.quiet:

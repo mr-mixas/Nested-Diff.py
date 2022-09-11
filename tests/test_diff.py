@@ -65,3 +65,28 @@ def test_text_diff_disabled_when_ON_disabled():  # noqa N802
     assert {'D': [{'O': 'a'}]} == diff(a, b, N=False, text_diff_ctx=3)
     assert {'D': [{'N': 'a\nb'}]} == diff(a, b, O=False, text_diff_ctx=3)
     assert {} == diff(a, b, N=False, O=False, text_diff_ctx=3)
+
+
+def test_dicts_with_same_data_but_different_sequence_u_disabled():
+    # for example pickle.dumps({1: 1, 2: 2}) != pickle.dumps({2: 2, 1: 1})
+    a = {1: 1, 2: 2}
+    b = {2: 2, 1: 1}
+
+    assert {} == diff(a, b, U=False)
+
+
+def test_dicts_with_same_data_but_different_sequence_u_enabled():
+    # for example pickle.dumps({1: 1, 2: 2}) != pickle.dumps({2: 2, 1: 1})
+    a = {1: 1, 2: 2}
+    b = {2: 2, 1: 1}
+    expected = {'U': {1: 1, 2: 2}}
+
+    assert expected == diff(a, b, U=True)
+
+
+def test_dicts_with_same_data_but_different_sequence_in_list_u_enabled():
+    a = [{1: 1, 2: 2}]
+    b = [{2: 2, 1: 1}]
+    expected = {'U': [{1: 1, 2: 2}]}
+
+    assert expected == diff(a, b, U=True)

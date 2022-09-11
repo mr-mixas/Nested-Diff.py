@@ -11,7 +11,7 @@ def test_diff_handlers():
 
         def diff(self, differ, a, b):
             if round(a, self.precision) == round(b, self.precision):
-                return {'U': a} if differ.op_u else {}
+                return True, {'U': a} if differ.op_u else {}
 
             return super().diff(differ, a, b)
 
@@ -21,4 +21,4 @@ def test_diff_handlers():
     a = [0.001, 0.01, 0.1]
     b = [0.002, 0.02, 0.2]
 
-    assert {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]} == differ.diff(a, b)
+    assert (False, {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]}) == differ.diff(a, b)
