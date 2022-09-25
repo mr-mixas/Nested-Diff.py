@@ -83,10 +83,6 @@ def get_tests():
             'diff': {'N': 1, 'O': 0},
             'format_func_opts': {'depth': 3},
         },
-        'absent_yielder': {
-            'diff': {'D': [], 'E': None},
-            'formatter_raises': NotImplementedError,
-        },
     })
 
     for test in tests.values():

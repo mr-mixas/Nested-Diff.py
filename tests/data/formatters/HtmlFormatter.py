@@ -39,9 +39,6 @@ RESULTS = {
     'a_vs_b': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;a&#x27;</span></div><div>+ <span class="dif-vN">&#x27;b&#x27;</span></div></div>',
     },
-    'absent_yielder': {
-        'raises': NotImplementedError,
-    },
     'brackets': {
         'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;(&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;)&#x27;</span></div><div>+   <span class="dif-vN">&#x27;(&#x27;</span></div><div>  <span class="dif-kO">{&#x27;&lt;&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;&gt;&#x27;</span></div><div>+   <span class="dif-vN">&#x27;&lt;&#x27;</span></div><div>  <span class="dif-kO">{&#x27;[&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;]&#x27;</span></div><div>+   <span class="dif-vN">&#x27;[&#x27;</span></div><div>  <span class="dif-kO">{&#x27;{&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;}&#x27;</span></div><div>+   <span class="dif-vN">&#x27;{&#x27;</span></div></div>',
     },
@@ -49,7 +46,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div># <span class="dif-vC"></span></div><div>- <span class="dif-vO">&#x27;old&#x27;</span></div><div>+ <span class="dif-vN">&#x27;new&#x27;</span></div></div>',
     },
     'comment_vs_type_hint': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
     },
     'comment_with_HTML_tags': {
         'result': '<div class="dif-body"><div># <span class="dif-vC">&lt;h1&gt;comment&lt;/h1&gt;</span></div><div>  <span class="dif-vU">&#x27;same&#x27;</span></div></div>',
@@ -118,7 +115,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;&#x27;</span></div><div>+ <span class="dif-vN">0</span></div></div>',
     },
     'empty_string_vs_text': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1,2 @@</span></div><div>- <span class="dif-vR"></span></div><div>+ <span class="dif-vA">A</span></div><div>+ <span class="dif-vA">B</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1 +1,2 @@</span></div><div>- <span class="dif-vR"></span></div><div>+ <span class="dif-vA">A</span></div><div>+ <span class="dif-vA">B</span></div></div>',
     },
     'empty_string_vs_undef': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;&#x27;</span></div><div>+ <span class="dif-vN">None</span></div></div>',
@@ -148,7 +145,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div>  <span class="dif-kN">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-vN">2</span></div></div>',
     },
     'line_added_to_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1,2 @@</span></div><div>  <span class="dif-vU"></span></div><div>+ <span class="dif-vA"></span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1 +1,2 @@</span></div><div>  <span class="dif-vU"></span></div><div>+ <span class="dif-vA"></span></div></div>',
     },
     'list_with_one_item_vs_empty_list': {
         'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div></div>',
@@ -370,28 +367,28 @@ RESULTS = {
         'result': '<div class="dif-body"></div>',
     },
     'text_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_line_added': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1,3 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vU">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,2 +1,3 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vU">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_line_changed': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_line_changed_ctx_0': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -2 +2 @@</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -2 +2 @@</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div></div>',
     },
     'text_line_removed': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
     },
     'text_multiple_hunks': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1 +1 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-kX0-0">@@ -3 +4 @@</span></div><div>- <span class="dif-vR">C</span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1 +1 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vH">@@ -3 +4 @@</span></div><div>- <span class="dif-vR">C</span></div></div>',
     },
     'text_trailing_newlines': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU"></span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU"></span></div></div>',
     },
     'text_vs_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-kX0-0">@@ -1,2 +1 @@</span></div><div>- <span class="dif-vR">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA"></span></div></div>',
+        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,2 +1 @@</span></div><div>- <span class="dif-vR">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA"></span></div></div>',
     },
     'tuple_extended': {
         'result': '<div class="dif-body"><div>  <span class="dif-kU">(0)</span></div><div>    <span class="dif-vU">1</span></div><div>+ <span class="dif-kA">(1)</span></div><div>+   <span class="dif-vA">2</span></div></div>',
@@ -403,7 +400,7 @@ RESULTS = {
         'result': '<div class="dif-body"><div>+ <span class="dif-kA">(0)</span></div><div>+   <span class="dif-vA">0</span></div><div>  <span class="dif-kN">(2)</span></div><div>+   <span class="dif-vN">3</span></div><div>- <span class="dif-kR">(3)</span></div><div>-   <span class="dif-vR">5</span></div></div>',
     },
     'type_hints_disabled': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kX0-0">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
+        'result': '<div class="dif-body"><div>  <span class="dif-vH">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
     },
     'undef_vs_0': {
         'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">0</span></div></div>',

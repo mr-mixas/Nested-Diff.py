@@ -64,15 +64,15 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 >>> d = diff(a, b, U=False, text_diff_ctx=3)
 >>> print(TextFormatter().format(d))
+  {'one'}
+-   1
++   0
   {'two'}
 #   <str>
     @@ -1,3 +1,2 @@
     some
     text
 -   inside
-  {'one'}
--   1
-+   0
 <BLANKLINE>
 >>>
 ```

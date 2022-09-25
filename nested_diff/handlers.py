@@ -24,11 +24,15 @@ class TypeHandler(object):
     """
     Base class for type handlers.
 
-    Handlers provide diff, patch and iterate_diff methods for specific type.
+    Handlers provide diff, patch, generate_formatted_diff and iterate_diff
+    methods for specific type.
 
     """
 
     handled_type = None
+
+    type_prefix = ''
+    type_suffix = ''
 
     def diff(self, differ, a, b):
         """
@@ -80,6 +84,16 @@ class TypeHandler(object):
 
         """
         yield diff, None, None
+
+    def generate_formatted_diff(self, formatter, diff, depth):
+        """Generate formatted diff."""
+        for tag in formatter.tags:
+            try:
+                value = diff[tag]
+            except KeyError:
+                continue
+
+            yield from formatter.generate_value(value, tag, depth)
 
 
 class ScalarHandler(TypeHandler):
@@ -138,6 +152,9 @@ class DictHandler(TypeHandler):
     """dict handler."""
 
     handled_type = dict
+
+    type_prefix = '{'
+    type_suffix = '}'
 
     def diff(self, differ, a, b):
         """
@@ -227,11 +244,28 @@ class DictHandler(TypeHandler):
         for key, subdiff in sorted(items) if iterator.sort_keys else items:
             yield diff, key, subdiff
 
+    def generate_formatted_diff(self, formatter, diff, depth):
+        """Generate formatted dict diff."""
+        items = diff['D'].items()
+
+        for key, subdiff in sorted(items) if formatter.sort_keys else items:
+            for tag in formatter.tags:
+                if tag in subdiff:
+                    yield from formatter.generate_key(
+                        key, tag, self.handled_type, depth,
+                    )
+                    break
+
+            yield from formatter.generate_diff(subdiff, depth=depth+1)
+
 
 class ListHandler(TypeHandler):
     """list handler."""
 
     handled_type = list
+
+    type_prefix = '['
+    type_suffix = ']'
 
     def __init__(self):
         """Initialize handler."""
@@ -361,11 +395,35 @@ class ListHandler(TypeHandler):
 
             idx += 1
 
+    def generate_formatted_diff(self, formatter, diff, depth):
+        """Generate formatted list diff."""
+        idx = 0
+
+        for subdiff in diff['D']:
+            try:
+                idx = subdiff['I']
+            except KeyError:
+                pass
+
+            for tag in formatter.tags:
+                if tag in subdiff:
+                    yield from formatter.generate_key(
+                        idx, tag, self.handled_type, depth,
+                    )
+                    break
+
+            yield from formatter.generate_diff(subdiff, depth=depth+1)
+
+            idx += 1
+
 
 class TupleHandler(ListHandler):
     """tuple handler."""
 
     handled_type = tuple
+
+    type_prefix = '('
+    type_suffix = ')'
 
     def diff(self, differ, a, b):
         """
@@ -468,6 +526,18 @@ class SetHandler(TypeHandler):
                     pass
 
         return target
+
+    def generate_formatted_diff(self, formatter, diff, depth):
+        """Generate formatted set diff."""
+        for subdiff in diff['D']:
+            for tag in ('R', 'A', 'U'):
+                try:
+                    value = subdiff[tag]
+                except KeyError:
+                    continue
+
+                yield from formatter.generate_value(value, tag, depth)
+                break
 
 
 class FrozenSetHandler(SetHandler):
@@ -597,3 +667,33 @@ class TextHandler(TypeHandler):
                 raise ValueError('Unsupported operation')
 
         return '\n'.join(target)
+
+    def generate_formatted_diff(self, formatter, diff, depth):
+        """Generate unified text diff."""
+        for subdiff in diff['D']:
+            for tag in ('I', 'R', 'A', 'U'):
+                try:
+                    value = subdiff[tag]
+                except KeyError:
+                    continue
+
+                if tag == 'I':
+                    yield from formatter.generate_string(
+                        '@@ -{} +{} @@'.format(
+                            self._get_hunk_range(value[0], value[1]),
+                            self._get_hunk_range(value[2], value[3]),
+                        ),
+                        'H',
+                        depth,
+                    )
+                else:
+                    yield from formatter.generate_string(value, tag, depth)
+
+    @staticmethod
+    def _get_hunk_range(start, stop):
+        length = stop - start
+
+        if length > 1:
+            return '{},{}'.format(start + 1, length)
+
+        return str(start + 1)
