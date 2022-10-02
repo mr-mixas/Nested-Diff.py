@@ -23,14 +23,14 @@ def test_dumper_dump_default_with_tty(stringio_tty):
     dumper = Dumper()
     dumper.dump(stringio_tty, 'text')
 
-    assert 'text' == stringio_tty.getvalue()
+    assert stringio_tty.getvalue() == 'text'
 
 
 def test_dumper_dump_default_without_tty(stringio):
     dumper = Dumper()
     dumper.dump(stringio, 'text')
 
-    assert 'text' == stringio.getvalue()
+    assert stringio.getvalue() == 'text'
 
 
 def test_dumper_dump_final_new_line_with_tty(stringio_tty):
@@ -38,7 +38,7 @@ def test_dumper_dump_final_new_line_with_tty(stringio_tty):
     dumper.tty_final_new_line = True
     dumper.dump(stringio_tty, 'text')
 
-    assert 'text\n' == stringio_tty.getvalue()
+    assert stringio_tty.getvalue() == 'text\n'
 
 
 def test_dumper_dump_final_new_line_without_tty(stringio):
@@ -46,7 +46,7 @@ def test_dumper_dump_final_new_line_without_tty(stringio):
     dumper.tty_final_new_line = True
     dumper.dump(stringio, 'text')
 
-    assert 'text' == stringio.getvalue()
+    assert stringio.getvalue() == 'text'
 
 
 def test_exit_code_wrong_args():
@@ -60,7 +60,7 @@ def test_excepthook_overrided():
     orig_id = id(sys.excepthook)
     cli.App(args=())
 
-    assert orig_id != id(sys.excepthook)
+    assert id(sys.excepthook) != orig_id
 
 
 def test_excepthook_raise_system_exit_127():
@@ -84,12 +84,12 @@ def test_guess_fmt_aliases():
 
     for ext in sorted(aliases):
         fake_fp.name = 'filename.' + ext
-        assert aliases[ext] == cli.App(args=()).guess_fmt(fake_fp, 'default')
+        assert cli.App(args=()).guess_fmt(fake_fp, 'default') == aliases[ext]
 
 
 def test_guess_fmt_ignore_fp_defaults():
     for fp in sys.stdin, sys.stdout, sys.stderr:
-        assert 'default' == cli.App(args=()).guess_fmt(fp, 'default')
+        assert cli.App(args=()).guess_fmt(fp, 'default') == 'default'
 
 
 def test_get_dumper_unsupported_fmt():

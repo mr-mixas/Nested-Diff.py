@@ -20,12 +20,12 @@ def test_default_patch(capsys, content, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
-    assert json.loads(content(rpath('shared.lists.b.json'))) == \
-        json.loads(content(result_file_name))
+    expected = json.loads(content(rpath('shared.lists.b.json')))
+    assert json.loads(content(result_file_name)) == expected
 
 
 def test_json_ofmt_opts(capsys, content, expected, rpath, tmp_path):
@@ -42,11 +42,11 @@ def test_json_ofmt_opts(capsys, content, expected, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
-    assert json.loads(expected) == json.loads(content(result_file_name))
+    assert json.loads(content(result_file_name)) == json.loads(expected)
 
 
 def test_auto_fmts(capsys, content, expected, rpath, tmp_path):
@@ -61,11 +61,11 @@ def test_auto_fmts(capsys, content, expected, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
-    assert expected == content(result_file_name)
+    assert content(result_file_name) == expected
 
 
 def test_yaml_ifmt(capsys, content, rpath, tmp_path):
@@ -82,13 +82,13 @@ def test_yaml_ifmt(capsys, content, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
     # output is json by default
-    assert json.loads(content(rpath('shared.lists.b.json'))) == \
-        json.loads(content(result_file_name))
+    expected = json.loads(content(rpath('shared.lists.b.json')))
+    assert json.loads(content(result_file_name)) == expected
 
 
 def test_yaml_ofmt(capsys, content, expected, rpath, tmp_path):
@@ -104,11 +104,11 @@ def test_yaml_ofmt(capsys, content, expected, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
-    assert expected == content(result_file_name)
+    assert content(result_file_name) == expected
 
 
 def test_ini_ofmt(capsys, content, rpath, tmp_path):
@@ -124,12 +124,12 @@ def test_ini_ofmt(capsys, content, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
     expected = content(rpath('shared.b.ini'))
-    assert expected == content(result_file_name)
+    assert content(result_file_name) == expected
 
 
 def test_toml_fmt(capsys, content, rpath, tmp_path):
@@ -144,12 +144,12 @@ def test_toml_fmt(capsys, content, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
     expected = content(rpath('shared.dict.b.toml'))
-    assert expected == content(result_file_name)
+    assert content(result_file_name) == expected
 
 
 def test_entry_point(capsys):
@@ -161,7 +161,7 @@ def test_entry_point(capsys):
 
     captured = capsys.readouterr()
     assert captured.out.startswith('usage: nested_patch')
-    assert '' == captured.err
+    assert captured.err == ''
 
 
 def test_stdin_patch(capsys, content, rpath, tmp_path):
@@ -178,12 +178,12 @@ def test_stdin_patch(capsys, content, rpath, tmp_path):
             args=(result_file_name, '--ifmt', 'json')).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.out
-    assert '' == captured.err
+    assert captured.out == ''
+    assert captured.err == ''
     assert exit_code == 0
 
-    assert json.loads(content(rpath('shared.lists.b.json'))) == \
-        json.loads(content(result_file_name))
+    expected = json.loads(content(rpath('shared.lists.b.json')))
+    assert json.loads(content(result_file_name)) == expected
 
 
 def test_arg_files_absent():

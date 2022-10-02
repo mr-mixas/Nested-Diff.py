@@ -45,12 +45,12 @@ def test_deeply_different():
     differ.set_handler(CustomTypeHandler())
     equal, diff = differ.diff(old, new)
     assert equal is False
-    assert [{'I': 2, 'N': 'new', 'O': 'old'}] == diff['D'].data
+    assert diff['D'].data == [{'I': 2, 'N': 'new', 'O': 'old'}]
 
     patcher = Patcher()
     patcher.set_handler(CustomTypeHandler())
     old = patcher.patch(old, diff)
-    assert old.data == new.data
+    assert new.data == old.data
 
 
 def test_entire_different():
@@ -64,9 +64,9 @@ def test_entire_different():
     differ.set_handler(CustomTypeHandler())
     equal, diff = differ.diff(old, new)
     assert equal is False
-    assert {'O': old, 'N': new} == diff
+    assert diff == {'O': old, 'N': new}
 
     patcher = Patcher()
     patcher.set_handler(CustomTypeHandler())
     old = patcher.patch(old, diff)
-    assert old.data == new.data
+    assert new.data == old.data

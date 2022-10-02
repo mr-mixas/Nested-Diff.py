@@ -14,10 +14,10 @@ def test_default_diff(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_default_diff_with_tty(capsys, expected, rpath, stringio_tty):
@@ -28,10 +28,10 @@ def test_default_diff_with_tty(capsys, expected, rpath, stringio_tty):
         )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_diff_method_kwargs_override(capsys, expected, rpath):
@@ -47,10 +47,10 @@ def test_diff_method_kwargs_override(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_enable_U_ops(capsys, expected, rpath):  # noqa N802
@@ -62,10 +62,10 @@ def test_enable_U_ops(capsys, expected, rpath):  # noqa N802
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_trimR_ops(capsys, expected, rpath):  # noqa N802
@@ -76,10 +76,10 @@ def test_trimR_ops(capsys, expected, rpath):  # noqa N802
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_output_file(capsys, content, expected, rpath, tmp_path):
@@ -92,11 +92,11 @@ def test_output_file(capsys, content, expected, rpath, tmp_path):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
-    assert '' == captured.out
+    assert captured.err == ''
+    assert captured.out == ''
     assert exit_code == 1
 
-    assert json.loads(expected) == json.loads(content(result_file_name))
+    assert json.loads(content(result_file_name)) == json.loads(expected)
 
 
 def test_json_ofmt_opts(capsys, expected, rpath):
@@ -108,10 +108,10 @@ def test_json_ofmt_opts(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_ini_ifmt(capsys, expected, rpath):
@@ -123,10 +123,10 @@ def test_ini_ifmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_text_default(capsys, expected, rpath):
@@ -136,10 +136,10 @@ def test_text_default(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_text_default_term(capsys, expected, rpath):
@@ -150,10 +150,10 @@ def test_text_default_term(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_text_context_0(capsys, expected, rpath):
@@ -164,10 +164,10 @@ def test_text_context_0(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_text_disabled(capsys, expected, rpath):
@@ -178,10 +178,10 @@ def test_text_disabled(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_html_ofmt(capsys, expected, rpath):
@@ -192,10 +192,10 @@ def test_html_ofmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 @pytest.mark.skipif(
@@ -211,10 +211,10 @@ def test_html_ofmt_opts(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_html_ofmt_wrappings(capsys, expected, rpath):
@@ -226,10 +226,10 @@ def test_html_ofmt_wrappings(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_text_ofmt(capsys, expected, rpath):
@@ -240,10 +240,10 @@ def test_text_ofmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_term_ofmt(capsys, expected, rpath):
@@ -254,10 +254,10 @@ def test_term_ofmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 @pytest.mark.skipif(sys.version_info < (3, 6), reason='different keys order')
@@ -269,10 +269,10 @@ def test_toml_fmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_yaml_ifmt(capsys, expected, rpath):
@@ -284,10 +284,10 @@ def test_yaml_ifmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_yaml_ofmt(capsys, expected, rpath):
@@ -298,10 +298,10 @@ def test_yaml_ofmt(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_quiet_diff(capsys, rpath):
@@ -312,10 +312,10 @@ def test_quiet_diff(capsys, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
-    assert '' == captured.out
+    assert captured.out == ''
 
 
 def test_exit_code_diff_absent(rpath):
@@ -346,7 +346,7 @@ def test_entry_point(capsys):
 
     captured = capsys.readouterr()
     assert captured.out.startswith('usage: nested_diff')
-    assert '' == captured.err
+    assert captured.err == ''
 
 
 def test_diff_single_arg(capsys, rpath):
@@ -364,7 +364,7 @@ def test_diff_several_args(capsys, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 1
 
     # can't use expected file here because of path sep on windows
@@ -380,7 +380,7 @@ def test_diff_several_args_tty(capsys, rpath, stringio_tty):
     app.args.out = stringio_tty
     exit_code = app.run()
 
-    assert '' == capsys.readouterr().err
+    assert capsys.readouterr().err == ''
     assert exit_code == 1
 
     assert stringio_tty.getvalue().startswith('\033[33m--- tests')
@@ -393,10 +393,10 @@ def test_show_single_arg(capsys, expected, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 0
 
-    assert expected == captured.out
+    assert captured.out == expected
 
 
 def test_show_several_args(capsys, rpath):
@@ -407,7 +407,7 @@ def test_show_several_args(capsys, rpath):
     )).run()
 
     captured = capsys.readouterr()
-    assert '' == captured.err
+    assert captured.err == ''
     assert exit_code == 0
 
     assert captured.out.startswith('=== tests')
@@ -422,7 +422,7 @@ def test_show_several_args_tty(capsys, rpath, stringio_tty):
     app.args.out = stringio_tty
     exit_code = app.run()
 
-    assert '' == capsys.readouterr().err
+    assert capsys.readouterr().err == ''
     assert exit_code == 0
 
     assert stringio_tty.getvalue().startswith('\033[33m=== tests')

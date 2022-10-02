@@ -13,11 +13,12 @@ TESTS.update(specific.get_tests())
 def test_diff(name):
     a = TESTS[name]['a']
     b = TESTS[name]['b']
+
     expected = TESTS[name]['diff']
     opts = TESTS[name].get('diff_opts', {})
     got = diff(a, b, **opts)
 
-    assert expected == got
+    assert got == expected
 
 
 def test_local_objects():
@@ -42,9 +43,10 @@ def test_nested_derivatives():
     derivative = SubclassedDict()
     b = {'k': derivative}
 
-    d = diff(a, b)
+    expected = {'D': {'k': {'N': derivative, 'O': original}}}
+    got = diff(a, b)
 
-    assert {'D': {'k': {'N': derivative, 'O': original}}} == d
+    assert got == expected
 
 
 def test_different_object_attributes():
@@ -53,18 +55,19 @@ def test_different_object_attributes():
     b = SubclassedDict()
     b.arbitrary_attr = False
 
-    d = diff(a, b)
+    expected = {'N': b, 'O': a}
+    got = diff(a, b)
 
-    assert {'N': b, 'O': a} == d
+    assert got == expected
 
 
 def test_text_diff_disabled_when_ON_disabled():  # noqa N802
     a = ['a']
     b = ['a\nb']
 
-    assert {'D': [{'O': 'a'}]} == diff(a, b, N=False, text_diff_ctx=3)
-    assert {'D': [{'N': 'a\nb'}]} == diff(a, b, O=False, text_diff_ctx=3)
-    assert {} == diff(a, b, N=False, O=False, text_diff_ctx=3)
+    assert diff(a, b, N=False, text_diff_ctx=3) == {'D': [{'O': 'a'}]}
+    assert diff(a, b, O=False, text_diff_ctx=3) == {'D': [{'N': 'a\nb'}]}
+    assert diff(a, b, N=False, O=False, text_diff_ctx=3) == {}
 
 
 def test_dicts_with_same_data_but_different_sequence_u_disabled():
@@ -72,21 +75,28 @@ def test_dicts_with_same_data_but_different_sequence_u_disabled():
     a = {1: 1, 2: 2}
     b = {2: 2, 1: 1}
 
-    assert {} == diff(a, b, U=False)
+    expected = {}
+    got = diff(a, b, U=False)
+
+    assert got == expected
 
 
 def test_dicts_with_same_data_but_different_sequence_u_enabled():
     # for example pickle.dumps({1: 1, 2: 2}) != pickle.dumps({2: 2, 1: 1})
     a = {1: 1, 2: 2}
     b = {2: 2, 1: 1}
-    expected = {'U': {1: 1, 2: 2}}
 
-    assert expected == diff(a, b, U=True)
+    expected = {'U': {1: 1, 2: 2}}
+    got = diff(a, b, U=True)
+
+    assert got == expected
 
 
 def test_dicts_with_same_data_but_different_sequence_in_list_u_enabled():
     a = [{1: 1, 2: 2}]
     b = [{2: 2, 1: 1}]
-    expected = {'U': [{1: 1, 2: 2}]}
 
-    assert expected == diff(a, b, U=True)
+    expected = {'U': [{1: 1, 2: 2}]}
+    got = diff(a, b, U=True)
+
+    assert got == expected

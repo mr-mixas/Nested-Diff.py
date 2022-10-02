@@ -21,4 +21,7 @@ def test_diff_handlers():
     a = [0.001, 0.01, 0.1]
     b = [0.002, 0.02, 0.2]
 
-    assert (False, {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]}) == differ.diff(a, b)
+    expected = (False, {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]})
+    got = differ.diff(a, b)
+
+    assert got == expected

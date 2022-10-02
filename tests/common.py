@@ -22,7 +22,7 @@ def do_test_function(test, func):
             if test.get('diff', {}) != diff_should_be:
                 raise ValueError(diff_should_be)
 
-        assert test['result'] == func(test)
+        assert func(test) == test['result']
 
 
 def iterate_test_suite(tests_map, results_mod, func):

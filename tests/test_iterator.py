@@ -9,7 +9,7 @@ def test_scalar_diff():
     expected = [(d, None, None, 0)]
     got = list(Iterator().iterate(d))
 
-    assert expected == got
+    assert got == expected
 
 
 def test_dict_diff():
@@ -66,7 +66,7 @@ def test_dict_diff__keys_sorted():
 
     got = list(Iterator(sort_keys=True).iterate(d))
 
-    assert expected == got
+    assert got == expected
 
 
 def test_list_diff():
@@ -90,7 +90,7 @@ def test_list_diff():
 
     got = list(Iterator().iterate(d))
 
-    assert expected == got
+    assert got == expected
 
 
 def test_list_diff__noU():  # noqa N802
@@ -106,7 +106,7 @@ def test_list_diff__noU():  # noqa N802
 
     got = list(Iterator().iterate(d))
 
-    assert expected == got
+    assert got == expected
 
 
 def test_set_diff():
@@ -120,7 +120,7 @@ def test_set_diff():
 
     got = list(Iterator().iterate(d))
 
-    assert expected == got
+    assert got == expected
 
 
 def test_unknown_containers():
@@ -133,4 +133,4 @@ def test_unknown_containers():
 
     got = list(Iterator().iterate(d))
 
-    assert expected == got
+    assert got == expected
