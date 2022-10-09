@@ -27,9 +27,9 @@ __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
 
-_DEFAULT_HANDLER = nested_diff.handlers.TypeHandler()
+DEFAULT_HANDLER = nested_diff.handlers.TypeHandler()
 
-_TYPE_HANDLERS = (
+TYPE_HANDLERS = (
     nested_diff.handlers.DictHandler(),
     nested_diff.handlers.ListHandler(),
     nested_diff.handlers.TupleHandler(),
@@ -100,7 +100,7 @@ class Differ(object):
 
     """
 
-    default_handler = _DEFAULT_HANDLER
+    default_differ = DEFAULT_HANDLER.diff
 
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
                  trimR=False, handlers=None):
@@ -124,9 +124,9 @@ class Differ(object):
         self.op_u = U
         self.op_trim_r = trimR
 
-        self.__differs = {}
+        self._differs = {}
 
-        for handler in _TYPE_HANDLERS if handlers is None else handlers:
+        for handler in TYPE_HANDLERS if handlers is None else handlers:
             self.set_handler(handler)
 
     def diff(self, a, b):
@@ -146,11 +146,11 @@ class Differ(object):
 
         if a.__class__ is b.__class__:
             try:
-                return self.__differs[a.__class__](self, a, b)
+                return self._differs[a.__class__](self, a, b)
             except KeyError:
                 pass
 
-        return self.default_handler.diff(self, a, b)
+        return self.default_differ(self, a, b)
 
     def set_handler(self, handler):
         """
@@ -159,13 +159,13 @@ class Differ(object):
         :param handler: handlers.TypeHandler.
 
         """
-        self.__differs[handler.handled_type] = handler.diff
+        self._differs[handler.handled_type] = handler.diff
 
 
 class Patcher(object):
     """Patch objects using nested diff."""
 
-    default_handler = _DEFAULT_HANDLER
+    default_patcher = DEFAULT_HANDLER.patch
 
     def __init__(self, handlers=None):
         """
@@ -174,9 +174,9 @@ class Patcher(object):
         :param handlers: List of type handlers.
 
         """
-        self.__patchers = {}
+        self._patchers = {}
 
-        for handler in _TYPE_HANDLERS if handlers is None else handlers:
+        for handler in TYPE_HANDLERS if handlers is None else handlers:
             self.set_handler(handler)
 
         if handlers is None:
@@ -200,11 +200,12 @@ class Patcher(object):
                 type_ = ndiff['D'].__class__
 
             try:
-                return self.__patchers[type_](self, target, ndiff)
+                return self._patchers[type_](self, target, ndiff)
             except KeyError:
-                raise NotImplementedError('unsupported diff type') from None
+                raise ValueError('unsupported patch type: '
+                                 + type_.__name__) from None
 
-        return self.default_handler.patch(self, target, ndiff)
+        return self.default_patcher(self, target, ndiff)
 
     def set_handler(self, handler):
         """
@@ -213,13 +214,13 @@ class Patcher(object):
         :param handler: handlers.TypeHandler.
 
         """
-        self.__patchers[handler.handled_type] = handler.patch
+        self._patchers[handler.handled_type] = handler.patch
 
 
 class Iterator(object):
     """Nested diff iterator."""
 
-    default_handler = _DEFAULT_HANDLER
+    default_iterator = DEFAULT_HANDLER.iterate_diff
 
     def __init__(self, handlers=None, sort_keys=False):
         """
@@ -232,9 +233,9 @@ class Iterator(object):
 
         """
         self.sort_keys = sort_keys
-        self.__iterators = {}
+        self._iterators = {}
 
-        for handler in _TYPE_HANDLERS if handlers is None else handlers:
+        for handler in TYPE_HANDLERS if handlers is None else handlers:
             self.set_handler(handler)
 
     def _get_iterator(self, ndiff):
@@ -245,12 +246,12 @@ class Iterator(object):
 
         """
         if 'E' in ndiff:
-            return self.default_handler.iterate_diff(self, ndiff)
+            return self.default_iterator(self, ndiff)
 
         try:
-            return self.__iterators[ndiff['D'].__class__](self, ndiff)
+            return self._iterators[ndiff['D'].__class__](self, ndiff)
         except KeyError:
-            return self.default_handler.iterate_diff(self, ndiff)
+            return self.default_iterator(self, ndiff)
 
     def iterate(self, ndiff, depth=0):
         """
@@ -285,7 +286,7 @@ class Iterator(object):
         :param handler: handlers.TypeHandler.
 
         """
-        self.__iterators[handler.handled_type] = handler.iterate_diff
+        self._iterators[handler.handled_type] = handler.iterate_diff
 
 
 def diff(a, b, text_diff_ctx=-1, **kwargs):

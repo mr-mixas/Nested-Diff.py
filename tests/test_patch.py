@@ -65,8 +65,5 @@ def test_type_mismatch():
 
 
 def test_unsupported_patch_type():
-    class Foo(object):
-        pass
-
-    with pytest.raises(NotImplementedError):
-        patch(None, {'D': Foo()})
+    with pytest.raises(ValueError):
+        patch(None, {'D': pytest})  # module

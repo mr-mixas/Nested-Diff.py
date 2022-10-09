@@ -25,6 +25,8 @@ from html import escape as escape_html
 class AbstractFormatter(object):
     """Base class for nested diff formatters."""
 
+    default_generator = nested_diff.DEFAULT_HANDLER.generate_formatted_diff
+
     def __init__(
         self,
         handlers=None,
@@ -82,11 +84,11 @@ class AbstractFormatter(object):
         self.type_prefix = {}
         self.type_suffix = {}
 
-        self.handlers = {}
+        self._generators = {}
 
         if handlers is None:
             handlers = (
-                *nested_diff._TYPE_HANDLERS,
+                *nested_diff.TYPE_HANDLERS,
                 nested_diff.handlers.TextHandler(),
             )
 
@@ -104,9 +106,11 @@ class AbstractFormatter(object):
         :param handler: handlers.TypeHandler.
 
         """
-        self.handlers[handler.handled_type] = handler
-        self.type_prefix[handler.handled_type] = handler.type_prefix
-        self.type_suffix[handler.handled_type] = handler.type_suffix
+        handled_type = handler.handled_type
+
+        self._generators[handled_type] = handler.generate_formatted_diff
+        self.type_prefix[handled_type] = handler.type_prefix
+        self.type_suffix[handled_type] = handler.type_suffix
 
 
 class TextFormatter(AbstractFormatter):
@@ -148,14 +152,14 @@ class TextFormatter(AbstractFormatter):
         yield from self.generate_comment(diff, depth=depth)
 
         try:
-            handler = self.handlers[diff['E'].__class__]
+            generator = self._generators[diff['E'].__class__]
         except KeyError:
             try:
-                handler = self.handlers[diff['D'].__class__]
+                generator = self._generators[diff['D'].__class__]
             except KeyError:
-                handler = nested_diff._DEFAULT_HANDLER
+                generator = self.default_generator
 
-        yield from handler.generate_formatted_diff(self, diff, depth)
+        yield from generator(self, diff, depth)
 
         yield footer
 
