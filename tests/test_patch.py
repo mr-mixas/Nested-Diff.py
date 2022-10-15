@@ -30,7 +30,7 @@ def test_incorrect_diff_type():
         patch(None, None)
 
 
-def test_text_removing_line_mismatsh():
+def test_text_removing_line_mismatch():
     with pytest.raises(ValueError):
         patch(
             '\nB',
@@ -38,7 +38,7 @@ def test_text_removing_line_mismatsh():
         )
 
 
-def test_text_unchanged_line_mismatsh():
+def test_text_unchanged_line_mismatch():
     with pytest.raises(ValueError):
         patch(
             'A\nB',

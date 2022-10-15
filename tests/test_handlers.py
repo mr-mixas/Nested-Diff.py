@@ -2,7 +2,7 @@ from nested_diff import Differ, handlers
 
 
 def test_diff_handlers():
-    class FloatHanler(handlers.TypeHandler):
+    class FloatHandler(handlers.TypeHandler):
         handled_type = float
 
         def __init__(self, precision=2, *args, **kwargs):
@@ -16,7 +16,7 @@ def test_diff_handlers():
             return super().diff(differ, a, b)
 
     differ = Differ(U=False)
-    differ.set_handler(FloatHanler(precision=1))
+    differ.set_handler(FloatHandler(precision=1))
 
     a = [0.001, 0.01, 0.1]
     b = [0.002, 0.02, 0.2]

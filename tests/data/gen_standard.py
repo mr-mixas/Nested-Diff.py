@@ -5,7 +5,7 @@ import os
 import sys
 
 
-def fotmat_test(**kwargs):
+def format_test(**kwargs):
     return """\
         '{name}': {{
             'a': {a},
@@ -36,7 +36,7 @@ def generate_tests(source_dir=sys.argv[1]):
         else:
             patched = ''
 
-        tests.append(fotmat_test(
+        tests.append(format_test(
             name=test_name,
             a=repr(data['a']),
             b=repr(data['b']),
