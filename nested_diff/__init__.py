@@ -253,12 +253,11 @@ class Iterator(object):
         except KeyError:
             return self.default_iterator(self, ndiff)
 
-    def iterate(self, ndiff, depth=0):
+    def iterate(self, ndiff):
         """
-        Yield tuples with diff, key, subdiff and depth for each nested diff.
+        Yield tuples with diff, key and subdiff for each nested diff.
 
         :param ndiff: nested diff.
-        :param depth: depth initial value (for use in subiterators).
 
         """
         stack = [self._get_iterator(ndiff)]
@@ -268,15 +267,13 @@ class Iterator(object):
                 ndiff, key, subdiff = next(stack[-1])
             except StopIteration:
                 stack.pop()
-                depth -= 1
                 continue
 
-            yield ndiff, key, subdiff, depth
+            yield ndiff, key, subdiff
 
             if subdiff is None:
                 continue
 
-            depth += 1
             stack.append(self._get_iterator(subdiff))
 
     def set_handler(self, handler):
