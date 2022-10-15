@@ -57,7 +57,7 @@ mixas:~/$ nested_patch a.json patch.json
 
 ```
 >>> from nested_diff import diff
->>> from nested_diff.fmt import TextFormatter
+>>> from nested_diff.formatters import TextFormatter
 >>>
 >>> a = {'one': 1, 'two': 'some\ntext\ninside'}
 >>> b = {'one': 0, 'two': 'some\ntext'}
