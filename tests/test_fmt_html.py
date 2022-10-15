@@ -15,7 +15,7 @@ def function_to_test(test):
 
 
 @pytest.mark.parametrize(
-    'test, func',
+    ('test', 'func'),
     iterate_test_suite(
         tests.data.formatters.get_tests(),
         tests.data.formatters.HtmlFormatter,

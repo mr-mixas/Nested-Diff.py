@@ -7,7 +7,7 @@ from io import StringIO
 pytest.register_assert_rewrite('tests.common')
 
 
-@pytest.fixture
+@pytest.fixture()
 def content():
     def _reader(filename):
         with open(filename) as f:
@@ -16,7 +16,7 @@ def content():
     return _reader
 
 
-@pytest.fixture
+@pytest.fixture()
 def expected(request):
     filename = os.path.splitext(request.module.__file__)[0]
     filename += '.' + request.function.__name__ + '.exp'
@@ -25,7 +25,7 @@ def expected(request):
         return f.read()
 
 
-@pytest.fixture
+@pytest.fixture()
 def rpath(request):
     def _path_resolver(filename):
         path = os.path.join(
@@ -41,7 +41,7 @@ def rpath(request):
     return _path_resolver
 
 
-@pytest.fixture
+@pytest.fixture()
 def stringio():
     return StringIO()
 
@@ -51,6 +51,6 @@ class _StringIOTTY(StringIO):
         return True
 
 
-@pytest.fixture
+@pytest.fixture()
 def stringio_tty():
     return _StringIOTTY()

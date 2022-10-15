@@ -1,5 +1,5 @@
 """Python specific tests."""
-from tests.data import standard, specific
+from tests.data import specific, standard
 
 
 def get_tests():

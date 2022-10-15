@@ -2,7 +2,7 @@ import pytest
 
 from nested_diff import diff
 
-from tests.data import standard, specific
+from tests.data import specific, standard
 
 TESTS = {}
 TESTS.update(standard.get_tests())
@@ -28,7 +28,7 @@ def test_local_objects():
     a = [local_function_cant_be_pickled]
     b = []
 
-    with pytest.raises(Exception):  # Can't pickle local object
+    with pytest.raises(Exception, match="Can't pickle"):
         diff(a, b)
 
 
