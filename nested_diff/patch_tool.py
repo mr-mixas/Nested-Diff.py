@@ -26,12 +26,12 @@ class App(nested_diff.cli.App):
     """Patch tool for nested data structures."""
 
     def dump(self, file_, data, fmt):
-        """
-        Dump patched data using apropriate format.
+        """Dump patched data using apropriate format.
 
-        :param file_: File object to dump.
-        :param data: Data to dump.
-        :param fmt: Format used for dump, one of `self.supported_ofmts`.
+        Args:
+            file_: File object to dump.
+            data: Data to dump.
+            fmt: Format for dump.
 
         """
         if fmt == 'auto':
@@ -56,11 +56,14 @@ class App(nested_diff.cli.App):
 
     @staticmethod
     def patch(target, diff):
-        """
-        Return patched object.
+        """Patch object using nested diff..
 
-        :param target: object to patch.
-        :param diff: nested diff.
+        Args:
+            target: Object to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched object.
 
         """
         return nested_diff.patch(target, diff)

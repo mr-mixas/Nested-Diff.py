@@ -34,13 +34,13 @@ class AbstractFormatter(object):
         line_separator='\n',
         sort_keys=True,
     ):
-        """
-        Initialize formatter.
+        """Initialize formatter.
 
-        :param handlers: iterable with type handlers.
-        :param indent: prefix for each level of diff.
-        :param line_separator: text lines delimiter.
-        :param sort_keys: sort keys for dict-like structures.
+        Args:
+            handlers: Iterable with type handlers.
+            indent: Prefix for each level of diff.
+            line_separator: Text lines delimiter.
+            sort_keys: Sort keys for dict-like structures.
 
         """
         self.indent = indent
@@ -100,10 +100,10 @@ class AbstractFormatter(object):
         return ''.join(self.generate_diff(diff, **kwargs))
 
     def set_handler(self, handler):
-        """
-        Set handler.
+        """Set handler.
 
-        :param handler: handlers.TypeHandler.
+        Args:
+            handler: instance of handlers.TypeHandler.
 
         """
         handled_type = handler.handled_type
@@ -117,12 +117,12 @@ class TextFormatter(AbstractFormatter):
     """Produce human friendly text diff with indenting formatting."""
 
     def __init__(self, *args, type_hints=True, **kwargs):
-        """
-        Initialize formatter.
+        """Initialize formatter.
 
-        :param type_hints: print values types when True.
-
-        Rest args and kwargs passed to base class as is.
+        Args:
+            args: Passed to base class as is.
+            kwargs: Passed to base class as is.
+            type_hints: Print values types when True.
 
         """
         super().__init__(*args, **kwargs)
@@ -218,10 +218,12 @@ class HtmlFormatter(TextFormatter):
     """
 
     def __init__(self, *args, line_separator='', **kwargs):
-        """
-        Initialize formatter.
+        """Initialize formatter.
 
-        Args and kwargs passed to base class as is.
+        Args:
+            args: Passed to base class as is.
+            line_separator: Lines delimiter.
+            kwargs: Passed to base class as is.
 
         """
         super().__init__(*args, line_separator=line_separator, **kwargs)
@@ -290,10 +292,11 @@ class TermFormatter(TextFormatter):
     """Same as TextFormatter but with term colors."""
 
     def __init__(self, *args, **kwargs):
-        """
-        Initialize formatter.
+        """Initialize formatter.
 
-        Args and kwargs passed to base class as is.
+        Args:
+            args: Passed to base class as is.
+            kwargs: Passed to base class as is.
 
         """
         super().__init__(*args, **kwargs)

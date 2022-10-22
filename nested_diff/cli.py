@@ -35,10 +35,10 @@ class App(object):
     version = nested_diff.__version__
 
     def __init__(self, args=None):
-        """
-        Initialize app.
+        """Initialize appplication.
 
-        :param args: command line arguments; `sys.argv` used by default.
+        Args:
+            args: Command line arguments; sys.argv used by default.
 
         """
         self.override_excepthook()  # ASAP, but overridable by descendants
@@ -55,14 +55,14 @@ class App(object):
         return json.loads(opts)
 
     def dump(self, file_, data, fmt, header='', footer=''):
-        """
-        Dump data using apropriate format.
+        """Dump data using apropriate format.
 
-        :param file_: File object to dump.
-        :param data: Data to dump.
-        :param fmt: Format used for dump, one of `self.supported_ofmts`.
-        :param header: Optional leading string.
-        :param footer: Optional trailing string.
+        Args:
+            file_: File object.
+            data: Data to dump.
+            fmt: Format, one of self.supported_ofmts.
+            header: Optional leading string.
+            footer: Optional trailing string.
 
         """
         if header:
@@ -135,10 +135,17 @@ class App(object):
 
     @staticmethod
     def get_dumper(fmt, **kwargs):
-        """
-        Return data dumper object based on desired format.
+        """Create dumper object according to passed format.
 
-        :param kwargs: passed to dumper's constructor as is.
+        Args:
+            fmt: Dumper format.
+            kwargs: Passed to dumper's constructor as is.
+
+        Returns:
+            Dumper object.
+
+        Raises:
+            RuntimeError: Unsupported format passed.
 
         """
         if fmt == 'json':
@@ -154,7 +161,7 @@ class App(object):
 
     @staticmethod
     def guess_fmt(fp, default, ignore_fps=(sys.stdin, sys.stdout, sys.stderr)):
-        """Guess format of a file object based on its extention."""
+        """Guess format of a file object according it's extention."""
         if fp in ignore_fps:
             return default
 
@@ -167,10 +174,17 @@ class App(object):
 
     @staticmethod
     def get_loader(fmt, **kwargs):
-        """
-        Return data loader object based on desired format.
+        """Create data loader object accordint to passed format.
 
-        :param kwargs: passed to loader's constructor as is.
+        Args:
+            fmt: Loader format.
+            kwargs: Passed to loader's constructor as is.
+
+        Returns:
+            Loader object.
+
+        Raises:
+            RuntimeError: Unsupported format passed.
 
         """
         if fmt == 'json':
@@ -185,10 +199,13 @@ class App(object):
         raise RuntimeError('Unsupported input format: ' + fmt)
 
     def load(self, file_):
-        """
-        Load data from file using apropriate loader.
+        """Load data from file using apropriate loader.
 
-        :param file_: File object to load from.
+        Args:
+            file_: File object to load from.
+
+        Returns:
+            Python object.
 
         """
         if self.args.ifmt == 'auto':
@@ -215,10 +232,10 @@ class App(object):
         sys.excepthook = overrided
 
     def run(self):
-        """
-        App object entry point.
+        """App object entry point.
 
-        Must be implemented in derivatives.
+        Raises:
+            NotImplementedError: Must be implemented in derivatives.
 
         """
         raise NotImplementedError
@@ -230,32 +247,28 @@ class Dumper(object):
     tty_final_new_line = False
 
     def encode(self, data):
-        """
-        Return encoded data.
+        """Encode data.
 
-        :param data: data to encode.
+        Args:
+            data: Data to encode.
 
-        Must be implemented in derivatives.
+        Raises:
+            NotImplementedError: Must be implemented in derivatives.
 
         """
         raise NotImplementedError
 
     @staticmethod
     def get_opts(opts):
-        """
-        Return dumper options.
-
-        :param opts: initial options.
-
-        """
+        """Return dumper options."""
         return opts
 
     def dump(self, file_, data):
-        """
-        Encode and write data to file.
+        """Encode data and write to file.
 
-        :param file_: File object.
-        :param data: Data to write.
+        Args:
+            file_: File object.
+            data: Data to dump.
 
         """
         file_.write(self.encode(data))
@@ -270,31 +283,30 @@ class Loader(object):
     """Base class for data loaders."""
 
     def decode(self, data):
-        """
-        Return decoded data.
+        """Decode data.
 
-        :param data: data to decode.
+        Args:
+            data: Data to decode.
 
-        Must be implemented in derivatives.
+        Raises:
+            NotImplementedError: Must be implemented in derivatives.
 
         """
         raise NotImplementedError
 
     @staticmethod
     def get_opts(opts):
-        """
-        Return loader options.
-
-        :param opts: initial options.
-
-        """
+        """Return loader options."""
         return opts
 
     def load(self, file_):
-        """
-        Return decoded data loaded from file.
+        """Decode data loaded from file.
 
-        :param file_: File object.
+        Args:
+            file_: File object.
+
+        Returns:
+            Python object.
 
         """
         return self.decode(file_.read())
@@ -306,10 +318,10 @@ class JsonDumper(Dumper):
     tty_final_new_line = True
 
     def __init__(self, **kwargs):
-        """
-        Initialize dumper.
+        """Initialize dumper.
 
-        :param kwargs: options for `json.JSONEncoder`.
+        Args:
+            kwargs: Options for json.JSONEncoder.
 
         """
         super().__init__()
@@ -318,22 +330,20 @@ class JsonDumper(Dumper):
         self.encoder = json.JSONEncoder(**self.get_opts(kwargs))
 
     def encode(self, data):
-        """
-        Return JSON encoded data.
-
-        :param data: data to encode.
-
-        """
+        """Encode data as JSON string."""
         return self.encoder.encode(data)
 
     @staticmethod
     def get_opts(opts):
-        """
-        Return dumper options.
+        """Extend options by default values.
 
-        :param opts: initial options.
+        indent opt is set to 3 and sort_keys opt to True if absent in opts.
 
-        `indent` is set to 3 and `sort_keys` to `True` if absent in opts.
+        Args:
+            opts: Initial options (dict).
+
+        Returns:
+            Options extended by default values.
 
         """
         opts.setdefault('indent', 3)
@@ -345,10 +355,10 @@ class JsonLoader(Loader):
     """JSON loader."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize loader.
+        """Initialize loader.
 
-        :param kwargs: options for `json.JSONDecoder`.
+        Args:
+            kwargs: Options for json.JSONDecoder.
 
         """
         super().__init__()
@@ -357,12 +367,7 @@ class JsonLoader(Loader):
         self.decoder = json.JSONDecoder(**self.get_opts(kwargs))
 
     def decode(self, data):
-        """
-        Return data decoded from JSON.
-
-        :param data: data to decode.
-
-        """
+        """Parse JSON string."""
         return self.decoder.decode(data)
 
 
@@ -370,10 +375,10 @@ class IniDumper(Dumper):
     """INI dumper."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize dumper.
+        """Initialize dumper.
 
-        :param kwargs: options for `configparser.ConfigParser`.
+        Args:
+            kwargs: Options for configparser.ConfigParser.
 
         """
         super().__init__()
@@ -384,12 +389,7 @@ class IniDumper(Dumper):
         self.stringio = io.StringIO()
 
     def encode(self, data):
-        """
-        Return INI encoded data.
-
-        :param data: data to encode.
-
-        """
+        """Encode data as INI string."""
         self.encoder.read_dict(data)
         self.encoder.write(self.stringio)
 
@@ -400,10 +400,10 @@ class IniLoader(Loader):
     """INI loader."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize loader.
+        """Initialize loader.
 
-        :param kwargs: options for `configparser.ConfigParser`.
+        Args:
+            kwargs: Options for configparser.ConfigParser.
 
         """
         super().__init__()
@@ -412,12 +412,7 @@ class IniLoader(Loader):
         self.decoder = configparser.ConfigParser(**kwargs)
 
     def decode(self, data):
-        """
-        Return data decoded from INI.
-
-        :param data: data to decode.
-
-        """
+        """Parse INI string."""
         self.decoder.read_string(data)
 
         out = {}
@@ -443,12 +438,7 @@ class TomlDumper(Dumper):
         self.codec = toml
 
     def encode(self, data):
-        """
-        Return TOML encoded data.
-
-        :param data: data to encode.
-
-        """
+        """Encode data as TOML string."""
         return self.codec.dumps(data)
 
 
@@ -463,12 +453,7 @@ class TomlLoader(Loader):
         self.codec = toml
 
     def decode(self, data):
-        """
-        Return data decoded from TOML.
-
-        :param data: data to decode.
-
-        """
+        """Parse TOML string."""
         return self.codec.loads(data)
 
 
@@ -476,10 +461,10 @@ class YamlDumper(Dumper):
     """YAML dumper."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize dumper.
+        """Initialize dumper.
 
-        :param kwargs: options for `yaml.dump`.
+        Args:
+            kwargs: Options for yaml.dump.
 
         """
         super().__init__()
@@ -495,22 +480,20 @@ class YamlDumper(Dumper):
         self.opts = self.get_opts(kwargs)
 
     def encode(self, data):
-        """
-        Return YAML encoded data.
-
-        :param data: data to encode.
-
-        """
+        """Encode data as YAML string."""
         return self.yaml.dump(data, Dumper=self.yaml_dumper, **self.opts)
 
     @staticmethod
     def get_opts(opts):
-        """
-        Return dumper options.
+        """Extend options by default values.
 
-        :param opts: initial options.
+        default_flow_style opt is set to `False` if absent in passed opts.
 
-        `default_flow_style` is set to `False` if absent in opts.
+        Args:
+            opts: Initial options (dict).
+
+        Returns:
+            Options extended by default values.
 
         """
         opts.setdefault('default_flow_style', False)
@@ -523,10 +506,10 @@ class YamlLoader(Loader):
     """YAML loader."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize loader.
+        """Initialize loader.
 
-        :param kwargs: options for `yaml.safe_load`.
+        Args:
+            kwargs: options for yaml.safe_load.
 
         """
         super().__init__()
@@ -542,10 +525,5 @@ class YamlLoader(Loader):
         self.opts = self.get_opts(kwargs)
 
     def decode(self, data):
-        """
-        Return data decoded from YAML.
-
-        :param data: data to decode.
-
-        """
+        """Parse YAML string."""
         return self.yaml.load(data, Loader=self.yaml_loader, **self.opts)

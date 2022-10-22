@@ -104,17 +104,16 @@ class Differ(object):
 
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
                  trimR=False, handlers=None):
-        """
-        Initialize Differ.
+        """Initialize Differ.
 
-        Optional arguments:
-        `A`, `N`, `O`, `R`, `U` are toggles for according diff ops and all
-        enabled (`True`) by default.
-
-        `trimR` when True will drop (replace by `None`) removed data from diff;
-        default is `False`.
-
-        `handlers` is a list of type handlers.
+        Args:
+            A: Enable/disable added items.
+            N: Enable/disable new items.
+            O: Enable/disable old items.
+            R: Enable/disable removed items.
+            U: Enable/disable unchanged items.
+            trimR: When enabled will replace removed data by None.
+            handlers: A list of type handlers.
 
         """
         self.op_a = A
@@ -130,15 +129,18 @@ class Differ(object):
             self.set_handler(handler)
 
     def diff(self, a, b):
-        """
-        Return equality flag and diff for two arbitrary objects.
+        """Calculate diff for two objects.
 
         This method calls registered handler according diffed objects type.
         Default handler called for objects with different types or when no
         handler registered for such type.
 
-        :param a: First object to diff.
-        :param b: Second object to diff.
+        Args:
+            a: First object to diff.
+            b: Second object to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         """
         if a is b:
@@ -153,10 +155,10 @@ class Differ(object):
         return self.default_differ(self, a, b)
 
     def set_handler(self, handler):
-        """
-        Set handler.
+        """Set handler.
 
-        :param handler: handlers.TypeHandler.
+        Args:
+            handler: Instance of handlers.TypeHandler.
 
         """
         self._differs[handler.handled_type] = handler.diff
@@ -168,10 +170,10 @@ class Patcher(object):
     default_patcher = DEFAULT_HANDLER.patch
 
     def __init__(self, handlers=None):
-        """
-        Initialize Patcher.
+        """Initialize Patcher.
 
-        :param handlers: List of type handlers.
+        Args:
+            handlers: List of type handlers.
 
         """
         self._patchers = {}
@@ -183,14 +185,20 @@ class Patcher(object):
             self.set_handler(nested_diff.handlers.TextHandler())
 
     def patch(self, target, ndiff):
-        """
-        Return patched object.
+        """Patch object using nested diff.
 
         This method calls apropriate handler for target value according to
-        value type.
+        it's type.
 
-        :param target: Object to patch.
-        :param ndiff: Nested diff.
+        Args:
+            target: Object to patch.
+            ndiff: Nested diff.
+
+        Returns:
+            Patched object.
+
+        Raises:
+            ValueError: Unsupported patch type passed.
 
         """
         if 'D' in ndiff:
@@ -208,10 +216,10 @@ class Patcher(object):
         return self.default_patcher(self, target, ndiff)
 
     def set_handler(self, handler):
-        """
-        Set handler.
+        """Set handler.
 
-        :param handler: handlers.TypeHandler.
+        Args:
+            handler: Instance of handlers.TypeHandler.
 
         """
         self._patchers[handler.handled_type] = handler.patch
@@ -223,13 +231,11 @@ class Iterator(object):
     default_iterator = DEFAULT_HANDLER.iterate_diff
 
     def __init__(self, handlers=None, sort_keys=False):
-        """
-        Initialize iterator.
+        """Initialize iterator.
 
-        If `sort_keys` is `True`, then the output for mappings will be
-        sorted by key. Disabled by default.
-
-        `handlers` is a list of type handlers.
+        Args:
+            sort_keys: Sort diff items if applicable.
+            handlers: List of type handlers.
 
         """
         self.sort_keys = sort_keys
@@ -239,12 +245,7 @@ class Iterator(object):
             self.set_handler(handler)
 
     def _get_iterator(self, ndiff):
-        """
-        Return apropriate iterator for passed nested diff.
-
-        :param ndiff: nested diff.
-
-        """
+        """Return apropriate iterator for passed nested diff."""
         if 'E' in ndiff:
             return self.default_iterator(self, ndiff)
 
@@ -254,10 +255,13 @@ class Iterator(object):
             return self.default_iterator(self, ndiff)
 
     def iterate(self, ndiff):
-        """
-        Yield tuples with diff, key and subdiff for each nested diff.
+        """Iterate over nested diff.
 
-        :param ndiff: nested diff.
+        Args:
+            ndiff: Nested diff to iterate.
+
+        Yields:
+            Tuples with diff, key and subdiff for each nested diff.
 
         """
         stack = [self._get_iterator(ndiff)]
@@ -277,27 +281,28 @@ class Iterator(object):
             stack.append(self._get_iterator(subdiff))
 
     def set_handler(self, handler):
-        """
-        Set handler.
+        """Set handler.
 
-        :param handler: handlers.TypeHandler.
+        Args:
+            handler: Instance of handlers.TypeHandler.
 
         """
         self._iterators[handler.handled_type] = handler.iterate_diff
 
 
 def diff(a, b, text_diff_ctx=-1, **kwargs):
-    """
-    Return recursive diff for two passed objects.
+    """Calculate diff for two objects.
 
-    :param a: First object to diff.
-    :param b: Second object to diff.
+    Args:
+        a: First object to diff.
+        b: Second object to diff.
+        text_diff_ctx: Amount of context lines for text (multiline strings)
+            diffs. Disabled entirely when value is negative. This opt is
+            deprecated and should be avoided.
+        kwargs: Passed to Differ's constructor as is.
 
-    :param text_diff_ctx: defines amount of context lines for text (multiline
-    strings) diffs, disabled entirely when value is negative. This opt is
-    deprecated and should be avoided.
-
-    Rest kwargs passed to Differ's constructor as is.
+    Returns:
+        Tuple: equality flag and nested diff.
 
     """
     differ = Differ(**kwargs)
@@ -313,13 +318,15 @@ def diff(a, b, text_diff_ctx=-1, **kwargs):
 
 
 def patch(target, ndiff, **kwargs):
-    """
-    Return patched object.
+    """Patch object using nested diff.
 
-    :param target: Object to patch.
-    :param ndiff: Nested diff.
+    Args:
+        target: Object to patch.
+        ndiff: Nested diff.
+        kwargs: Passed to Patcher's constructor as is.
 
-    Rest kwargs passed to Patcher's constructor as is.
+    Returns:
+        Patched object.
 
     """
     return Patcher(**kwargs).patch(target, ndiff)

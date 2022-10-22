@@ -21,8 +21,7 @@ from pickle import dumps
 
 
 class TypeHandler(object):
-    """
-    Base class for type handlers.
+    """Base class for type handlers.
 
     Handlers provide diff, patch, generate_formatted_diff and iterate_diff
     methods for specific type.
@@ -35,12 +34,15 @@ class TypeHandler(object):
     type_suffix = ''
 
     def diff(self, differ, a, b):
-        """
-        Return equality flag and diff for two objects.
+        """Calculate diff for two objects.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First dict to diff.
-        :param b: Second dict to diff.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First object to diff.
+            b: Second object to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         """
         diff = {}
@@ -59,12 +61,18 @@ class TypeHandler(object):
         return equal, diff
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched object.
+        """Patch object.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: Object to patch.
-        :param diff: Nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: Object to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched object.
+
+        Raises:
+            ValueError: Inapropriate diff tag found.
 
         """
         try:
@@ -76,11 +84,14 @@ class TypeHandler(object):
         raise ValueError(diff)
 
     def iterate_diff(self, iterator, diff):
-        """
-        Iterate over nested diff.
+        """Iterate over nested diff.
 
-        :param patcher: nested_diff.Iterator object.
-        :param diff: Nested diff.
+        Args:
+            iterator: nested_diff.Iterator object.
+            diff: Nested diff.
+
+        Yields:
+            Tuple: diff, None, None
 
         """
         yield diff, None, None
@@ -100,12 +111,15 @@ class ScalarHandler(TypeHandler):
     """Base class for scalar handlers."""
 
     def diff(self, differ, a, b):
-        """
-        Return diff for two scalar objects.
+        """Calculate diff for for two scalar objects.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First dict to diff.
-        :param b: Second dict to diff.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First object to diff.
+            b: Second object to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         """
         diff = {}
@@ -157,12 +171,15 @@ class DictHandler(TypeHandler):
     type_suffix = '}'
 
     def diff(self, differ, a, b):
-        """
-        Return equality flag and diff for two dicts.
+        """Calculate diff for two dict objects.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First dict to diff.
-        :param b: Second dict to diff.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First dict to diff.
+            b: Second dict to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         >>> from nested_diff import Differ
         >>>
@@ -213,12 +230,15 @@ class DictHandler(TypeHandler):
         return equal, diff
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched dict.
+        """Patch dict object.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: dict to patch.
-        :param diff: nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: dict object to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched dict.
 
         """
         for key, subdiff in diff['D'].items():
@@ -232,11 +252,14 @@ class DictHandler(TypeHandler):
         return target
 
     def iterate_diff(self, iterator, diff):
-        """
-        Iterate over dict diff.
+        """Iterate over dict diff.
 
-        :param iterator: nested_diff.Iterator object.
-        :param diff: nested diff.
+        Args:
+            iterator: nested_diff.Iterator object.
+            diff: nested diff.
+
+        Yields:
+            Tuples with diff, key and subdiff for each nested diff.
 
         """
         items = diff['D'].items()
@@ -273,12 +296,15 @@ class ListHandler(TypeHandler):
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
     def diff(self, differ, a, b):
-        """
-        Return equality flag and diff for two lists.
+        """Calculate diff for two list objects.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First list to diff.
-        :param b: Second list to diff.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First list to diff.
+            b: Second list to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         >>> from nested_diff import Differ
         >>>
@@ -348,12 +374,15 @@ class ListHandler(TypeHandler):
         return equal, {}
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched list.
+        """Patch list object.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: list to patch.
-        :param diff: Nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: list to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched list.
 
         """
         i, j = 0, 0  # index, scatter
@@ -377,10 +406,14 @@ class ListHandler(TypeHandler):
         return target
 
     def iterate_diff(self, iterator, diff):
-        """
-        Iterate over list diff.
+        """Iterate over nested diff.
 
-        :param diff: nested diff.
+        Args:
+            iterator: nested_diff.Iterator object.
+            diff: Nested diff.
+
+        Yields:
+            Tuples with diff, key and subdiff for each nested diff.
 
         """
         idx = 0
@@ -426,12 +459,15 @@ class TupleHandler(ListHandler):
     type_suffix = ')'
 
     def diff(self, differ, a, b):
-        """
-        Return equality flag and diff for two tuples.
+        """Calculate diff for two tuple objects.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First tuple to diff.
-        :param b: Second tuple to diff.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First tuple to diff.
+            b: Second tuple to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         >>> from nested_diff import Differ
         >>>
@@ -452,12 +488,15 @@ class TupleHandler(ListHandler):
         return equal, diff
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched tuple.
+        """Patch tuple object.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: tuple to patch.
-        :param diff: Nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: tuple to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched tuple.
 
         """
         return tuple(super().patch(patcher, list(target), diff))
@@ -469,12 +508,15 @@ class SetHandler(TypeHandler):
     handled_type = set
 
     def diff(self, differ, a, b):
-        """
-        Return diff for two sets.
+        """Calculate diff for two set objects.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First set to diff.
-        :param b: Second set to diff.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First set to diff.
+            b: Second set to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
 
         >>> from nested_diff import Differ
         >>>
@@ -508,12 +550,15 @@ class SetHandler(TypeHandler):
         return equal, {}
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched set.
+        """Patch set object.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: set to patch.
-        :param diff: Nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: set object to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched set.
 
         """
         for subdiff in diff['D']:
@@ -546,12 +591,15 @@ class FrozenSetHandler(SetHandler):
     handled_type = frozenset
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched frozenset.
+        """Patch frozenset object.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: frozenset to patch.
-        :param diff: Nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: frozenset object to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched frozenset.
 
         """
         return frozenset(super().patch(patcher, set(target), diff))
@@ -563,10 +611,10 @@ class TextHandler(TypeHandler):
     handled_type = str
 
     def __init__(self, context=3):
-        """
-        Initialize handler.
+        """Initialize handler.
 
-        :param context: Amount of context lines.
+        Args:
+            context: Amount of context lines.
 
         """
         super().__init__()
@@ -574,15 +622,16 @@ class TextHandler(TypeHandler):
         self.context = context
 
     def diff(self, differ, a, b):
-        r"""
-        Return equality flag and diff for texts (multiline strings).
+        r"""Calculate diff for two texts (multiline strings).
 
-        Result is a unified-like diff formatted as nested diff structure, with
-        'I' tagged subdiffs containing hunks headers.
+        Args:
+            differ: nested_diff.Differ object.
+            a: First string to diff.
+            b: Second string to diff.
 
-        :param differ: nested_diff.Differ object.
-        :param a: First string to diff.
-        :param b: Second string to diff.
+        Returns:
+            Equality flag and a unified-like diff formatted as nested diff
+            structure, with 'I' tagged subdiffs containing hunks headers.
 
         >>> from nested_diff import Differ
         >>>
@@ -633,16 +682,22 @@ class TextHandler(TypeHandler):
         return equal, {}
 
     def patch(self, patcher, target, diff):
-        """
-        Return patched text (multiline string).
+        """Patch text (multiline string).
 
         Unlike GNU patch, this algorithm does not implement any heuristics and
         patch target in straightforward way: get position from hunk header and
         apply changes specified in a hunk.
 
-        :param patcher: nested_diff.Patcher object.
-        :param target: string to patch.
-        :param diff: Nested diff.
+        Args:
+            patcher: nested_diff.Patcher object.
+            target: string to patch.
+            diff: Nested diff.
+
+        Returns:
+            Patched string.
+
+        Raises:
+            ValueError: Items and/or ops doesn't match diff/object.
 
         """
         offset = 0

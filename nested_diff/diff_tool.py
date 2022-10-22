@@ -30,14 +30,16 @@ class App(nested_diff.cli.App):
     supported_ofmts = ('auto', 'html', 'json', 'term', 'toml', 'text', 'yaml')
 
     def diff(self, a, b, **kwargs):
-        """
-        Return equality flag and diff for passed objects.
+        """Calculate diff for two objects.
 
-        :param a: First object to diff.
-        :param b: Second object to diff.
+        Args:
+            a: First object to diff.
+            b: Second object to diff.
+            kwargs: Merged (with higher priority) with cli options and passed
+                to nested_diff.Differ constructor.
 
-        kwargs will be merged (with higher priority) with cli options passed
-        to Differ().
+        Returns:
+            Tuple: equality flag and nested diff.
 
         """
         diff_opts = {
@@ -126,10 +128,14 @@ class App(nested_diff.cli.App):
         return parser
 
     def get_dumper(self, fmt, **kwargs):
-        """
-        Return data dumper object based on desired format.
+        """Create dumper object according to passed format.
 
-        :param kwargs: passed to dumper's constructor as is.
+        Args:
+            fmt: Dumper format.
+            kwargs: Passed to dumper's constructor as is.
+
+        Returns:
+            Dumper object.
 
         """
         if fmt == 'auto':
@@ -214,22 +220,28 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
     """Base class for diff formatters dumpers."""
 
     def encode(self, data):
-        """
-        Return encoded (formatted) diff.
+        """Encode (format) diff.
 
-        :param data: diff data to format.
+        Args:
+            data: Nested diff to format.
+
+        Returns:
+            Encoded diff string.
 
         """
         return self.encoder.format(data)
 
     @staticmethod
     def get_opts(opts):
-        """
-        Return dumper options.
+        """Extend options by default values.
 
-        :param opts: initial options.
+        sort_keys opt is set to `True` if absent in passed opts.
 
-        `sort_keys` is set to `True` if absent in opts.
+        Args:
+            opts: Initial options (dict).
+
+        Returns:
+            Options extended by default values.
 
         """
         opts.setdefault('sort_keys', True)
@@ -241,14 +253,14 @@ class HtmlDumper(AbstractFmtDumper):
 
     def __init__(self, html_opts=(('lang', 'en'), ('title', 'Nested diff')),
                  **kwargs):
-        """
-        Initialize dumper.
+        """Initialize dumper.
 
-        :param html_opts: may contain `header` (default is brief HTML5
-        boilerplate) and `footer` (page closing tags). Also `lang` and `title`
-        supported which define according values for default `header`.
-
-        Rest kwargs passed to `fmt.HtmlFormatter`.
+        Args:
+            html_opts: May contain `header` (default is brief HTML5
+                boilerplate) and `footer` (page closing tags). Also `lang` and
+                `title` supported which define according values for default
+                `header`.
+            kwargs: Passed to `fmt.HtmlFormatter`.
 
         """
         super().__init__()
@@ -269,12 +281,7 @@ class HtmlDumper(AbstractFmtDumper):
             self.html_opts['footer'] = '</body></html>'
 
     def encode(self, data):
-        """
-        Return diff formatted as HTML.
-
-        :param data: diff to format.
-
-        """
+        """Format nested diff as HTML string."""
         return self.formatter.format(
             data,
             header=self.html_opts['header'],
@@ -286,10 +293,10 @@ class TermDumper(AbstractFmtDumper):
     """Same as TextDumper but with ANSI term colors."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize dumper.
+        """Initialize dumper.
 
-        :param kwargs: passed to `fmt.TermFormatter`.
+        Args:
+            kwargs: Passed to `fmt.TermFormatter` as is.
 
         """
         super().__init__()
@@ -301,10 +308,10 @@ class TextDumper(AbstractFmtDumper):
     """Human friendly text dumper for nested diff."""
 
     def __init__(self, **kwargs):
-        """
-        Initialize dumper.
+        """Initialize dumper.
 
-        :param kwargs: passed to `fmt.TextFormatter` as is.
+        Args:
+            kwargs: Passed to `fmt.TextFormatter` as is.
 
         """
         super().__init__()
