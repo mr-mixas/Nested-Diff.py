@@ -146,9 +146,9 @@ class App(nested_diff.cli.App):
 
         if fmt == 'term':
             return TermDumper(**kwargs)
-        elif fmt == 'text':
+        if fmt == 'text':
             return TextDumper(**kwargs)
-        elif fmt == 'html':
+        if fmt == 'html':
             return HtmlDumper(**kwargs)
 
         return super().get_dumper(fmt, **kwargs)

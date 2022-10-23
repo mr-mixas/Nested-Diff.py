@@ -2,7 +2,7 @@ from nested_diff import Differ, Patcher
 from nested_diff.handlers import TypeHandler
 
 
-class CustomContainer(object):
+class CustomContainer():
     data = None
 
 

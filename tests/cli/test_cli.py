@@ -74,7 +74,7 @@ def test_excepthook_raise_system_exit_127():
 
 
 def test_guess_fmt_aliases():
-    class FakeFP(object):
+    class FakeFP():
         name = None
 
     aliases = {

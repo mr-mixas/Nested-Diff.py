@@ -23,7 +23,7 @@ import sys
 import nested_diff
 
 
-class App(object):
+class App():
     """Base class for command line tools."""
 
     default_ifmt = 'auto'
@@ -150,11 +150,11 @@ class App(object):
         """
         if fmt == 'json':
             return JsonDumper(**kwargs)
-        elif fmt == 'yaml':
+        if fmt == 'yaml':
             return YamlDumper(**kwargs)
-        elif fmt == 'ini':
+        if fmt == 'ini':
             return IniDumper(**kwargs)
-        elif fmt == 'toml':
+        if fmt == 'toml':
             return TomlDumper(**kwargs)
 
         raise RuntimeError('Unsupported output format: ' + fmt)
@@ -189,11 +189,11 @@ class App(object):
         """
         if fmt == 'json':
             return JsonLoader(**kwargs)
-        elif fmt == 'yaml':
+        if fmt == 'yaml':
             return YamlLoader(**kwargs)
-        elif fmt == 'ini':
+        if fmt == 'ini':
             return IniLoader(**kwargs)
-        elif fmt == 'toml':
+        if fmt == 'toml':
             return TomlLoader(**kwargs)
 
         raise RuntimeError('Unsupported input format: ' + fmt)
@@ -241,7 +241,7 @@ class App(object):
         raise NotImplementedError
 
 
-class Dumper(object):
+class Dumper():
     """Base class for data dumpers."""
 
     tty_final_new_line = False
@@ -279,7 +279,7 @@ class Dumper(object):
         file_.flush()
 
 
-class Loader(object):
+class Loader():
     """Base class for data loaders."""
 
     def decode(self, data):

@@ -16,13 +16,13 @@
 
 """Formatters for Nested Diff."""
 
+from html import escape as escape_html
+
 import nested_diff
 import nested_diff.handlers
 
-from html import escape as escape_html
 
-
-class AbstractFormatter(object):
+class AbstractFormatter():
     """Base class for nested diff formatters."""
 
     default_generator = nested_diff.DEFAULT_HANDLER.generate_formatted_diff

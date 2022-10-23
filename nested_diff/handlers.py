@@ -20,7 +20,7 @@ from difflib import SequenceMatcher
 from pickle import dumps
 
 
-class TypeHandler(object):
+class TypeHandler():
     """Base class for type handlers.
 
     Handlers provide diff, patch, generate_formatted_diff and iterate_diff
@@ -371,7 +371,8 @@ class ListHandler(TypeHandler):
             if equal:
                 return equal, {'U': a}
             return equal, {'D': diff}
-        elif equal and differ.op_u:
+
+        if equal and differ.op_u:
             return equal, {'U': a}
 
         return equal, {}

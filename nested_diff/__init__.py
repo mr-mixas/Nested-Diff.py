@@ -43,7 +43,7 @@ TYPE_HANDLERS = (
 )
 
 
-class Differ(object):
+class Differ():
     """
     Compute recursive diff for two passed objects.
 
@@ -164,7 +164,7 @@ class Differ(object):
         self._differs[handler.handled_type] = handler.diff
 
 
-class Patcher(object):
+class Patcher():
     """Patch objects using nested diff."""
 
     default_patcher = DEFAULT_HANDLER.patch
@@ -236,7 +236,7 @@ class Patcher(object):
             self._patchers_by_ext[handler.extension_id] = handler.patch
 
 
-class Iterator(object):
+class Iterator():
     """Nested diff iterator."""
 
     default_iterator = DEFAULT_HANDLER.iterate_diff
