@@ -28,6 +28,7 @@ class TypeHandler(object):
 
     """
 
+    extension_id = None
     handled_type = None
 
     type_prefix = ''
@@ -165,6 +166,7 @@ class BytesHandler(ScalarHandler):
 class DictHandler(TypeHandler):
     """dict handler."""
 
+    extension_id = 0
     handled_type = dict
 
     type_prefix = '{'
@@ -285,6 +287,7 @@ class DictHandler(TypeHandler):
 class ListHandler(TypeHandler):
     """list handler."""
 
+    extension_id = 1
     handled_type = list
 
     type_prefix = '['
@@ -453,6 +456,7 @@ class ListHandler(TypeHandler):
 class TupleHandler(ListHandler):
     """tuple handler."""
 
+    extension_id = 2
     handled_type = tuple
 
     type_prefix = '('
@@ -505,6 +509,7 @@ class TupleHandler(ListHandler):
 class SetHandler(TypeHandler):
     """set handler."""
 
+    extension_id = 3
     handled_type = set
 
     def diff(self, differ, a, b):
@@ -524,7 +529,7 @@ class SetHandler(TypeHandler):
         >>> b = {2, 3}
         >>>
         >>> Differ(handlers=[SetHandler()], U=False).diff(a, b)
-        (False, {'D': [{'R': 1}, {'A': 3}], 'E': set()})
+        (False, {'D': [{'R': 1}, {'A': 3}], 'E': 3})
         >>>
         """
         diff = []
@@ -545,7 +550,7 @@ class SetHandler(TypeHandler):
                 equal = False
 
         if diff:
-            return equal, {'D': diff, 'E': a.__class__()}
+            return equal, {'D': diff, 'E': self.extension_id}
 
         return equal, {}
 
@@ -588,6 +593,7 @@ class SetHandler(TypeHandler):
 class FrozenSetHandler(SetHandler):
     """frozenset handler."""
 
+    extension_id = 4
     handled_type = frozenset
 
     def patch(self, patcher, target, diff):
@@ -608,6 +614,7 @@ class FrozenSetHandler(SetHandler):
 class TextHandler(TypeHandler):
     """text (multiline string) handler."""
 
+    extension_id = 5
     handled_type = str
 
     def __init__(self, context=3):
@@ -640,7 +647,7 @@ class TextHandler(TypeHandler):
         >>>
         >>> Differ(handlers=[TextHandler()]).diff(a, b)
         (False,
-         {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': ''})
+         {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': 5})
         >>>
         """
         lines_a = a.split('\n', -1)
@@ -677,7 +684,7 @@ class TextHandler(TypeHandler):
                     diff.extend({'A': line} for line in lines_b[j1:j2])
 
         if diff:
-            return equal, {'D': diff, 'E': a.__class__()}
+            return equal, {'D': diff, 'E': self.extension_id}
 
         return equal, {}
 

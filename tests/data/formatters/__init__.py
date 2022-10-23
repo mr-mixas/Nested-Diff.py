@@ -32,7 +32,7 @@ def get_tests():
                     {'A': '2'},
                     {'U': 'lines'},
                 ],
-                'E': '',
+                'E': 5,
                 'H': 'Comment should win',
             },
             'formatter_opts': {'type_hints': True},  # type hint should be ignored
@@ -64,7 +64,7 @@ def get_tests():
         'type_hints_disabled': {
             'a': 'two\nlines',
             'b': '2\nlines',
-            'diff': {'D': [{'I': [0, 2, 0, 2]}, {'R': 'two'}, {'A': '2'}, {'U': 'lines'}], 'E': ''},
+            'diff': {'D': [{'I': [0, 2, 0, 2]}, {'R': 'two'}, {'A': '2'}, {'U': 'lines'}], 'E': 5},
             'diff_opts': {'text_diff_ctx': 2},
             'formatter_opts': {'type_hints': False},
         },

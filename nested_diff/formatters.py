@@ -81,10 +81,12 @@ class AbstractFormatter(object):
             'U',
         )
 
+        self._gens_by_cls = {}
+        self._gens_by_ext = {}
+        self._type_by_ext = {}
+
         self.type_prefix = {}
         self.type_suffix = {}
-
-        self._generators = {}
 
         if handlers is None:
             handlers = (
@@ -106,9 +108,15 @@ class AbstractFormatter(object):
             handler: instance of handlers.TypeHandler.
 
         """
+        extension_id = handler.extension_id
         handled_type = handler.handled_type
 
-        self._generators[handled_type] = handler.generate_formatted_diff
+        self._gens_by_cls[handled_type] = handler.generate_formatted_diff
+        if extension_id is not None:
+            self._gens_by_ext[extension_id] = handler.generate_formatted_diff
+
+        self._type_by_ext[extension_id] = handled_type
+
         self.type_prefix[handled_type] = handler.type_prefix
         self.type_suffix[handled_type] = handler.type_suffix
 
@@ -138,10 +146,17 @@ class TextFormatter(AbstractFormatter):
                 return
 
             try:
-                comment = diff['E'].__class__.__name__
-                tag = 'E'
+                extension_id = diff['E']
             except KeyError:
                 return
+
+            try:
+                cls = self._type_by_ext[extension_id]
+            except KeyError:
+                raise ValueError('unsupported extension: '
+                                 + extension_id) from None
+            tag = 'E'
+            comment = cls.__name__
 
         yield from self.generate_string(comment, tag, depth)
 
@@ -152,10 +167,15 @@ class TextFormatter(AbstractFormatter):
         yield from self.generate_comment(diff, depth=depth)
 
         try:
-            generator = self._generators[diff['E'].__class__]
+            extension_id = diff['E']
+            try:
+                generator = self._gens_by_ext[extension_id]
+            except KeyError:
+                raise ValueError('unsupported extension: '
+                                 + extension_id) from None
         except KeyError:
             try:
-                generator = self._generators[diff['D'].__class__]
+                generator = self._gens_by_cls[diff['D'].__class__]
             except KeyError:
                 generator = self.default_generator
 

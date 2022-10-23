@@ -114,7 +114,7 @@ def test_set_diff():
     d = diff(a, b)
 
     expected = [
-        ({'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': set()}, None, None),
+        ({'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': 3}, None, None),
     ]
 
     got = list(Iterator().iterate(d))

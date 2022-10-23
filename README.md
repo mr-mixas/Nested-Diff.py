@@ -93,7 +93,7 @@ Diff is a dict and may contain status keys:
 and auxiliary keys:
 
 * `C` comment; optional, value - arbitrary string.
-* `E` diffed entity (optional), value - empty instance of entity's class.
+* `E` extension ID (optional).
 * `I` index for sequence item, used only when prior item was omitted.
 
 Diff metadata alternates with actual data; simple types specified as is, dicts,

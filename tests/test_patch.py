@@ -34,7 +34,7 @@ def test_text_removing_line_mismatch():
     with pytest.raises(ValueError, match='Removing line does not match'):
         patch(
             '\nB',
-            {'D': [{'I': [0, 2, 0, 1]}, {'U': ''}, {'R': 'A'}], 'E': ''},
+            {'D': [{'I': [0, 2, 0, 1]}, {'U': ''}, {'R': 'A'}], 'E': 5},
         )
 
 
@@ -42,7 +42,7 @@ def test_text_unchanged_line_mismatch():
     with pytest.raises(ValueError, match='Unchanged line does not match'):
         patch(
             'A\nB',
-            {'D': [{'I': [0, 2, 0, 1]}, {'U': 'Z'}, {'R': 'B'}], 'E': ''},
+            {'D': [{'I': [0, 2, 0, 1]}, {'U': 'Z'}, {'R': 'B'}], 'E': 5},
         )
 
 
@@ -50,7 +50,7 @@ def test_text_unsupported_op():
     with pytest.raises(ValueError, match='Unsupported operation'):
         patch(
             'A\nB',
-            {'D': [{'I': [0, 2, 0, 1]}, {'Z': 'A'}, {'R': 'B'}], 'E': ''},
+            {'D': [{'I': [0, 2, 0, 1]}, {'Z': 'A'}, {'R': 'B'}], 'E': 5},
         )
 
 

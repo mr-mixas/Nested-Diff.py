@@ -63,7 +63,7 @@ class Differ(object):
     and auxiliary keys:
 
     `C` comment; optional, value - arbitrary string.
-    `E` diffed entity (optional), value - empty instance of entity's class.
+    `E` extension ID (optional).
     `I` index for sequence item, used only when prior item was omitted.
 
     Diff metadata alternates with actual data; simple types specified as is,
@@ -176,7 +176,8 @@ class Patcher(object):
             handlers: List of type handlers.
 
         """
-        self._patchers = {}
+        self._patchers_by_cls = {}
+        self._patchers_by_ext = {}
 
         for handler in TYPE_HANDLERS if handlers is None else handlers:
             self.set_handler(handler)
@@ -203,15 +204,22 @@ class Patcher(object):
         """
         if 'D' in ndiff:
             try:
-                type_ = ndiff['E'].__class__
+                extension_id = ndiff['E']
+                try:
+                    patcher = self._patchers_by_ext[extension_id]
+                except KeyError:
+                    raise ValueError('unsupported extension: '
+                                     + extension_id) from None
             except KeyError:
-                type_ = ndiff['D'].__class__
+                cls = ndiff['D'].__class__
 
-            try:
-                return self._patchers[type_](self, target, ndiff)
-            except KeyError:
-                raise ValueError('unsupported patch type: '
-                                 + type_.__name__) from None
+                try:
+                    patcher = self._patchers_by_cls[cls]
+                except KeyError:
+                    raise ValueError('unsupported patch type: '
+                                     + cls.__name__) from None
+
+            return patcher(self, target, ndiff)
 
         return self.default_patcher(self, target, ndiff)
 
@@ -222,7 +230,10 @@ class Patcher(object):
             handler: Instance of handlers.TypeHandler.
 
         """
-        self._patchers[handler.handled_type] = handler.patch
+        self._patchers_by_cls[handler.handled_type] = handler.patch
+
+        if handler.extension_id is not None:
+            self._patchers_by_ext[handler.extension_id] = handler.patch
 
 
 class Iterator(object):
@@ -239,20 +250,29 @@ class Iterator(object):
 
         """
         self.sort_keys = sort_keys
-        self._iterators = {}
+
+        self._iters_by_cls = {}
+        self._iters_by_ext = {}
 
         for handler in TYPE_HANDLERS if handlers is None else handlers:
             self.set_handler(handler)
 
     def _get_iterator(self, ndiff):
         """Return apropriate iterator for passed nested diff."""
-        if 'E' in ndiff:
-            return self.default_iterator(self, ndiff)
-
         try:
-            return self._iterators[ndiff['D'].__class__](self, ndiff)
+            extension_id = ndiff['E']
+            try:
+                iterator = self._iters_by_ext[extension_id]
+            except KeyError:
+                raise ValueError('unsupported extension: '
+                                 + extension_id) from None
         except KeyError:
-            return self.default_iterator(self, ndiff)
+            try:
+                iterator = self._iters_by_cls[ndiff['D'].__class__]
+            except KeyError:
+                iterator = self.default_iterator
+
+        return iterator(self, ndiff)
 
     def iterate(self, ndiff):
         """Iterate over nested diff.
@@ -287,7 +307,10 @@ class Iterator(object):
             handler: Instance of handlers.TypeHandler.
 
         """
-        self._iterators[handler.handled_type] = handler.iterate_diff
+        self._iters_by_cls[handler.handled_type] = handler.iterate_diff
+
+        if handler.extension_id is not None:
+            self._iters_by_ext[handler.extension_id] = handler.iterate_diff
 
 
 def diff(a, b, text_diff_ctx=-1, **kwargs):
