@@ -136,35 +136,9 @@ class TextFormatter(AbstractFormatter):
         super().__init__(*args, **kwargs)
         self.type_hints = type_hints
 
-    def generate_comment(self, diff, depth=0):
-        """Generate diff comment."""
-        try:
-            comment = diff['C']
-            tag = 'C'
-        except KeyError:
-            if not self.type_hints:
-                return
-
-            try:
-                extension_id = diff['E']
-            except KeyError:
-                return
-
-            try:
-                cls = self._type_by_ext[extension_id]
-            except KeyError:
-                raise ValueError('unsupported extension: '
-                                 + extension_id) from None
-            tag = 'E'
-            comment = cls.__name__
-
-        yield from self.generate_string(comment, tag, depth)
-
     def generate_diff(self, diff, depth=0, header='', footer=''):
         """Generate formatted diff."""
         yield header
-
-        yield from self.generate_comment(diff, depth=depth)
 
         try:
             extension_id = diff['E']
@@ -174,10 +148,20 @@ class TextFormatter(AbstractFormatter):
                 raise ValueError('unsupported extension: '
                                  + extension_id) from None
         except KeyError:
+            extension_id = None
             try:
                 generator = self._gens_by_cls[diff['D'].__class__]
             except KeyError:
                 generator = self.default_generator
+
+        try:
+            comment = diff['C']
+        except KeyError:
+            if extension_id is not None and self.type_hints:
+                yield from self.generate_string(
+                    self._type_by_ext[extension_id].__name__, 'E', depth)
+        else:
+            yield from self.generate_string(comment, 'C', depth)
 
         yield from generator(self, diff, depth)
 
