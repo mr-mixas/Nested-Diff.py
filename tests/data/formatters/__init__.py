@@ -1,4 +1,5 @@
 """Python specific tests."""
+
 from tests.data import specific, standard
 
 
@@ -82,6 +83,9 @@ def get_tests():
             'b': 1,
             'diff': {'N': 1, 'O': 0},
             'format_func_opts': {'depth': 3},
+        },
+        'unsupported_extension': {
+            'diff': {'D': None, 'E': 'garbage'},
         },
     })
 

@@ -19,6 +19,13 @@ def test_abstract_loader_decode():
         cli.Loader().decode('data')
 
 
+def test_dump_wrapping(stringio):
+    app = cli.App(args=[])
+    app.dump(stringio, 'data', 'json', header='header', footer='footer')
+
+    assert stringio.getvalue() == 'header"data"footer'
+
+
 def test_dumper_dump_default_with_tty(stringio_tty):
     dumper = Dumper()
     dumper.dump(stringio_tty, 'text')

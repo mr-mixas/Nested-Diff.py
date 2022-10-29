@@ -419,6 +419,9 @@ RESULTS = {
     'undef_vs_undef': {
         'result': '<div class="dif-body"><div>  <span class="dif-vU">None</span></div></div>',
     },
+    'unsupported_extension': {
+        'raises': ValueError,
+    },
     'wrapping_text': {
         'result': 'Header\n<div class="dif-body"><div>- <span class="dif-vO">0</span></div><div>+ <span class="dif-vN">1</span></div></div>Footer\n',
     },

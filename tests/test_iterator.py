@@ -1,3 +1,5 @@
+import pytest
+
 from nested_diff import Iterator, diff
 
 
@@ -133,3 +135,8 @@ def test_unknown_containers():
     got = list(Iterator().iterate(d))
 
     assert got == expected
+
+
+def test_unsupported_extension():
+    with pytest.raises(ValueError, match='unsupported extension: _ext_id_'):
+        list(Iterator().iterate({'D': None, 'E': '_ext_id_'}))

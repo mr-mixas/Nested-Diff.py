@@ -64,6 +64,11 @@ def test_type_mismatch():
         patch({}, {'D': [{'A': 1}]})
 
 
+def test_unsupported_extension():
+    with pytest.raises(ValueError, match='unsupported extension: _ext_id_'):
+        patch(None, {'D': None, 'E': '_ext_id_'})
+
+
 def test_unsupported_patch_type():
     with pytest.raises(ValueError, match='unsupported patch type: module'):
         patch(None, {'D': pytest})  # module

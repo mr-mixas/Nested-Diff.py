@@ -25,3 +25,33 @@ def test_diff_handlers():
     got = differ.diff(a, b)
 
     assert got == expected
+
+
+def test_scalar_handler_diff_equal():
+    a = 0
+    b = 0
+
+    expected = (True, {'U': 0})
+    got = handlers.ScalarHandler().diff(Differ(), a, b)
+
+    assert got == expected
+
+
+def test_text_handler_diff_equal_noU():  # noqa N802
+    a = '1\n2'
+    b = '1\n2'
+
+    expected = (True, {})
+    got = handlers.TextHandler().diff(Differ(U=False), a, b)
+
+    assert got == expected
+
+
+def test_type_handler_diff_equal():
+    a = 0
+    b = 0
+
+    expected = (True, {'U': 0})
+    got = handlers.TypeHandler().diff(Differ(), a, b)
+
+    assert got == expected
