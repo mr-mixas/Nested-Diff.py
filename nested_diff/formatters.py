@@ -47,6 +47,9 @@ class AbstractFormatter():
         self.line_separator = line_separator
         self.sort_keys = sort_keys
 
+        self.diff_prefix = ''
+        self.diff_suffix = ''
+
         self.key_line_prefix = {
             'A': '+ ',
             'D': '  ',
@@ -97,9 +100,9 @@ class AbstractFormatter():
         for handler in handlers:
             self.set_handler(handler)
 
-    def format(self, diff, **kwargs):  # noqa A003
-        """Return formatted diff."""
-        return ''.join(self.generate_diff(diff, **kwargs))
+    def format(self, diff, header='', footer='', **kwargs):  # noqa A003
+        """Return formatted diff as string."""
+        return ''.join((header, *self.generate_diff(diff, **kwargs), footer))
 
     def set_handler(self, handler):
         """Set handler.
@@ -136,9 +139,9 @@ class TextFormatter(AbstractFormatter):
         super().__init__(*args, **kwargs)
         self.type_hints = type_hints
 
-    def generate_diff(self, diff, depth=0, header='', footer=''):
+    def generate_diff(self, diff, depth=0):
         """Generate formatted diff."""
-        yield header
+        yield self.diff_prefix
 
         try:
             extension_id = diff['E']
@@ -165,7 +168,7 @@ class TextFormatter(AbstractFormatter):
 
         yield from generator(self, diff, depth)
 
-        yield footer
+        yield self.diff_suffix
 
     def generate_key(self, key, tag, diff_type, depth):
         """Generate key line."""
@@ -232,52 +235,85 @@ class HtmlFormatter(TextFormatter):
         """
         super().__init__(*args, line_separator=line_separator, **kwargs)
 
-        self.line_separator = '</div>' + self.line_separator
+        self.diff_prefix = '<ul class="nDvD">'
+        self.diff_suffix = '</ul>'
+
+        self.line_separator = '</li>' + self.line_separator
 
         for key, val in self.key_line_prefix.items():
-            self.key_line_prefix[key] = '<div>' + val
+            self.key_line_prefix[key] = '<li>' + val
         for key, val in self.val_line_prefix.items():
-            self.val_line_prefix[key] = '<div>' + val
+            self.val_line_prefix[key] = '<li>' + val
 
         for key in self.key_line_prefix:
-            self.key_prefix[key] = '<span class="dif-k' + key + '">'
-            self.key_suffix[key] = '</span>'
+            self.key_prefix[key] = '<div class="nDk' + key + '">'
+            self.key_suffix[key] = '</div>'
 
         for key, val in self.val_prefix.items():
-            self.val_prefix[key] = ('<span class="dif-v' + key + '">' +
+            self.val_prefix[key] = ('<div class="nDv' + key + '">' +
                                     escape_html(val))
         for key, val in self.val_suffix.items():
-            self.val_suffix[key] = escape_html(val) + '</span>'
+            self.val_suffix[key] = escape_html(val) + '</div>'
 
     @staticmethod
     def get_css():
         """Return CSS for generated HTML page."""
-        return (
-            '.dif-body {font-family: monospace; white-space: pre}'
-            ' .dif-kA {background-color: #cfc}'
-            ' .dif-kD {color: #000}'
-            ' .dif-kN {color: #000}'
-            ' .dif-kO {color: #000}'
-            ' .dif-kR {background-color: #fcc}'
-            ' .dif-kU {color: #777}'
-            ' .dif-vA {background-color: #dfd}'
-            ' .dif-vC {color: #00b}'
-            ' .dif-vE {color: #00b}'
-            ' .dif-vH {color: #707}'
-            ' .dif-vN {background-color: #dfd}'
-            ' .dif-vO {background-color: #fdd}'
-            ' .dif-vR {background-color: #fdd}'
-            ' .dif-vU {color: #777}'
-        )
+        return """
+.nDkA {background-color: #cfc; display: inline}
+.nDkD, .nDkN, .nDkO {color: #000; display: inline}
+.nDkR {background-color: #fcc; display: inline}
+.nDkU, .nDvU {color: #777; display: inline}
+.nDvA, .nDvN {background-color: #dfd; display: inline}
+.nDvC, .nDvE {color: #00b; display: inline}
+.nDvD {font-family: monospace; white-space: pre; padding: 0;
+margin: 0; list-style: none}
+.nDvH {color: #707; display: inline}
+.nDvO, .nDvR {background-color: #fdd; display: inline}
+[class^="nDk"] {cursor: pointer}
+""".replace(' ', '').replace('\n', '')
 
-    def format(self, diff, header='', footer='', **kwargs):  # noqa A003
-        """Return completely formatted diff as string."""
-        return ''.join(self.generate_diff(
-            diff,
-            header=header+'<div class="dif-body">',
-            footer='</div>'+footer,
-            **kwargs,
-        ))
+    def get_script(self):
+        """Return script for generated HTML page."""
+        script = """
+document.querySelector('.nDvD').addEventListener('click', event => {
+    tgt = event.target;
+
+    if (tgt.className === '') {  // line div, no CSS class
+        if (!tgt.firstElementChild.className.startsWith('nDk')) {
+            return  // only key lines are togglers
+        }
+    } else if (tgt.className.startsWith('nDk')) {
+        tgt = tgt.parentElement  // switch to line div
+    } else {
+        return  // only key lines are togglers
+    }
+
+    dif = tgt.nextSibling;  // diff is below the key line (nDvD div)
+
+    if (dif.style.display === 'none') {
+        dif.style.display = 'block';
+        tgt.innerHTML = tgt.innerHTML.replace(/^./, dif.__nDstash);
+        tgt.style.fontWeight = 'normal'
+    } else {
+        dif.style.display = 'none';
+        dif.__nDstash = tgt.innerHTML.substring(1, 2);
+        tgt.innerHTML = tgt.innerHTML.replace(/^./, '*');
+        tgt.style.fontWeight = 'bold'
+    }
+})
+"""
+        lines = []
+        for line in script.split('\n'):
+            try:
+                comment_starts = line.index('//')
+            except ValueError:
+                pass
+            else:
+                line = line[:comment_starts]
+
+            lines.append(line.strip())
+
+        return ''.join(lines)
 
     def format_key(self, key):
         """Return key/index representation."""

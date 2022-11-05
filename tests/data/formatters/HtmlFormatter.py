@@ -3,427 +3,427 @@ import sys
 
 RESULTS = {
     '0_vs_0': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">0</div></li></ul>',
     },
     '0_vs_0_noU': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     '0_vs_1': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">0</span></div><div>+ <span class="dif-vN">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">1</div></li></ul>',
     },
     '0_vs_empty_string': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">0</span></div><div>+ <span class="dif-vN">&#x27;&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">&#x27;&#x27;</div></li></ul>',
     },
     '0_vs_undef': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">0</span></div><div>+ <span class="dif-vN">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">None</div></li></ul>',
     },
     '1.0_vs_1.0_as_string': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">1</span></div><div>+ <span class="dif-vN">&#x27;1.0&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">1</div></li><li>+ <div class="nDvN">&#x27;1.0&#x27;</div></li></ul>',
     },
     '1_vs_-1': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">1</span></div><div>+ <span class="dif-vN">-1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">1</div></li><li>+ <div class="nDvN">-1</div></li></ul>',
     },
     '1_vs_1.0': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">1</div></li></ul>',
     },
     '1_vs_1_as_string': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">1</span></div><div>+ <span class="dif-vN">&#x27;1&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">1</div></li><li>+ <div class="nDvN">&#x27;1&#x27;</div></li></ul>',
     },
     'a_vs_a': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">&#x27;a&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">&#x27;a&#x27;</div></li></ul>',
     },
     'a_vs_b': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;a&#x27;</span></div><div>+ <span class="dif-vN">&#x27;b&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;a&#x27;</div></li><li>+ <div class="nDvN">&#x27;b&#x27;</div></li></ul>',
     },
     'brackets': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;(&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;)&#x27;</span></div><div>+   <span class="dif-vN">&#x27;(&#x27;</span></div><div>  <span class="dif-kO">{&#x27;&lt;&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;&gt;&#x27;</span></div><div>+   <span class="dif-vN">&#x27;&lt;&#x27;</span></div><div>  <span class="dif-kO">{&#x27;[&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;]&#x27;</span></div><div>+   <span class="dif-vN">&#x27;[&#x27;</span></div><div>  <span class="dif-kO">{&#x27;{&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;}&#x27;</span></div><div>+   <span class="dif-vN">&#x27;{&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;(&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;)&#x27;</div></li><li>+   <div class="nDvN">&#x27;(&#x27;</div></li></ul><li>  <div class="nDkO">{&#x27;&lt;&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;&gt;&#x27;</div></li><li>+   <div class="nDvN">&#x27;&lt;&#x27;</div></li></ul><li>  <div class="nDkO">{&#x27;[&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;]&#x27;</div></li><li>+   <div class="nDvN">&#x27;[&#x27;</div></li></ul><li>  <div class="nDkO">{&#x27;{&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;}&#x27;</div></li><li>+   <div class="nDvN">&#x27;{&#x27;</div></li></ul></ul>',
     },
     'comment_is_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-vC"></span></div><div>- <span class="dif-vO">&#x27;old&#x27;</span></div><div>+ <span class="dif-vN">&#x27;new&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvC"></div></li><li>- <div class="nDvO">&#x27;old&#x27;</div></li><li>+ <div class="nDvN">&#x27;new&#x27;</div></li></ul>',
     },
     'comment_vs_type_hint': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,2 +1,2 @@</div></li><li>- <div class="nDvR">two</div></li><li>+ <div class="nDvA">2</div></li><li>  <div class="nDvU">lines</div></li></ul>',
     },
     'comment_with_HTML_tags': {
-        'result': '<div class="dif-body"><div># <span class="dif-vC">&lt;h1&gt;comment&lt;/h1&gt;</span></div><div>  <span class="dif-vU">&#x27;same&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvC">&lt;h1&gt;comment&lt;/h1&gt;</div></li><li>  <div class="nDvU">&#x27;same&#x27;</div></li></ul>',
     },
     'comments': {
-        'result': '<div class="dif-body"><div># <span class="dif-vC">C-D</span></div><div>  <span class="dif-kO">{&#x27;k&#x27;}</span></div><div>#   <span class="dif-vC">C-NO</span></div><div>-   <span class="dif-vO">&#x27;v&#x27;</span></div><div>+   <span class="dif-vN">&#x27;V&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvC">C-D</div></li><li>  <div class="nDkO">{&#x27;k&#x27;}</div></li><ul class="nDvD"><li>#   <div class="nDvC">C-NO</div></li><li>-   <div class="nDvO">&#x27;v&#x27;</div></li><li>+   <div class="nDvN">&#x27;V&#x27;</div></li></ul></ul>',
     },
     'deeply_nested_hash_vs_empty_hash': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</div></li></ul></ul>',
     },
     'deeply_nested_hash_vs_empty_hash_trimR': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
     },
     'deeply_nested_list_vs_empty_list': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">[[0, 1]]</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">[[0, 1]]</div></li></ul></ul>',
     },
     'deeply_nested_list_vs_empty_list_trimR': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
     },
     'deeply_nested_subhash_removed_from_hash': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">{&#x27;four&#x27;}</span></div><div>    <span class="dif-vU">4</span></div><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">4</div></li></ul><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</div></li></ul></ul>',
     },
     'deeply_nested_subhash_removed_from_hash_trimR': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">{&#x27;four&#x27;}</span></div><div>    <span class="dif-vU">4</span></div><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">4</div></li></ul><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
     },
     'deeply_nested_sublist_removed_from_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">[[0, 1]]</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">[[0, 1]]</div></li></ul></ul>',
     },
     'deeply_nested_sublist_removed_from_list_trimR': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
     },
     'empty_hash_vs_empty_hash': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">{}</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">{}</div></li></ul>',
     },
     'empty_hash_vs_empty_hash_noU': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'empty_hash_vs_empty_list': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">{}</span></div><div>+ <span class="dif-vN">[]</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">{}</div></li><li>+ <div class="nDvN">[]</div></li></ul>',
     },
     'empty_hash_vs_hash_with_one_key': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-vA">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
     },
     'empty_hash_vs_hash_with_one_key_noA': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'empty_list_vs_deeply_nested_list': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[0]</span></div><div>+   <span class="dif-vA">[[0, 1]]</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">[[0, 1]]</div></li></ul></ul>',
     },
     'empty_list_vs_empty_hash': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">[]</span></div><div>+ <span class="dif-vN">{}</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">[]</div></li><li>+ <div class="nDvN">{}</div></li></ul>',
     },
     'empty_list_vs_empty_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">[]</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">[]</div></li></ul>',
     },
     'empty_list_vs_empty_list_noU': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'empty_list_vs_list_with_one_item': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[0]</span></div><div>+   <span class="dif-vA">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul></ul>',
     },
     'empty_list_vs_list_with_one_item_noA': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'empty_string_vs_0': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;&#x27;</span></div><div>+ <span class="dif-vN">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;&#x27;</div></li><li>+ <div class="nDvN">0</div></li></ul>',
     },
     'empty_string_vs_text': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1 +1,2 @@</span></div><div>- <span class="dif-vR"></span></div><div>+ <span class="dif-vA">A</span></div><div>+ <span class="dif-vA">B</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1 +1,2 @@</div></li><li>- <div class="nDvR"></div></li><li>+ <div class="nDvA">A</div></li><li>+ <div class="nDvA">B</div></li></ul>',
     },
     'empty_string_vs_undef': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;&#x27;</span></div><div>+ <span class="dif-vN">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;&#x27;</div></li><li>+ <div class="nDvN">None</div></li></ul>',
     },
     'escaped_symbols': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;\\n&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;\\r\\n&#x27;</span></div><div>+   <span class="dif-vN">&#x27;\\n&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;\\n&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;\\r\\n&#x27;</div></li><li>+   <div class="nDvN">&#x27;\\n&#x27;</div></li></ul></ul>',
     },
     'frozenset_extended': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;frozenset&gt;</span></div><div>  <span class="dif-vU">1</span></div><div>+ <span class="dif-vA">2</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;frozenset&gt;</div></li><li>  <div class="nDvU">1</div></li><li>+ <div class="nDvA">2</div></li></ul>',
     },
     'frozensets_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;frozenset&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;frozenset&gt;</div></li><li>- <div class="nDvR">1</div></li><li>  <div class="nDvU">2</div></li><li>+ <div class="nDvA">3</div></li></ul>',
     },
     'hash_with_one_key_vs_empty_hash': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vR">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
     },
     'hash_with_one_key_vs_empty_hash_noR': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'hashes_with_different_value_onlyU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">{&#x27;one&#x27;}</span></div><div>    <span class="dif-vU">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul></ul>',
     },
     'hashes_with_one_different_value_noN': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-vO">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li></ul></ul>',
     },
     'hashes_with_one_different_value_noO': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kN">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-vN">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkN">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvN">2</div></li></ul></ul>',
     },
     'line_added_to_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1 +1,2 @@</span></div><div>  <span class="dif-vU"></span></div><div>+ <span class="dif-vA"></span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1 +1,2 @@</div></li><li>  <div class="nDvU"></div></li><li>+ <div class="nDvA"></div></li></ul>',
     },
     'list_with_one_item_vs_empty_list': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul></ul>',
     },
     'list_with_one_item_vs_empty_list_noR': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'lists_LCS_added_items': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[0]</span></div><div>+   <span class="dif-vA">0</span></div><div>+ <span class="dif-kA">[1]</span></div><div>+   <span class="dif-vA">1</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div><div>  <span class="dif-kU">[3]</span></div><div>    <span class="dif-vU">3</span></div><div>+ <span class="dif-kA">[4]</span></div><div>+   <span class="dif-vA">4</span></div><div>  <span class="dif-kU">[5]</span></div><div>    <span class="dif-vU">5</span></div><div>+ <span class="dif-kA">[6]</span></div><div>+   <span class="dif-vA">6</span></div><div>+ <span class="dif-kA">[7]</span></div><div>+   <span class="dif-vA">7</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul><li>  <div class="nDkU">[3]</div></li><ul class="nDvD"><li>    <div class="nDvU">3</div></li></ul><li>+ <div class="nDkA">[4]</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>  <div class="nDkU">[5]</div></li><ul class="nDvD"><li>    <div class="nDvU">5</div></li></ul><li>+ <div class="nDkA">[6]</div></li><ul class="nDvD"><li>+   <div class="nDvA">6</div></li></ul><li>+ <div class="nDkA">[7]</div></li><ul class="nDvD"><li>+   <div class="nDvA">7</div></li></ul></ul>',
     },
     'lists_LCS_added_items_noU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[0]</span></div><div>+   <span class="dif-vA">0</span></div><div>+ <span class="dif-kA">[1]</span></div><div>+   <span class="dif-vA">1</span></div><div>+ <span class="dif-kA">[2]</span></div><div>+   <span class="dif-vA">4</span></div><div>+ <span class="dif-kA">[3]</span></div><div>+   <span class="dif-vA">6</span></div><div>+ <span class="dif-kA">[4]</span></div><div>+   <span class="dif-vA">7</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul><li>+ <div class="nDkA">[2]</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">6</div></li></ul><li>+ <div class="nDkA">[4]</div></li><ul class="nDvD"><li>+   <div class="nDvA">7</div></li></ul></ul>',
     },
     'lists_LCS_changed_items': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">1</span></div><div>  <span class="dif-kO">[2]</span></div><div>-   <span class="dif-vO">2</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kO">[3]</span></div><div>-   <span class="dif-vO">3</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kU">[4]</span></div><div>    <span class="dif-vU">4</span></div><div>  <span class="dif-kO">[5]</span></div><div>-   <span class="dif-vO">5</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kU">[6]</span></div><div>    <span class="dif-vU">6</span></div><div>  <span class="dif-kU">[7]</span></div><div>    <span class="dif-vU">7</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>  <div class="nDkO">[2]</div></li><ul class="nDvD"><li>-   <div class="nDvO">2</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">3</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[4]</div></li><ul class="nDvD"><li>    <div class="nDvU">4</div></li></ul><li>  <div class="nDkO">[5]</div></li><ul class="nDvD"><li>-   <div class="nDvO">5</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[6]</div></li><ul class="nDvD"><li>    <div class="nDvU">6</div></li></ul><li>  <div class="nDkU">[7]</div></li><ul class="nDvD"><li>    <div class="nDvU">7</div></li></ul></ul>',
     },
     'lists_LCS_changed_items_noOU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kN">[2]</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kN">[3]</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kN">[5]</span></div><div>+   <span class="dif-vN">9</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkN">[2]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkN">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkN">[5]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul></ul>',
     },
     'lists_LCS_changed_items_noU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">[2]</span></div><div>-   <span class="dif-vO">2</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kO">[3]</span></div><div>-   <span class="dif-vO">3</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kO">[5]</span></div><div>-   <span class="dif-vO">5</span></div><div>+   <span class="dif-vN">9</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">[2]</div></li><ul class="nDvD"><li>-   <div class="nDvO">2</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">3</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkO">[5]</div></li><ul class="nDvD"><li>-   <div class="nDvO">5</div></li><li>+   <div class="nDvN">9</div></li></ul></ul>',
     },
     'lists_LCS_complex': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">&#x27;a&#x27;</span></div><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">&#x27;b&#x27;</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">&#x27;c&#x27;</span></div><div>+ <span class="dif-kA">[3]</span></div><div>+   <span class="dif-vA">&#x27;d&#x27;</span></div><div>  <span class="dif-kU">[4]</span></div><div>    <span class="dif-vU">&#x27;e&#x27;</span></div><div>  <span class="dif-kO">[5]</span></div><div>-   <span class="dif-vO">&#x27;h&#x27;</span></div><div>+   <span class="dif-vN">&#x27;f&#x27;</span></div><div>  <span class="dif-kU">[6]</span></div><div>    <span class="dif-vU">&#x27;j&#x27;</span></div><div>+ <span class="dif-kA">[7]</span></div><div>+   <span class="dif-vA">&#x27;k&#x27;</span></div><div>  <span class="dif-kU">[8]</span></div><div>    <span class="dif-vU">&#x27;l&#x27;</span></div><div>  <span class="dif-kU">[9]</span></div><div>    <span class="dif-vU">&#x27;m&#x27;</span></div><div>  <span class="dif-kO">[10]</span></div><div>-   <span class="dif-vO">&#x27;n&#x27;</span></div><div>+   <span class="dif-vN">&#x27;r&#x27;</span></div><div>  <span class="dif-kO">[11]</span></div><div>-   <span class="dif-vO">&#x27;p&#x27;</span></div><div>+   <span class="dif-vN">&#x27;s&#x27;</span></div><div>+ <span class="dif-kA">[12]</span></div><div>+   <span class="dif-vA">&#x27;t&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">&#x27;a&#x27;</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;b&#x27;</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;c&#x27;</div></li></ul><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;d&#x27;</div></li></ul><li>  <div class="nDkU">[4]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;e&#x27;</div></li></ul><li>  <div class="nDkO">[5]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>  <div class="nDkU">[6]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;j&#x27;</div></li></ul><li>+ <div class="nDkA">[7]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;k&#x27;</div></li></ul><li>  <div class="nDkU">[8]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;l&#x27;</div></li></ul><li>  <div class="nDkU">[9]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;m&#x27;</div></li></ul><li>  <div class="nDkO">[10]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[11]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul><li>+ <div class="nDkA">[12]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;t&#x27;</div></li></ul></ul>',
     },
     'lists_LCS_complex_noAU': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">&#x27;a&#x27;</span></div><div>  <span class="dif-kO">[4]</span></div><div>-   <span class="dif-vO">&#x27;h&#x27;</span></div><div>+   <span class="dif-vN">&#x27;f&#x27;</span></div><div>  <span class="dif-kO">[8]</span></div><div>-   <span class="dif-vO">&#x27;n&#x27;</span></div><div>+   <span class="dif-vN">&#x27;r&#x27;</span></div><div>  <span class="dif-kO">[9]</span></div><div>-   <span class="dif-vO">&#x27;p&#x27;</span></div><div>+   <span class="dif-vN">&#x27;s&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">&#x27;a&#x27;</div></li></ul><li>  <div class="nDkO">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>  <div class="nDkO">[8]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[9]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul></ul>',
     },
     'lists_LCS_complex_noRU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[3]</span></div><div>+   <span class="dif-vA">&#x27;d&#x27;</span></div><div>  <span class="dif-kO">[4]</span></div><div>-   <span class="dif-vO">&#x27;h&#x27;</span></div><div>+   <span class="dif-vN">&#x27;f&#x27;</span></div><div>+ <span class="dif-kA">[6]</span></div><div>+   <span class="dif-vA">&#x27;k&#x27;</span></div><div>  <span class="dif-kO">[8]</span></div><div>-   <span class="dif-vO">&#x27;n&#x27;</span></div><div>+   <span class="dif-vN">&#x27;r&#x27;</span></div><div>  <span class="dif-kO">[9]</span></div><div>-   <span class="dif-vO">&#x27;p&#x27;</span></div><div>+   <span class="dif-vN">&#x27;s&#x27;</span></div><div>+ <span class="dif-kA">[10]</span></div><div>+   <span class="dif-vA">&#x27;t&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;d&#x27;</div></li></ul><li>  <div class="nDkO">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>+ <div class="nDkA">[6]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;k&#x27;</div></li></ul><li>  <div class="nDkO">[8]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[9]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul><li>+ <div class="nDkA">[10]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;t&#x27;</div></li></ul></ul>',
     },
     'lists_LCS_complex_noU': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">&#x27;a&#x27;</span></div><div>+ <span class="dif-kA">[3]</span></div><div>+   <span class="dif-vA">&#x27;d&#x27;</span></div><div>  <span class="dif-kO">[4]</span></div><div>-   <span class="dif-vO">&#x27;h&#x27;</span></div><div>+   <span class="dif-vN">&#x27;f&#x27;</span></div><div>+ <span class="dif-kA">[6]</span></div><div>+   <span class="dif-vA">&#x27;k&#x27;</span></div><div>  <span class="dif-kO">[8]</span></div><div>-   <span class="dif-vO">&#x27;n&#x27;</span></div><div>+   <span class="dif-vN">&#x27;r&#x27;</span></div><div>  <span class="dif-kO">[9]</span></div><div>-   <span class="dif-vO">&#x27;p&#x27;</span></div><div>+   <span class="dif-vN">&#x27;s&#x27;</span></div><div>+ <span class="dif-kA">[10]</span></div><div>+   <span class="dif-vA">&#x27;t&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">&#x27;a&#x27;</div></li></ul><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;d&#x27;</div></li></ul><li>  <div class="nDkO">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>+ <div class="nDkA">[6]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;k&#x27;</div></li></ul><li>  <div class="nDkO">[8]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[9]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul><li>+ <div class="nDkA">[10]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;t&#x27;</div></li></ul></ul>',
     },
     'lists_LCS_complex_onlyU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">&#x27;b&#x27;</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">&#x27;c&#x27;</span></div><div>  <span class="dif-kU">[3]</span></div><div>    <span class="dif-vU">&#x27;e&#x27;</span></div><div>  <span class="dif-kU">[5]</span></div><div>    <span class="dif-vU">&#x27;j&#x27;</span></div><div>  <span class="dif-kU">[6]</span></div><div>    <span class="dif-vU">&#x27;l&#x27;</span></div><div>  <span class="dif-kU">[7]</span></div><div>    <span class="dif-vU">&#x27;m&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;b&#x27;</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;c&#x27;</div></li></ul><li>  <div class="nDkU">[3]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;e&#x27;</div></li></ul><li>  <div class="nDkU">[5]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;j&#x27;</div></li></ul><li>  <div class="nDkU">[6]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;l&#x27;</div></li></ul><li>  <div class="nDkU">[7]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;m&#x27;</div></li></ul></ul>',
     },
     'lists_LCS_removed_items': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">1</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div><div>  <span class="dif-kU">[3]</span></div><div>    <span class="dif-vU">3</span></div><div>- <span class="dif-kR">[4]</span></div><div>-   <span class="dif-vR">4</span></div><div>  <span class="dif-kU">[5]</span></div><div>    <span class="dif-vU">5</span></div><div>- <span class="dif-kR">[6]</span></div><div>-   <span class="dif-vR">6</span></div><div>- <span class="dif-kR">[7]</span></div><div>-   <span class="dif-vR">7</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul><li>  <div class="nDkU">[3]</div></li><ul class="nDvD"><li>    <div class="nDvU">3</div></li></ul><li>- <div class="nDkR">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvR">4</div></li></ul><li>  <div class="nDkU">[5]</div></li><ul class="nDvD"><li>    <div class="nDvU">5</div></li></ul><li>- <div class="nDkR">[6]</div></li><ul class="nDvD"><li>-   <div class="nDvR">6</div></li></ul><li>- <div class="nDkR">[7]</div></li><ul class="nDvD"><li>-   <div class="nDvR">7</div></li></ul></ul>',
     },
     'lists_LCS_removed_items_noU': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">1</span></div><div>- <span class="dif-kR">[4]</span></div><div>-   <span class="dif-vR">4</span></div><div>- <span class="dif-kR">[6]</span></div><div>-   <span class="dif-vR">6</span></div><div>- <span class="dif-kR">[7]</span></div><div>-   <span class="dif-vR">7</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul><li>- <div class="nDkR">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvR">4</div></li></ul><li>- <div class="nDkR">[6]</div></li><ul class="nDvD"><li>-   <div class="nDvR">6</div></li></ul><li>- <div class="nDkR">[7]</div></li><ul class="nDvD"><li>-   <div class="nDvR">7</div></li></ul></ul>',
     },
     'lists_with_one_different_item': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">[0]</span></div><div>-   <span class="dif-vO">0</span></div><div>+   <span class="dif-vN">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvO">0</div></li><li>+   <div class="nDvN">1</div></li></ul></ul>',
     },
     'lists_with_one_different_item_noN': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">[0]</span></div><div>-   <span class="dif-vO">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvO">0</div></li></ul></ul>',
     },
     'lists_with_one_different_item_noO': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kN">[0]</span></div><div>+   <span class="dif-vN">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkN">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvN">1</div></li></ul></ul>',
     },
     'mixed_specific_structures': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">(0)</span></div><div>-   <span class="dif-vO">()</span></div><div>+   <span class="dif-vN">frozenset()</span></div><div>  <span class="dif-kD">(1)</span></div><div>#   <span class="dif-vE">&lt;set&gt;</span></div><div>+   <span class="dif-vA">True</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">(0)</div></li><ul class="nDvD"><li>-   <div class="nDvO">()</div></li><li>+   <div class="nDvN">frozenset()</div></li></ul><li>  <div class="nDkD">(1)</div></li><ul class="nDvD"><li>#   <div class="nDvE">&lt;set&gt;</div></li><li>+   <div class="nDvA">True</div></li></ul></ul>',
     },
     'nested_hashes': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">{&#x27;four&#x27;}</span></div><div>+   <span class="dif-vA">4</span></div><div>  <span class="dif-kU">{&#x27;one&#x27;}</span></div><div>    <span class="dif-vU">1</span></div><div>- <span class="dif-kR">{&#x27;three&#x27;}</span></div><div>-   <span class="dif-vR">3</span></div><div>  <span class="dif-kD">{&#x27;two&#x27;}</span></div><div>    <span class="dif-kO">{&#x27;nine&#x27;}</span></div><div>-     <span class="dif-vO">9</span></div><div>+     <span class="dif-vN">8</span></div><div>    <span class="dif-kU">{&#x27;ten&#x27;}</span></div><div>      <span class="dif-vU">10</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>  <div class="nDkU">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>- <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">3</div></li></ul><li>  <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkO">{&#x27;nine&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvO">9</div></li><li>+     <div class="nDvN">8</div></li></ul><li>    <div class="nDkU">{&#x27;ten&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDvU">10</div></li></ul></ul></ul>',
     },
     'nested_hashes_noU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">{&#x27;four&#x27;}</span></div><div>+   <span class="dif-vA">4</span></div><div>- <span class="dif-kR">{&#x27;three&#x27;}</span></div><div>-   <span class="dif-vR">3</span></div><div>  <span class="dif-kD">{&#x27;two&#x27;}</span></div><div>    <span class="dif-kO">{&#x27;nine&#x27;}</span></div><div>-     <span class="dif-vO">9</span></div><div>+     <span class="dif-vN">8</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>- <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">3</div></li></ul><li>  <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkO">{&#x27;nine&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvO">9</div></li><li>+     <div class="nDvN">8</div></li></ul></ul></ul>',
     },
     'nested_hashes_with_one_different_value': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>    <span class="dif-kD">{&#x27;two&#x27;}</span></div><div>      <span class="dif-kO">{&#x27;three&#x27;}</span></div><div>-       <span class="dif-vO">3</span></div><div>+       <span class="dif-vN">4</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDkO">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-       <div class="nDvO">3</div></li><li>+       <div class="nDvN">4</div></li></ul></ul></ul></ul>',
     },
     'nested_hashes_with_one_equal_value': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">{&#x27;one&#x27;: {&#x27;two&#x27;: {&#x27;three&#x27;: 3}}}</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">{&#x27;one&#x27;: {&#x27;two&#x27;: {&#x27;three&#x27;: 3}}}</div></li></ul>',
     },
     'nested_hashes_with_one_equal_value_noU': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'nested_lists': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">[[100]]</span></div><div>  <span class="dif-kD">[2]</span></div><div>    <span class="dif-kU">[0]</span></div><div>      <span class="dif-vU">20</span></div><div>    <span class="dif-kO">[1]</span></div><div>-     <span class="dif-vO">&#x27;30&#x27;</span></div><div>+     <span class="dif-vN">&#x27;31&#x27;</span></div><div>  <span class="dif-kO">[3]</span></div><div>-   <span class="dif-vO">4</span></div><div>+   <span class="dif-vN">5</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">[[100]]</div></li></ul><li>  <div class="nDkD">[2]</div></li><ul class="nDvD"><li>    <div class="nDkU">[0]</div></li><ul class="nDvD"><li>      <div class="nDvU">20</div></li></ul><li>    <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-     <div class="nDvO">&#x27;30&#x27;</div></li><li>+     <div class="nDvN">&#x27;31&#x27;</div></li></ul></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">4</div></li><li>+   <div class="nDvN">5</div></li></ul></ul>',
     },
     'nested_lists_noU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">[2]</span></div><div>    <span class="dif-kO">[1]</span></div><div>-     <span class="dif-vO">&#x27;30&#x27;</span></div><div>+     <span class="dif-vN">&#x27;31&#x27;</span></div><div>  <span class="dif-kO">[3]</span></div><div>-   <span class="dif-vO">4</span></div><div>+   <span class="dif-vN">5</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">[2]</div></li><ul class="nDvD"><li>    <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-     <div class="nDvO">&#x27;30&#x27;</div></li><li>+     <div class="nDvN">&#x27;31&#x27;</div></li></ul></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">4</div></li><li>+   <div class="nDvN">5</div></li></ul></ul>',
     },
     'nested_lists_with_one_different_item': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">[0]</span></div><div>    <span class="dif-kO">[0]</span></div><div>-     <span class="dif-vO">0</span></div><div>+     <span class="dif-vN">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">[0]</div></li><ul class="nDvD"><li>    <div class="nDkO">[0]</div></li><ul class="nDvD"><li>-     <div class="nDvO">0</div></li><li>+     <div class="nDvN">1</div></li></ul></ul></ul>',
     },
     'nested_lists_with_one_equal_item': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">[[0]]</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">[[0]]</div></li></ul>',
     },
     'nested_lists_with_one_equal_item_noU': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'nested_mixed_structures': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>    <span class="dif-kD">[0]</span></div><div>      <span class="dif-kD">{&#x27;two&#x27;}</span></div><div>        <span class="dif-kD">{&#x27;three&#x27;}</span></div><div>          <span class="dif-kU">[0]</span></div><div>            <span class="dif-vU">7</span></div><div>          <span class="dif-kO">[1]</span></div><div>-           <span class="dif-vO">4</span></div><div>+           <span class="dif-vN">3</span></div><div>    <span class="dif-kU">[1]</span></div><div>      <span class="dif-vU">8</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkD">[0]</div></li><ul class="nDvD"><li>      <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>        <div class="nDkD">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>          <div class="nDkU">[0]</div></li><ul class="nDvD"><li>            <div class="nDvU">7</div></li></ul><li>          <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-           <div class="nDvO">4</div></li><li>+           <div class="nDvN">3</div></li></ul></ul></ul></ul><li>    <div class="nDkU">[1]</div></li><ul class="nDvD"><li>      <div class="nDvU">8</div></li></ul></ul></ul>',
     },
     'nested_mixed_structures_noOU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>    <span class="dif-kD">[0]</span></div><div>      <span class="dif-kD">{&#x27;two&#x27;}</span></div><div>        <span class="dif-kD">{&#x27;three&#x27;}</span></div><div>          <span class="dif-kN">[1]</span></div><div>+           <span class="dif-vN">3</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkD">[0]</div></li><ul class="nDvD"><li>      <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>        <div class="nDkD">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>          <div class="nDkN">[1]</div></li><ul class="nDvD"><li>+           <div class="nDvN">3</div></li></ul></ul></ul></ul></ul></ul>',
     },
     'one_item_changed_in_the_middle_of_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kO">[1]</span></div><div>-   <span class="dif-vO">1</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_changed_in_the_middle_of_list_noN': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kO">[1]</span></div><div>-   <span class="dif-vO">1</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_changed_in_the_middle_of_list_noNO': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_changed_in_the_middle_of_list_noO': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kN">[1]</span></div><div>+   <span class="dif-vN">9</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkN">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_changed_in_the_middle_of_list_noU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">[1]</span></div><div>-   <span class="dif-vO">1</span></div><div>+   <span class="dif-vN">9</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li><li>+   <div class="nDvN">9</div></li></ul></ul>',
     },
     'one_item_inserted_in_the_middle_of_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>+ <span class="dif-kA">[1]</span></div><div>+   <span class="dif-vA">1</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_inserted_in_the_middle_of_list_noA': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_inserted_in_the_middle_of_list_noU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[1]</span></div><div>+   <span class="dif-vA">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
     },
     'one_item_popped_from_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
     },
     'one_item_popped_from_list_noU': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
     },
     'one_item_pushed_to_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>+ <span class="dif-kA">[1]</span></div><div>+   <span class="dif-vA">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
     },
     'one_item_pushed_to_list_noU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[1]</span></div><div>+   <span class="dif-vA">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
     },
     'one_item_removed_from_the_middle_of_list': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">1</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_removed_from_the_middle_of_list_noR': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">[0]</span></div><div>    <span class="dif-vU">0</span></div><div>  <span class="dif-kU">[2]</span></div><div>    <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
     },
     'one_item_removed_from_the_middle_of_list_noU': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[1]</span></div><div>-   <span class="dif-vR">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
     },
     'one_item_shifted_from_list': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul></ul>',
     },
     'one_item_shifted_from_list_noU': {
-        'result': '<div class="dif-body"><div>- <span class="dif-kR">[0]</span></div><div>-   <span class="dif-vR">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul></ul>',
     },
     'one_item_unshifted_to_list': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[0]</span></div><div>+   <span class="dif-vA">0</span></div><div>  <span class="dif-kU">[1]</span></div><div>    <span class="dif-vU">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul></ul>',
     },
     'one_item_unshifted_to_list_noU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">[0]</span></div><div>+   <span class="dif-vA">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul></ul>',
     },
     'one_key_added_to_subhash': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-kA">{&#x27;three&#x27;}</span></div><div>+     <span class="dif-vA">3</span></div><div>    <span class="dif-kU">{&#x27;two&#x27;}</span></div><div>      <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDkA">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>+     <div class="nDvA">3</div></li></ul><li>    <div class="nDkU">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDvU">2</div></li></ul></ul></ul>',
     },
     'one_key_added_to_subhash_noU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-kA">{&#x27;three&#x27;}</span></div><div>+     <span class="dif-vA">3</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDkA">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>+     <div class="nDvA">3</div></li></ul></ul></ul>',
     },
     'one_key_removed_from_subhash': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-kR">{&#x27;three&#x27;}</span></div><div>-     <span class="dif-vR">3</span></div><div>    <span class="dif-kU">{&#x27;two&#x27;}</span></div><div>      <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvR">3</div></li></ul><li>    <div class="nDkU">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDvU">2</div></li></ul></ul></ul>',
     },
     'one_key_removed_from_subhash_noU': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-kR">{&#x27;three&#x27;}</span></div><div>-     <span class="dif-vR">3</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvR">3</div></li></ul></ul></ul>',
     },
     'quote_symbols': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kO">{&#x27;&quot;double&quot;&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;&quot;&quot;&#x27;</span></div><div>+   <span class="dif-vN">&#x27;&quot;&#x27;</span></div><div>  <span class="dif-kO">{&quot;&#x27;single&#x27;&quot;}</span></div><div>-   <span class="dif-vO">&quot;&#x27;&#x27;&quot;</span></div><div>+   <span class="dif-vN">&quot;&#x27;&quot;</span></div><div>  <span class="dif-kO">{&#x27;`backticks`&#x27;}</span></div><div>-   <span class="dif-vO">&#x27;``&#x27;</span></div><div>+   <span class="dif-vN">&#x27;`&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;&quot;double&quot;&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;&quot;&quot;&#x27;</div></li><li>+   <div class="nDvN">&#x27;&quot;&#x27;</div></li></ul><li>  <div class="nDkO">{&quot;&#x27;single&#x27;&quot;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&quot;&#x27;&#x27;&quot;</div></li><li>+   <div class="nDvN">&quot;&#x27;&quot;</div></li></ul><li>  <div class="nDkO">{&#x27;`backticks`&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;``&#x27;</div></li><li>+   <div class="nDvN">&#x27;`&#x27;</div></li></ul></ul>',
     },
     'redefined_depth': {
-        'result': '<div class="dif-body"><div>-       <span class="dif-vO">0</span></div><div>+       <span class="dif-vN">1</span></div></div>',
+        'result': '<ul class="nDvD"><li>-       <div class="nDvO">0</div></li><li>+       <div class="nDvN">1</div></li></ul>',
     },
     'set_extended': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>  <span class="dif-vU">1</span></div><div>+ <span class="dif-vA">2</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>  <div class="nDvU">1</div></li><li>+ <div class="nDvA">2</div></li></ul>',
     },
     'sets_empty_diff': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'sets_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>- <div class="nDvR">1</div></li><li>  <div class="nDvU">2</div></li><li>+ <div class="nDvA">3</div></li></ul>',
     },
     'sets_lcs_noAR': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>  <span class="dif-vU">2</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>  <div class="nDvU">2</div></li></ul>',
     },
     'sets_lcs_noU': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>- <div class="nDvR">1</div></li><li>+ <div class="nDvA">3</div></li></ul>',
     },
     'sets_lcs_trimR': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;set&gt;</span></div><div>- <span class="dif-vR">1</span></div><div>  <span class="dif-vU">2</span></div><div>+ <span class="dif-vA">3</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>- <div class="nDvR">1</div></li><li>  <div class="nDvU">2</div></li><li>+ <div class="nDvA">3</div></li></ul>',
     },
     'simple_strings_in_text_mode': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;bar&#x27;</span></div><div>+ <span class="dif-vN">&#x27;baz&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;bar&#x27;</div></li><li>+ <div class="nDvN">&#x27;baz&#x27;</div></li></ul>',
     },
     'str_vs_bytes': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;a&#x27;</span></div><div>+ <span class="dif-vN">b&#x27;a&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;a&#x27;</div></li><li>+ <div class="nDvN">b&#x27;a&#x27;</div></li></ul>',
     },
     'subhash_emptied': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>-   <span class="dif-kR">{&#x27;two&#x27;}</span></div><div>-     <span class="dif-vR">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDkR">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvR">2</div></li></ul></ul></ul>',
     },
     'subhash_emptied_noR': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'subhash_filled': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">{&#x27;one&#x27;}</span></div><div>+   <span class="dif-kA">{&#x27;two&#x27;}</span></div><div>+     <span class="dif-vA">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDkA">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>+     <div class="nDvA">2</div></li></ul></ul></ul>',
     },
     'subhash_filled_noA': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'sublist_emptied': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">[0]</span></div><div>-   <span class="dif-kR">[0]</span></div><div>-     <span class="dif-vR">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">[0]</div></li><ul class="nDvD"><li>-   <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-     <div class="nDvR">0</div></li></ul></ul></ul>',
     },
     'sublist_emptied_noR': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'sublist_filled': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kD">[0]</span></div><div>+   <span class="dif-kA">[0]</span></div><div>+     <span class="dif-vA">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkD">[0]</div></li><ul class="nDvD"><li>+   <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+     <div class="nDvA">0</div></li></ul></ul></ul>',
     },
     'sublist_filled_noA': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'text_diff_disabled': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">&#x27;A\\nB&#x27;</span></div><div>+ <span class="dif-vN">&#x27;B\\nC&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;A\\nB&#x27;</div></li><li>+ <div class="nDvN">&#x27;B\\nC&#x27;</div></li></ul>',
     },
     'text_equal': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'text_lcs': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,2 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>  <div class="nDvU">C</div></li></ul>',
     },
     'text_line_added': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,2 +1,3 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vU">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,2 +1,3 @@</div></li><li>+ <div class="nDvA">A</div></li><li>  <div class="nDvU">B</div></li><li>  <div class="nDvU">C</div></li></ul>',
     },
     'text_line_changed': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,3 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA">b</div></li><li>  <div class="nDvU">C</div></li></ul>',
     },
     'text_line_changed_ctx_0': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -2 +2 @@</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -2 +2 @@</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA">b</div></li></ul>',
     },
     'text_line_removed': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,2 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>  <span class="dif-vU">C</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,2 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>  <div class="nDvU">C</div></li></ul>',
     },
     'text_multiple_hunks': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1 +1 @@</span></div><div>+ <span class="dif-vA">A</span></div><div>  <span class="dif-vH">@@ -3 +4 @@</span></div><div>- <span class="dif-vR">C</span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1 +1 @@</div></li><li>+ <div class="nDvA">A</div></li><li>  <div class="nDvH">@@ -3 +4 @@</div></li><li>- <div class="nDvR">C</div></li></ul>',
     },
     'text_trailing_newlines': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,3 +1,3 @@</span></div><div>  <span class="dif-vU">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA">b</span></div><div>  <span class="dif-vU"></span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,3 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA">b</div></li><li>  <div class="nDvU"></div></li></ul>',
     },
     'text_vs_empty_string': {
-        'result': '<div class="dif-body"><div># <span class="dif-vE">&lt;str&gt;</span></div><div>  <span class="dif-vH">@@ -1,2 +1 @@</span></div><div>- <span class="dif-vR">A</span></div><div>- <span class="dif-vR">B</span></div><div>+ <span class="dif-vA"></span></div></div>',
+        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,2 +1 @@</div></li><li>- <div class="nDvR">A</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA"></div></li></ul>',
     },
     'tuple_extended': {
-        'result': '<div class="dif-body"><div>  <span class="dif-kU">(0)</span></div><div>    <span class="dif-vU">1</span></div><div>+ <span class="dif-kA">(1)</span></div><div>+   <span class="dif-vA">2</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDkU">(0)</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>+ <div class="nDkA">(1)</div></li><ul class="nDvD"><li>+   <div class="nDvA">2</div></li></ul></ul>',
     },
     'tuples_lcs': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">(0)</span></div><div>+   <span class="dif-vA">0</span></div><div>  <span class="dif-kU">(1)</span></div><div>    <span class="dif-vU">1</span></div><div>  <span class="dif-kU">(2)</span></div><div>    <span class="dif-vU">2</span></div><div>  <span class="dif-kO">(3)</span></div><div>-   <span class="dif-vO">4</span></div><div>+   <span class="dif-vN">3</span></div><div>- <span class="dif-kR">(4)</span></div><div>-   <span class="dif-vR">5</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">(0)</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>  <div class="nDkU">(1)</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>  <div class="nDkU">(2)</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul><li>  <div class="nDkO">(3)</div></li><ul class="nDvD"><li>-   <div class="nDvO">4</div></li><li>+   <div class="nDvN">3</div></li></ul><li>- <div class="nDkR">(4)</div></li><ul class="nDvD"><li>-   <div class="nDvR">5</div></li></ul></ul>',
     },
     'tuples_lcs_noOU': {
-        'result': '<div class="dif-body"><div>+ <span class="dif-kA">(0)</span></div><div>+   <span class="dif-vA">0</span></div><div>  <span class="dif-kN">(2)</span></div><div>+   <span class="dif-vN">3</span></div><div>- <span class="dif-kR">(3)</span></div><div>-   <span class="dif-vR">5</span></div></div>',
+        'result': '<ul class="nDvD"><li>+ <div class="nDkA">(0)</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>  <div class="nDkN">(2)</div></li><ul class="nDvD"><li>+   <div class="nDvN">3</div></li></ul><li>- <div class="nDkR">(3)</div></li><ul class="nDvD"><li>-   <div class="nDvR">5</div></li></ul></ul>',
     },
     'type_hints_disabled': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vH">@@ -1,2 +1,2 @@</span></div><div>- <span class="dif-vR">two</span></div><div>+ <span class="dif-vA">2</span></div><div>  <span class="dif-vU">lines</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvH">@@ -1,2 +1,2 @@</div></li><li>- <div class="nDvR">two</div></li><li>+ <div class="nDvA">2</div></li><li>  <div class="nDvU">lines</div></li></ul>',
     },
     'undef_vs_0': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">0</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">0</div></li></ul>',
     },
     'undef_vs_empty_hash': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">{}</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">{}</div></li></ul>',
     },
     'undef_vs_empty_hash_noNO': {
-        'result': '<div class="dif-body"></div>',
+        'result': '<ul class="nDvD"></ul>',
     },
     'undef_vs_empty_list': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">[]</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">[]</div></li></ul>',
     },
     'undef_vs_empty_string': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">&#x27;&#x27;</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">&#x27;&#x27;</div></li></ul>',
     },
     'undef_vs_negative_number': {
-        'result': '<div class="dif-body"><div>- <span class="dif-vO">None</span></div><div>+ <span class="dif-vN">-1</span></div></div>',
+        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">-1</div></li></ul>',
     },
     'undef_vs_undef': {
-        'result': '<div class="dif-body"><div>  <span class="dif-vU">None</span></div></div>',
+        'result': '<ul class="nDvD"><li>  <div class="nDvU">None</div></li></ul>',
     },
     'unsupported_extension': {
         'raises': ValueError,
     },
     'wrapping_text': {
-        'result': 'Header\n<div class="dif-body"><div>- <span class="dif-vO">0</span></div><div>+ <span class="dif-vN">1</span></div></div>Footer\n',
+        'result': 'Header\n<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">1</div></li></ul>Footer\n',
     },
 }
 

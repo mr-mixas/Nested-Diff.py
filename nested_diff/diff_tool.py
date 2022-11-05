@@ -278,7 +278,10 @@ class HtmlDumper(AbstractFmtDumper):
                 '</style></head><body>'
             )
         if 'footer' not in self.html_opts:
-            self.html_opts['footer'] = '</body></html>'
+            self.html_opts['footer'] = (
+                '<script>' + self.formatter.get_script() +
+                '</script></body></html>'
+            )
 
     def encode(self, data):
         """Format nested diff as HTML string."""
