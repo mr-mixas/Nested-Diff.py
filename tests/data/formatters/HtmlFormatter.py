@@ -3,427 +3,427 @@ import sys
 
 RESULTS = {
     '0_vs_0': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">0</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">0</div></div></div>',
     },
     '0_vs_0_noU': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     '0_vs_1': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">1</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">0</div></div><div>+ <div class="nDvN">1</div></div></div>',
     },
     '0_vs_empty_string': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">&#x27;&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">0</div></div><div>+ <div class="nDvN">&#x27;&#x27;</div></div></div>',
     },
     '0_vs_undef': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">None</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">0</div></div><div>+ <div class="nDvN">None</div></div></div>',
     },
     '1.0_vs_1.0_as_string': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">1</div></li><li>+ <div class="nDvN">&#x27;1.0&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">1</div></div><div>+ <div class="nDvN">&#x27;1.0&#x27;</div></div></div>',
     },
     '1_vs_-1': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">1</div></li><li>+ <div class="nDvN">-1</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">1</div></div><div>+ <div class="nDvN">-1</div></div></div>',
     },
     '1_vs_1.0': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">1</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">1</div></div></div>',
     },
     '1_vs_1_as_string': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">1</div></li><li>+ <div class="nDvN">&#x27;1&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">1</div></div><div>+ <div class="nDvN">&#x27;1&#x27;</div></div></div>',
     },
     'a_vs_a': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">&#x27;a&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">&#x27;a&#x27;</div></div></div>',
     },
     'a_vs_b': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;a&#x27;</div></li><li>+ <div class="nDvN">&#x27;b&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;a&#x27;</div></div><div>+ <div class="nDvN">&#x27;b&#x27;</div></div></div>',
     },
     'brackets': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;(&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;)&#x27;</div></li><li>+   <div class="nDvN">&#x27;(&#x27;</div></li></ul><li>  <div class="nDkO">{&#x27;&lt;&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;&gt;&#x27;</div></li><li>+   <div class="nDvN">&#x27;&lt;&#x27;</div></li></ul><li>  <div class="nDkO">{&#x27;[&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;]&#x27;</div></li><li>+   <div class="nDvN">&#x27;[&#x27;</div></li></ul><li>  <div class="nDkO">{&#x27;{&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;}&#x27;</div></li><li>+   <div class="nDvN">&#x27;{&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">{&#x27;(&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;)&#x27;</div></div><div>+   <div class="nDvN">&#x27;(&#x27;</div></div></div><div>  <div class="nDkO">{&#x27;&lt;&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;&gt;&#x27;</div></div><div>+   <div class="nDvN">&#x27;&lt;&#x27;</div></div></div><div>  <div class="nDkO">{&#x27;[&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;]&#x27;</div></div><div>+   <div class="nDvN">&#x27;[&#x27;</div></div></div><div>  <div class="nDkO">{&#x27;{&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;}&#x27;</div></div><div>+   <div class="nDvN">&#x27;{&#x27;</div></div></div></div>',
     },
     'comment_is_empty_string': {
-        'result': '<ul class="nDvD"><li># <div class="nDvC"></div></li><li>- <div class="nDvO">&#x27;old&#x27;</div></li><li>+ <div class="nDvN">&#x27;new&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvC"></div></div><div>- <div class="nDvO">&#x27;old&#x27;</div></div><div>+ <div class="nDvN">&#x27;new&#x27;</div></div></div>',
     },
     'comment_vs_type_hint': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,2 +1,2 @@</div></li><li>- <div class="nDvR">two</div></li><li>+ <div class="nDvA">2</div></li><li>  <div class="nDvU">lines</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,2 +1,2 @@</div></div><div>- <div class="nDvR">two</div></div><div>+ <div class="nDvA">2</div></div><div>  <div class="nDvU">lines</div></div></div>',
     },
     'comment_with_HTML_tags': {
-        'result': '<ul class="nDvD"><li># <div class="nDvC">&lt;h1&gt;comment&lt;/h1&gt;</div></li><li>  <div class="nDvU">&#x27;same&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvC">&lt;h1&gt;comment&lt;/h1&gt;</div></div><div>  <div class="nDvU">&#x27;same&#x27;</div></div></div>',
     },
     'comments': {
-        'result': '<ul class="nDvD"><li># <div class="nDvC">C-D</div></li><li>  <div class="nDkO">{&#x27;k&#x27;}</div></li><ul class="nDvD"><li>#   <div class="nDvC">C-NO</div></li><li>-   <div class="nDvO">&#x27;v&#x27;</div></li><li>+   <div class="nDvN">&#x27;V&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvC">C-D</div></div><div>  <div class="nDkO">{&#x27;k&#x27;}</div></div><div class="nDvD"><div>#   <div class="nDvC">C-NO</div></div><div>-   <div class="nDvO">&#x27;v&#x27;</div></div><div>+   <div class="nDvN">&#x27;V&#x27;</div></div></div></div>',
     },
     'deeply_nested_hash_vs_empty_hash': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</div></div></div></div>',
     },
     'deeply_nested_hash_vs_empty_hash_trimR': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">None</div></div></div></div>',
     },
     'deeply_nested_list_vs_empty_list': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">[[0, 1]]</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">[[0, 1]]</div></div></div></div>',
     },
     'deeply_nested_list_vs_empty_list_trimR': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">None</div></div></div></div>',
     },
     'deeply_nested_subhash_removed_from_hash': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">4</div></li></ul><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">{&#x27;four&#x27;}</div></div><div class="nDvD"><div>    <div class="nDvU">4</div></div></div><div>- <div class="nDkR">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">{&#x27;two&#x27;: {&#x27;three&#x27;: 3}}</div></div></div></div>',
     },
     'deeply_nested_subhash_removed_from_hash_trimR': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">4</div></li></ul><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">{&#x27;four&#x27;}</div></div><div class="nDvD"><div>    <div class="nDvU">4</div></div></div><div>- <div class="nDkR">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">None</div></div></div></div>',
     },
     'deeply_nested_sublist_removed_from_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">[[0, 1]]</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">[[0, 1]]</div></div></div></div>',
     },
     'deeply_nested_sublist_removed_from_list_trimR': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">None</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">None</div></div></div></div>',
     },
     'empty_hash_vs_empty_hash': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">{}</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">{}</div></div></div>',
     },
     'empty_hash_vs_empty_hash_noU': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'empty_hash_vs_empty_list': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">{}</div></li><li>+ <div class="nDvN">[]</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">{}</div></div><div>+ <div class="nDvN">[]</div></div></div>',
     },
     'empty_hash_vs_hash_with_one_key': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div></div>',
     },
     'empty_hash_vs_hash_with_one_key_noA': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'empty_list_vs_deeply_nested_list': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">[[0, 1]]</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[0]</div></div><div class="nDvD"><div>+   <div class="nDvA">[[0, 1]]</div></div></div></div>',
     },
     'empty_list_vs_empty_hash': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">[]</div></li><li>+ <div class="nDvN">{}</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">[]</div></div><div>+ <div class="nDvN">{}</div></div></div>',
     },
     'empty_list_vs_empty_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">[]</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">[]</div></div></div>',
     },
     'empty_list_vs_empty_list_noU': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'empty_list_vs_list_with_one_item': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[0]</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div></div>',
     },
     'empty_list_vs_list_with_one_item_noA': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'empty_string_vs_0': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;&#x27;</div></li><li>+ <div class="nDvN">0</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;&#x27;</div></div><div>+ <div class="nDvN">0</div></div></div>',
     },
     'empty_string_vs_text': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1 +1,2 @@</div></li><li>- <div class="nDvR"></div></li><li>+ <div class="nDvA">A</div></li><li>+ <div class="nDvA">B</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1 +1,2 @@</div></div><div>- <div class="nDvR"></div></div><div>+ <div class="nDvA">A</div></div><div>+ <div class="nDvA">B</div></div></div>',
     },
     'empty_string_vs_undef': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;&#x27;</div></li><li>+ <div class="nDvN">None</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;&#x27;</div></div><div>+ <div class="nDvN">None</div></div></div>',
     },
     'escaped_symbols': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;\\n&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;\\r\\n&#x27;</div></li><li>+   <div class="nDvN">&#x27;\\n&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">{&#x27;\\n&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;\\r\\n&#x27;</div></div><div>+   <div class="nDvN">&#x27;\\n&#x27;</div></div></div></div>',
     },
     'frozenset_extended': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;frozenset&gt;</div></li><li>  <div class="nDvU">1</div></li><li>+ <div class="nDvA">2</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;frozenset&gt;</div></div><div>  <div class="nDvU">1</div></div><div>+ <div class="nDvA">2</div></div></div>',
     },
     'frozensets_lcs': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;frozenset&gt;</div></li><li>- <div class="nDvR">1</div></li><li>  <div class="nDvU">2</div></li><li>+ <div class="nDvA">3</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;frozenset&gt;</div></div><div>- <div class="nDvR">1</div></div><div>  <div class="nDvU">2</div></div><div>+ <div class="nDvA">3</div></div></div>',
     },
     'hash_with_one_key_vs_empty_hash': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div></div>',
     },
     'hash_with_one_key_vs_empty_hash_noR': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'hashes_with_different_value_onlyU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div></div>',
     },
     'hashes_with_one_different_value_noN': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">1</div></div></div></div>',
     },
     'hashes_with_one_different_value_noO': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkN">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvN">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkN">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvN">2</div></div></div></div>',
     },
     'line_added_to_empty_string': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1 +1,2 @@</div></li><li>  <div class="nDvU"></div></li><li>+ <div class="nDvA"></div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1 +1,2 @@</div></div><div>  <div class="nDvU"></div></div><div>+ <div class="nDvA"></div></div></div>',
     },
     'list_with_one_item_vs_empty_list': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">0</div></div></div></div>',
     },
     'list_with_one_item_vs_empty_list_noR': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'lists_LCS_added_items': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul><li>  <div class="nDkU">[3]</div></li><ul class="nDvD"><li>    <div class="nDvU">3</div></li></ul><li>+ <div class="nDkA">[4]</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>  <div class="nDkU">[5]</div></li><ul class="nDvD"><li>    <div class="nDvU">5</div></li></ul><li>+ <div class="nDkA">[6]</div></li><ul class="nDvD"><li>+   <div class="nDvA">6</div></li></ul><li>+ <div class="nDkA">[7]</div></li><ul class="nDvD"><li>+   <div class="nDvA">7</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[0]</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div><div>+ <div class="nDkA">[1]</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div><div>  <div class="nDkU">[3]</div></div><div class="nDvD"><div>    <div class="nDvU">3</div></div></div><div>+ <div class="nDkA">[4]</div></div><div class="nDvD"><div>+   <div class="nDvA">4</div></div></div><div>  <div class="nDkU">[5]</div></div><div class="nDvD"><div>    <div class="nDvU">5</div></div></div><div>+ <div class="nDkA">[6]</div></div><div class="nDvD"><div>+   <div class="nDvA">6</div></div></div><div>+ <div class="nDkA">[7]</div></div><div class="nDvD"><div>+   <div class="nDvA">7</div></div></div></div>',
     },
     'lists_LCS_added_items_noU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul><li>+ <div class="nDkA">[2]</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">6</div></li></ul><li>+ <div class="nDkA">[4]</div></li><ul class="nDvD"><li>+   <div class="nDvA">7</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[0]</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div><div>+ <div class="nDkA">[1]</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div><div>+ <div class="nDkA">[2]</div></div><div class="nDvD"><div>+   <div class="nDvA">4</div></div></div><div>+ <div class="nDkA">[3]</div></div><div class="nDvD"><div>+   <div class="nDvA">6</div></div></div><div>+ <div class="nDkA">[4]</div></div><div class="nDvD"><div>+   <div class="nDvA">7</div></div></div></div>',
     },
     'lists_LCS_changed_items': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>  <div class="nDkO">[2]</div></li><ul class="nDvD"><li>-   <div class="nDvO">2</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">3</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[4]</div></li><ul class="nDvD"><li>    <div class="nDvU">4</div></li></ul><li>  <div class="nDkO">[5]</div></li><ul class="nDvD"><li>-   <div class="nDvO">5</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[6]</div></li><ul class="nDvD"><li>    <div class="nDvU">6</div></li></ul><li>  <div class="nDkU">[7]</div></li><ul class="nDvD"><li>    <div class="nDvU">7</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div><div>  <div class="nDkO">[2]</div></div><div class="nDvD"><div>-   <div class="nDvO">2</div></div><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkO">[3]</div></div><div class="nDvD"><div>-   <div class="nDvO">3</div></div><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkU">[4]</div></div><div class="nDvD"><div>    <div class="nDvU">4</div></div></div><div>  <div class="nDkO">[5]</div></div><div class="nDvD"><div>-   <div class="nDvO">5</div></div><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkU">[6]</div></div><div class="nDvD"><div>    <div class="nDvU">6</div></div></div><div>  <div class="nDkU">[7]</div></div><div class="nDvD"><div>    <div class="nDvU">7</div></div></div></div>',
     },
     'lists_LCS_changed_items_noOU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkN">[2]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkN">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkN">[5]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkN">[2]</div></div><div class="nDvD"><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkN">[3]</div></div><div class="nDvD"><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkN">[5]</div></div><div class="nDvD"><div>+   <div class="nDvN">9</div></div></div></div>',
     },
     'lists_LCS_changed_items_noU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">[2]</div></li><ul class="nDvD"><li>-   <div class="nDvO">2</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">3</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkO">[5]</div></li><ul class="nDvD"><li>-   <div class="nDvO">5</div></li><li>+   <div class="nDvN">9</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">[2]</div></div><div class="nDvD"><div>-   <div class="nDvO">2</div></div><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkO">[3]</div></div><div class="nDvD"><div>-   <div class="nDvO">3</div></div><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkO">[5]</div></div><div class="nDvD"><div>-   <div class="nDvO">5</div></div><div>+   <div class="nDvN">9</div></div></div></div>',
     },
     'lists_LCS_complex': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">&#x27;a&#x27;</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;b&#x27;</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;c&#x27;</div></li></ul><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;d&#x27;</div></li></ul><li>  <div class="nDkU">[4]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;e&#x27;</div></li></ul><li>  <div class="nDkO">[5]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>  <div class="nDkU">[6]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;j&#x27;</div></li></ul><li>+ <div class="nDkA">[7]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;k&#x27;</div></li></ul><li>  <div class="nDkU">[8]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;l&#x27;</div></li></ul><li>  <div class="nDkU">[9]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;m&#x27;</div></li></ul><li>  <div class="nDkO">[10]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[11]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul><li>+ <div class="nDkA">[12]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;t&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">&#x27;a&#x27;</div></div></div><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;b&#x27;</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;c&#x27;</div></div></div><div>+ <div class="nDkA">[3]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;d&#x27;</div></div></div><div>  <div class="nDkU">[4]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;e&#x27;</div></div></div><div>  <div class="nDkO">[5]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;h&#x27;</div></div><div>+   <div class="nDvN">&#x27;f&#x27;</div></div></div><div>  <div class="nDkU">[6]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;j&#x27;</div></div></div><div>+ <div class="nDkA">[7]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;k&#x27;</div></div></div><div>  <div class="nDkU">[8]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;l&#x27;</div></div></div><div>  <div class="nDkU">[9]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;m&#x27;</div></div></div><div>  <div class="nDkO">[10]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;n&#x27;</div></div><div>+   <div class="nDvN">&#x27;r&#x27;</div></div></div><div>  <div class="nDkO">[11]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;p&#x27;</div></div><div>+   <div class="nDvN">&#x27;s&#x27;</div></div></div><div>+ <div class="nDkA">[12]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;t&#x27;</div></div></div></div>',
     },
     'lists_LCS_complex_noAU': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">&#x27;a&#x27;</div></li></ul><li>  <div class="nDkO">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>  <div class="nDkO">[8]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[9]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">&#x27;a&#x27;</div></div></div><div>  <div class="nDkO">[4]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;h&#x27;</div></div><div>+   <div class="nDvN">&#x27;f&#x27;</div></div></div><div>  <div class="nDkO">[8]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;n&#x27;</div></div><div>+   <div class="nDvN">&#x27;r&#x27;</div></div></div><div>  <div class="nDkO">[9]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;p&#x27;</div></div><div>+   <div class="nDvN">&#x27;s&#x27;</div></div></div></div>',
     },
     'lists_LCS_complex_noRU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;d&#x27;</div></li></ul><li>  <div class="nDkO">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>+ <div class="nDkA">[6]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;k&#x27;</div></li></ul><li>  <div class="nDkO">[8]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[9]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul><li>+ <div class="nDkA">[10]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;t&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[3]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;d&#x27;</div></div></div><div>  <div class="nDkO">[4]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;h&#x27;</div></div><div>+   <div class="nDvN">&#x27;f&#x27;</div></div></div><div>+ <div class="nDkA">[6]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;k&#x27;</div></div></div><div>  <div class="nDkO">[8]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;n&#x27;</div></div><div>+   <div class="nDvN">&#x27;r&#x27;</div></div></div><div>  <div class="nDkO">[9]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;p&#x27;</div></div><div>+   <div class="nDvN">&#x27;s&#x27;</div></div></div><div>+ <div class="nDkA">[10]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;t&#x27;</div></div></div></div>',
     },
     'lists_LCS_complex_noU': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">&#x27;a&#x27;</div></li></ul><li>+ <div class="nDkA">[3]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;d&#x27;</div></li></ul><li>  <div class="nDkO">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;h&#x27;</div></li><li>+   <div class="nDvN">&#x27;f&#x27;</div></li></ul><li>+ <div class="nDkA">[6]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;k&#x27;</div></li></ul><li>  <div class="nDkO">[8]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;n&#x27;</div></li><li>+   <div class="nDvN">&#x27;r&#x27;</div></li></ul><li>  <div class="nDkO">[9]</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;p&#x27;</div></li><li>+   <div class="nDvN">&#x27;s&#x27;</div></li></ul><li>+ <div class="nDkA">[10]</div></li><ul class="nDvD"><li>+   <div class="nDvA">&#x27;t&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">&#x27;a&#x27;</div></div></div><div>+ <div class="nDkA">[3]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;d&#x27;</div></div></div><div>  <div class="nDkO">[4]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;h&#x27;</div></div><div>+   <div class="nDvN">&#x27;f&#x27;</div></div></div><div>+ <div class="nDkA">[6]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;k&#x27;</div></div></div><div>  <div class="nDkO">[8]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;n&#x27;</div></div><div>+   <div class="nDvN">&#x27;r&#x27;</div></div></div><div>  <div class="nDkO">[9]</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;p&#x27;</div></div><div>+   <div class="nDvN">&#x27;s&#x27;</div></div></div><div>+ <div class="nDkA">[10]</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;t&#x27;</div></div></div></div>',
     },
     'lists_LCS_complex_onlyU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;b&#x27;</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;c&#x27;</div></li></ul><li>  <div class="nDkU">[3]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;e&#x27;</div></li></ul><li>  <div class="nDkU">[5]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;j&#x27;</div></li></ul><li>  <div class="nDkU">[6]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;l&#x27;</div></li></ul><li>  <div class="nDkU">[7]</div></li><ul class="nDvD"><li>    <div class="nDvU">&#x27;m&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;b&#x27;</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;c&#x27;</div></div></div><div>  <div class="nDkU">[3]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;e&#x27;</div></div></div><div>  <div class="nDkU">[5]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;j&#x27;</div></div></div><div>  <div class="nDkU">[6]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;l&#x27;</div></div></div><div>  <div class="nDkU">[7]</div></div><div class="nDvD"><div>    <div class="nDvU">&#x27;m&#x27;</div></div></div></div>',
     },
     'lists_LCS_removed_items': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul><li>  <div class="nDkU">[3]</div></li><ul class="nDvD"><li>    <div class="nDvU">3</div></li></ul><li>- <div class="nDkR">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvR">4</div></li></ul><li>  <div class="nDkU">[5]</div></li><ul class="nDvD"><li>    <div class="nDvU">5</div></li></ul><li>- <div class="nDkR">[6]</div></li><ul class="nDvD"><li>-   <div class="nDvR">6</div></li></ul><li>- <div class="nDkR">[7]</div></li><ul class="nDvD"><li>-   <div class="nDvR">7</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">0</div></div></div><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div><div>  <div class="nDkU">[3]</div></div><div class="nDvD"><div>    <div class="nDvU">3</div></div></div><div>- <div class="nDkR">[4]</div></div><div class="nDvD"><div>-   <div class="nDvR">4</div></div></div><div>  <div class="nDkU">[5]</div></div><div class="nDvD"><div>    <div class="nDvU">5</div></div></div><div>- <div class="nDkR">[6]</div></div><div class="nDvD"><div>-   <div class="nDvR">6</div></div></div><div>- <div class="nDkR">[7]</div></div><div class="nDvD"><div>-   <div class="nDvR">7</div></div></div></div>',
     },
     'lists_LCS_removed_items_noU': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul><li>- <div class="nDkR">[4]</div></li><ul class="nDvD"><li>-   <div class="nDvR">4</div></li></ul><li>- <div class="nDkR">[6]</div></li><ul class="nDvD"><li>-   <div class="nDvR">6</div></li></ul><li>- <div class="nDkR">[7]</div></li><ul class="nDvD"><li>-   <div class="nDvR">7</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">0</div></div></div><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div><div>- <div class="nDkR">[4]</div></div><div class="nDvD"><div>-   <div class="nDvR">4</div></div></div><div>- <div class="nDkR">[6]</div></div><div class="nDvD"><div>-   <div class="nDvR">6</div></div></div><div>- <div class="nDkR">[7]</div></div><div class="nDvD"><div>-   <div class="nDvR">7</div></div></div></div>',
     },
     'lists_with_one_different_item': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvO">0</div></li><li>+   <div class="nDvN">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">[0]</div></div><div class="nDvD"><div>-   <div class="nDvO">0</div></div><div>+   <div class="nDvN">1</div></div></div></div>',
     },
     'lists_with_one_different_item_noN': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvO">0</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">[0]</div></div><div class="nDvD"><div>-   <div class="nDvO">0</div></div></div></div>',
     },
     'lists_with_one_different_item_noO': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkN">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvN">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkN">[0]</div></div><div class="nDvD"><div>+   <div class="nDvN">1</div></div></div></div>',
     },
     'mixed_specific_structures': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">(0)</div></li><ul class="nDvD"><li>-   <div class="nDvO">()</div></li><li>+   <div class="nDvN">frozenset()</div></li></ul><li>  <div class="nDkD">(1)</div></li><ul class="nDvD"><li>#   <div class="nDvE">&lt;set&gt;</div></li><li>+   <div class="nDvA">True</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">(0)</div></div><div class="nDvD"><div>-   <div class="nDvO">()</div></div><div>+   <div class="nDvN">frozenset()</div></div></div><div>  <div class="nDkD">(1)</div></div><div class="nDvD"><div>#   <div class="nDvE">&lt;set&gt;</div></div><div>+   <div class="nDvA">True</div></div></div></div>',
     },
     'nested_hashes': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>  <div class="nDkU">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>- <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">3</div></li></ul><li>  <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkO">{&#x27;nine&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvO">9</div></li><li>+     <div class="nDvN">8</div></li></ul><li>    <div class="nDkU">{&#x27;ten&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDvU">10</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">{&#x27;four&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvA">4</div></div></div><div>  <div class="nDkU">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div><div>- <div class="nDkR">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">3</div></div></div><div>  <div class="nDkD">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>    <div class="nDkO">{&#x27;nine&#x27;}</div></div><div class="nDvD"><div>-     <div class="nDvO">9</div></div><div>+     <div class="nDvN">8</div></div></div><div>    <div class="nDkU">{&#x27;ten&#x27;}</div></div><div class="nDvD"><div>      <div class="nDvU">10</div></div></div></div></div>',
     },
     'nested_hashes_noU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">{&#x27;four&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDvA">4</div></li></ul><li>- <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvR">3</div></li></ul><li>  <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkO">{&#x27;nine&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvO">9</div></li><li>+     <div class="nDvN">8</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">{&#x27;four&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvA">4</div></div></div><div>- <div class="nDkR">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">3</div></div></div><div>  <div class="nDkD">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>    <div class="nDkO">{&#x27;nine&#x27;}</div></div><div class="nDvD"><div>-     <div class="nDvO">9</div></div><div>+     <div class="nDvN">8</div></div></div></div></div>',
     },
     'nested_hashes_with_one_different_value': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDkO">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-       <div class="nDvO">3</div></li><li>+       <div class="nDvN">4</div></li></ul></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>    <div class="nDkD">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>      <div class="nDkO">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>-       <div class="nDvO">3</div></div><div>+       <div class="nDvN">4</div></div></div></div></div></div>',
     },
     'nested_hashes_with_one_equal_value': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">{&#x27;one&#x27;: {&#x27;two&#x27;: {&#x27;three&#x27;: 3}}}</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">{&#x27;one&#x27;: {&#x27;two&#x27;: {&#x27;three&#x27;: 3}}}</div></div></div>',
     },
     'nested_hashes_with_one_equal_value_noU': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'nested_lists': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">[[100]]</div></li></ul><li>  <div class="nDkD">[2]</div></li><ul class="nDvD"><li>    <div class="nDkU">[0]</div></li><ul class="nDvD"><li>      <div class="nDvU">20</div></li></ul><li>    <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-     <div class="nDvO">&#x27;30&#x27;</div></li><li>+     <div class="nDvN">&#x27;31&#x27;</div></li></ul></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">4</div></li><li>+   <div class="nDvN">5</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">[[100]]</div></div></div><div>  <div class="nDkD">[2]</div></div><div class="nDvD"><div>    <div class="nDkU">[0]</div></div><div class="nDvD"><div>      <div class="nDvU">20</div></div></div><div>    <div class="nDkO">[1]</div></div><div class="nDvD"><div>-     <div class="nDvO">&#x27;30&#x27;</div></div><div>+     <div class="nDvN">&#x27;31&#x27;</div></div></div></div><div>  <div class="nDkO">[3]</div></div><div class="nDvD"><div>-   <div class="nDvO">4</div></div><div>+   <div class="nDvN">5</div></div></div></div>',
     },
     'nested_lists_noU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">[2]</div></li><ul class="nDvD"><li>    <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-     <div class="nDvO">&#x27;30&#x27;</div></li><li>+     <div class="nDvN">&#x27;31&#x27;</div></li></ul></ul><li>  <div class="nDkO">[3]</div></li><ul class="nDvD"><li>-   <div class="nDvO">4</div></li><li>+   <div class="nDvN">5</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">[2]</div></div><div class="nDvD"><div>    <div class="nDkO">[1]</div></div><div class="nDvD"><div>-     <div class="nDvO">&#x27;30&#x27;</div></div><div>+     <div class="nDvN">&#x27;31&#x27;</div></div></div></div><div>  <div class="nDkO">[3]</div></div><div class="nDvD"><div>-   <div class="nDvO">4</div></div><div>+   <div class="nDvN">5</div></div></div></div>',
     },
     'nested_lists_with_one_different_item': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">[0]</div></li><ul class="nDvD"><li>    <div class="nDkO">[0]</div></li><ul class="nDvD"><li>-     <div class="nDvO">0</div></li><li>+     <div class="nDvN">1</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">[0]</div></div><div class="nDvD"><div>    <div class="nDkO">[0]</div></div><div class="nDvD"><div>-     <div class="nDvO">0</div></div><div>+     <div class="nDvN">1</div></div></div></div></div>',
     },
     'nested_lists_with_one_equal_item': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">[[0]]</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">[[0]]</div></div></div>',
     },
     'nested_lists_with_one_equal_item_noU': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'nested_mixed_structures': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkD">[0]</div></li><ul class="nDvD"><li>      <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>        <div class="nDkD">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>          <div class="nDkU">[0]</div></li><ul class="nDvD"><li>            <div class="nDvU">7</div></li></ul><li>          <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-           <div class="nDvO">4</div></li><li>+           <div class="nDvN">3</div></li></ul></ul></ul></ul><li>    <div class="nDkU">[1]</div></li><ul class="nDvD"><li>      <div class="nDvU">8</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>    <div class="nDkD">[0]</div></div><div class="nDvD"><div>      <div class="nDkD">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>        <div class="nDkD">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>          <div class="nDkU">[0]</div></div><div class="nDvD"><div>            <div class="nDvU">7</div></div></div><div>          <div class="nDkO">[1]</div></div><div class="nDvD"><div>-           <div class="nDvO">4</div></div><div>+           <div class="nDvN">3</div></div></div></div></div></div><div>    <div class="nDkU">[1]</div></div><div class="nDvD"><div>      <div class="nDvU">8</div></div></div></div></div>',
     },
     'nested_mixed_structures_noOU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>    <div class="nDkD">[0]</div></li><ul class="nDvD"><li>      <div class="nDkD">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>        <div class="nDkD">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>          <div class="nDkN">[1]</div></li><ul class="nDvD"><li>+           <div class="nDvN">3</div></li></ul></ul></ul></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>    <div class="nDkD">[0]</div></div><div class="nDvD"><div>      <div class="nDkD">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>        <div class="nDkD">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>          <div class="nDkN">[1]</div></div><div class="nDvD"><div>+           <div class="nDvN">3</div></div></div></div></div></div></div></div>',
     },
     'one_item_changed_in_the_middle_of_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkO">[1]</div></div><div class="nDvD"><div>-   <div class="nDvO">1</div></div><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_changed_in_the_middle_of_list_noN': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkO">[1]</div></div><div class="nDvD"><div>-   <div class="nDvO">1</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_changed_in_the_middle_of_list_noNO': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_changed_in_the_middle_of_list_noO': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkN">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvN">9</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkN">[1]</div></div><div class="nDvD"><div>+   <div class="nDvN">9</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_changed_in_the_middle_of_list_noU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvO">1</div></li><li>+   <div class="nDvN">9</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">[1]</div></div><div class="nDvD"><div>-   <div class="nDvO">1</div></div><div>+   <div class="nDvN">9</div></div></div></div>',
     },
     'one_item_inserted_in_the_middle_of_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>+ <div class="nDkA">[1]</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_inserted_in_the_middle_of_list_noA': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_inserted_in_the_middle_of_list_noU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[1]</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div></div>',
     },
     'one_item_popped_from_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div></div>',
     },
     'one_item_popped_from_list_noU': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div></div>',
     },
     'one_item_pushed_to_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>+ <div class="nDkA">[1]</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div></div>',
     },
     'one_item_pushed_to_list_noU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[1]</div></li><ul class="nDvD"><li>+   <div class="nDvA">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[1]</div></div><div class="nDvD"><div>+   <div class="nDvA">1</div></div></div></div>',
     },
     'one_item_removed_from_the_middle_of_list': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_removed_from_the_middle_of_list_noR': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">[0]</div></li><ul class="nDvD"><li>    <div class="nDvU">0</div></li></ul><li>  <div class="nDkU">[2]</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">[0]</div></div><div class="nDvD"><div>    <div class="nDvU">0</div></div></div><div>  <div class="nDkU">[2]</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div></div>',
     },
     'one_item_removed_from_the_middle_of_list_noU': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[1]</div></li><ul class="nDvD"><li>-   <div class="nDvR">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[1]</div></div><div class="nDvD"><div>-   <div class="nDvR">1</div></div></div></div>',
     },
     'one_item_shifted_from_list': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">0</div></div></div><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div></div>',
     },
     'one_item_shifted_from_list_noU': {
-        'result': '<ul class="nDvD"><li>- <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-   <div class="nDvR">0</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDkR">[0]</div></div><div class="nDvD"><div>-   <div class="nDvR">0</div></div></div></div>',
     },
     'one_item_unshifted_to_list': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>  <div class="nDkU">[1]</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[0]</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div><div>  <div class="nDkU">[1]</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div></div>',
     },
     'one_item_unshifted_to_list_noU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">[0]</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div></div>',
     },
     'one_key_added_to_subhash': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDkA">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>+     <div class="nDvA">3</div></li></ul><li>    <div class="nDkU">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDvU">2</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDkA">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>+     <div class="nDvA">3</div></div></div><div>    <div class="nDkU">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>      <div class="nDvU">2</div></div></div></div></div>',
     },
     'one_key_added_to_subhash_noU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDkA">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>+     <div class="nDvA">3</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDkA">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>+     <div class="nDvA">3</div></div></div></div></div>',
     },
     'one_key_removed_from_subhash': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvR">3</div></li></ul><li>    <div class="nDkU">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>      <div class="nDvU">2</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDkR">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>-     <div class="nDvR">3</div></div></div><div>    <div class="nDkU">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>      <div class="nDvU">2</div></div></div></div></div>',
     },
     'one_key_removed_from_subhash_noU': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDkR">{&#x27;three&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvR">3</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDkR">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>-     <div class="nDvR">3</div></div></div></div></div>',
     },
     'quote_symbols': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkO">{&#x27;&quot;double&quot;&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;&quot;&quot;&#x27;</div></li><li>+   <div class="nDvN">&#x27;&quot;&#x27;</div></li></ul><li>  <div class="nDkO">{&quot;&#x27;single&#x27;&quot;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&quot;&#x27;&#x27;&quot;</div></li><li>+   <div class="nDvN">&quot;&#x27;&quot;</div></li></ul><li>  <div class="nDkO">{&#x27;`backticks`&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDvO">&#x27;``&#x27;</div></li><li>+   <div class="nDvN">&#x27;`&#x27;</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkO">{&#x27;&quot;double&quot;&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;&quot;&quot;&#x27;</div></div><div>+   <div class="nDvN">&#x27;&quot;&#x27;</div></div></div><div>  <div class="nDkO">{&quot;&#x27;single&#x27;&quot;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&quot;&#x27;&#x27;&quot;</div></div><div>+   <div class="nDvN">&quot;&#x27;&quot;</div></div></div><div>  <div class="nDkO">{&#x27;`backticks`&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;``&#x27;</div></div><div>+   <div class="nDvN">&#x27;`&#x27;</div></div></div></div>',
     },
     'redefined_depth': {
-        'result': '<ul class="nDvD"><li>-       <div class="nDvO">0</div></li><li>+       <div class="nDvN">1</div></li></ul>',
+        'result': '<div class="nDvD"><div>-       <div class="nDvO">0</div></div><div>+       <div class="nDvN">1</div></div></div>',
     },
     'set_extended': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>  <div class="nDvU">1</div></li><li>+ <div class="nDvA">2</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;set&gt;</div></div><div>  <div class="nDvU">1</div></div><div>+ <div class="nDvA">2</div></div></div>',
     },
     'sets_empty_diff': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'sets_lcs': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>- <div class="nDvR">1</div></li><li>  <div class="nDvU">2</div></li><li>+ <div class="nDvA">3</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;set&gt;</div></div><div>- <div class="nDvR">1</div></div><div>  <div class="nDvU">2</div></div><div>+ <div class="nDvA">3</div></div></div>',
     },
     'sets_lcs_noAR': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>  <div class="nDvU">2</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;set&gt;</div></div><div>  <div class="nDvU">2</div></div></div>',
     },
     'sets_lcs_noU': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>- <div class="nDvR">1</div></li><li>+ <div class="nDvA">3</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;set&gt;</div></div><div>- <div class="nDvR">1</div></div><div>+ <div class="nDvA">3</div></div></div>',
     },
     'sets_lcs_trimR': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;set&gt;</div></li><li>- <div class="nDvR">1</div></li><li>  <div class="nDvU">2</div></li><li>+ <div class="nDvA">3</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;set&gt;</div></div><div>- <div class="nDvR">1</div></div><div>  <div class="nDvU">2</div></div><div>+ <div class="nDvA">3</div></div></div>',
     },
     'simple_strings_in_text_mode': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;bar&#x27;</div></li><li>+ <div class="nDvN">&#x27;baz&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;bar&#x27;</div></div><div>+ <div class="nDvN">&#x27;baz&#x27;</div></div></div>',
     },
     'str_vs_bytes': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;a&#x27;</div></li><li>+ <div class="nDvN">b&#x27;a&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;a&#x27;</div></div><div>+ <div class="nDvN">b&#x27;a&#x27;</div></div></div>',
     },
     'subhash_emptied': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>-   <div class="nDkR">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>-     <div class="nDvR">2</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDkR">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>-     <div class="nDvR">2</div></div></div></div></div>',
     },
     'subhash_emptied_noR': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'subhash_filled': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">{&#x27;one&#x27;}</div></li><ul class="nDvD"><li>+   <div class="nDkA">{&#x27;two&#x27;}</div></li><ul class="nDvD"><li>+     <div class="nDvA">2</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDkA">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>+     <div class="nDvA">2</div></div></div></div></div>',
     },
     'subhash_filled_noA': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'sublist_emptied': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">[0]</div></li><ul class="nDvD"><li>-   <div class="nDkR">[0]</div></li><ul class="nDvD"><li>-     <div class="nDvR">0</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">[0]</div></div><div class="nDvD"><div>-   <div class="nDkR">[0]</div></div><div class="nDvD"><div>-     <div class="nDvR">0</div></div></div></div></div>',
     },
     'sublist_emptied_noR': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'sublist_filled': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkD">[0]</div></li><ul class="nDvD"><li>+   <div class="nDkA">[0]</div></li><ul class="nDvD"><li>+     <div class="nDvA">0</div></li></ul></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkD">[0]</div></div><div class="nDvD"><div>+   <div class="nDkA">[0]</div></div><div class="nDvD"><div>+     <div class="nDvA">0</div></div></div></div></div>',
     },
     'sublist_filled_noA': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'text_diff_disabled': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">&#x27;A\\nB&#x27;</div></li><li>+ <div class="nDvN">&#x27;B\\nC&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;A\\nB&#x27;</div></div><div>+ <div class="nDvN">&#x27;B\\nC&#x27;</div></div></div>',
     },
     'text_equal': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'text_lcs': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,2 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>  <div class="nDvU">C</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,3 +1,2 @@</div></div><div>  <div class="nDvU">A</div></div><div>- <div class="nDvR">B</div></div><div>  <div class="nDvU">C</div></div></div>',
     },
     'text_line_added': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,2 +1,3 @@</div></li><li>+ <div class="nDvA">A</div></li><li>  <div class="nDvU">B</div></li><li>  <div class="nDvU">C</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,2 +1,3 @@</div></div><div>+ <div class="nDvA">A</div></div><div>  <div class="nDvU">B</div></div><div>  <div class="nDvU">C</div></div></div>',
     },
     'text_line_changed': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,3 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA">b</div></li><li>  <div class="nDvU">C</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,3 +1,3 @@</div></div><div>  <div class="nDvU">A</div></div><div>- <div class="nDvR">B</div></div><div>+ <div class="nDvA">b</div></div><div>  <div class="nDvU">C</div></div></div>',
     },
     'text_line_changed_ctx_0': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -2 +2 @@</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA">b</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -2 +2 @@</div></div><div>- <div class="nDvR">B</div></div><div>+ <div class="nDvA">b</div></div></div>',
     },
     'text_line_removed': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,2 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>  <div class="nDvU">C</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,3 +1,2 @@</div></div><div>  <div class="nDvU">A</div></div><div>- <div class="nDvR">B</div></div><div>  <div class="nDvU">C</div></div></div>',
     },
     'text_multiple_hunks': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1 +1 @@</div></li><li>+ <div class="nDvA">A</div></li><li>  <div class="nDvH">@@ -3 +4 @@</div></li><li>- <div class="nDvR">C</div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1 +1 @@</div></div><div>+ <div class="nDvA">A</div></div><div>  <div class="nDvH">@@ -3 +4 @@</div></div><div>- <div class="nDvR">C</div></div></div>',
     },
     'text_trailing_newlines': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,3 +1,3 @@</div></li><li>  <div class="nDvU">A</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA">b</div></li><li>  <div class="nDvU"></div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,3 +1,3 @@</div></div><div>  <div class="nDvU">A</div></div><div>- <div class="nDvR">B</div></div><div>+ <div class="nDvA">b</div></div><div>  <div class="nDvU"></div></div></div>',
     },
     'text_vs_empty_string': {
-        'result': '<ul class="nDvD"><li># <div class="nDvE">&lt;str&gt;</div></li><li>  <div class="nDvH">@@ -1,2 +1 @@</div></li><li>- <div class="nDvR">A</div></li><li>- <div class="nDvR">B</div></li><li>+ <div class="nDvA"></div></li></ul>',
+        'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,2 +1 @@</div></div><div>- <div class="nDvR">A</div></div><div>- <div class="nDvR">B</div></div><div>+ <div class="nDvA"></div></div></div>',
     },
     'tuple_extended': {
-        'result': '<ul class="nDvD"><li>  <div class="nDkU">(0)</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>+ <div class="nDkA">(1)</div></li><ul class="nDvD"><li>+   <div class="nDvA">2</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDkU">(0)</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div><div>+ <div class="nDkA">(1)</div></div><div class="nDvD"><div>+   <div class="nDvA">2</div></div></div></div>',
     },
     'tuples_lcs': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">(0)</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>  <div class="nDkU">(1)</div></li><ul class="nDvD"><li>    <div class="nDvU">1</div></li></ul><li>  <div class="nDkU">(2)</div></li><ul class="nDvD"><li>    <div class="nDvU">2</div></li></ul><li>  <div class="nDkO">(3)</div></li><ul class="nDvD"><li>-   <div class="nDvO">4</div></li><li>+   <div class="nDvN">3</div></li></ul><li>- <div class="nDkR">(4)</div></li><ul class="nDvD"><li>-   <div class="nDvR">5</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">(0)</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div><div>  <div class="nDkU">(1)</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div><div>  <div class="nDkU">(2)</div></div><div class="nDvD"><div>    <div class="nDvU">2</div></div></div><div>  <div class="nDkO">(3)</div></div><div class="nDvD"><div>-   <div class="nDvO">4</div></div><div>+   <div class="nDvN">3</div></div></div><div>- <div class="nDkR">(4)</div></div><div class="nDvD"><div>-   <div class="nDvR">5</div></div></div></div>',
     },
     'tuples_lcs_noOU': {
-        'result': '<ul class="nDvD"><li>+ <div class="nDkA">(0)</div></li><ul class="nDvD"><li>+   <div class="nDvA">0</div></li></ul><li>  <div class="nDkN">(2)</div></li><ul class="nDvD"><li>+   <div class="nDvN">3</div></li></ul><li>- <div class="nDkR">(3)</div></li><ul class="nDvD"><li>-   <div class="nDvR">5</div></li></ul></ul>',
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">(0)</div></div><div class="nDvD"><div>+   <div class="nDvA">0</div></div></div><div>  <div class="nDkN">(2)</div></div><div class="nDvD"><div>+   <div class="nDvN">3</div></div></div><div>- <div class="nDkR">(3)</div></div><div class="nDvD"><div>-   <div class="nDvR">5</div></div></div></div>',
     },
     'type_hints_disabled': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvH">@@ -1,2 +1,2 @@</div></li><li>- <div class="nDvR">two</div></li><li>+ <div class="nDvA">2</div></li><li>  <div class="nDvU">lines</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvH">@@ -1,2 +1,2 @@</div></div><div>- <div class="nDvR">two</div></div><div>+ <div class="nDvA">2</div></div><div>  <div class="nDvU">lines</div></div></div>',
     },
     'undef_vs_0': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">0</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">None</div></div><div>+ <div class="nDvN">0</div></div></div>',
     },
     'undef_vs_empty_hash': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">{}</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">None</div></div><div>+ <div class="nDvN">{}</div></div></div>',
     },
     'undef_vs_empty_hash_noNO': {
-        'result': '<ul class="nDvD"></ul>',
+        'result': '<div class="nDvD"></div>',
     },
     'undef_vs_empty_list': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">[]</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">None</div></div><div>+ <div class="nDvN">[]</div></div></div>',
     },
     'undef_vs_empty_string': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">&#x27;&#x27;</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">None</div></div><div>+ <div class="nDvN">&#x27;&#x27;</div></div></div>',
     },
     'undef_vs_negative_number': {
-        'result': '<ul class="nDvD"><li>- <div class="nDvO">None</div></li><li>+ <div class="nDvN">-1</div></li></ul>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">None</div></div><div>+ <div class="nDvN">-1</div></div></div>',
     },
     'undef_vs_undef': {
-        'result': '<ul class="nDvD"><li>  <div class="nDvU">None</div></li></ul>',
+        'result': '<div class="nDvD"><div>  <div class="nDvU">None</div></div></div>',
     },
     'unsupported_extension': {
         'raises': ValueError,
     },
     'wrapping_text': {
-        'result': 'Header\n<ul class="nDvD"><li>- <div class="nDvO">0</div></li><li>+ <div class="nDvN">1</div></li></ul>Footer\n',
+        'result': 'Header\n<div class="nDvD"><div>- <div class="nDvO">0</div></div><div>+ <div class="nDvN">1</div></div></div>Footer\n',
     },
 }
 

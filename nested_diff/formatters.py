@@ -235,15 +235,15 @@ class HtmlFormatter(TextFormatter):
         """
         super().__init__(*args, line_separator=line_separator, **kwargs)
 
-        self.diff_prefix = '<ul class="nDvD">'
-        self.diff_suffix = '</ul>'
+        self.diff_prefix = '<div class="nDvD">'
+        self.diff_suffix = '</div>'
 
-        self.line_separator = '</li>' + self.line_separator
+        self.line_separator = '</div>' + self.line_separator
 
         for key, val in self.key_line_prefix.items():
-            self.key_line_prefix[key] = '<li>' + val
+            self.key_line_prefix[key] = '<div>' + val
         for key, val in self.val_line_prefix.items():
-            self.val_line_prefix[key] = '<li>' + val
+            self.val_line_prefix[key] = '<div>' + val
 
         for key in self.key_line_prefix:
             self.key_prefix[key] = '<div class="nDk' + key + '">'
@@ -259,22 +259,34 @@ class HtmlFormatter(TextFormatter):
     def get_css():
         """Return CSS for generated HTML page."""
         return """
-.nDkA {background-color: #cfc; display: inline}
-.nDkD, .nDkN, .nDkO {color: #000; display: inline}
-.nDkR {background-color: #fcc; display: inline}
-.nDkU, .nDvU {color: #777; display: inline}
-.nDvA, .nDvN {background-color: #dfd; display: inline}
-.nDvC, .nDvE {color: #00b; display: inline}
-.nDvD {font-family: monospace; white-space: pre; padding: 0;
-margin: 0; list-style: none}
-.nDvH {color: #707; display: inline}
-.nDvO, .nDvR {background-color: #fdd; display: inline}
 [class^="nDk"] {cursor: pointer}
+[class^="nDk"], [class^="nDv"] {
+    border-radius: 2px;
+    display: inline;
+}
+.nDkA {background-color: #cfc}
+.nDkD, .nDkN, .nDkO {color: #000}
+.nDkR {background-color: #fcc}
+.nDkU, .nDvU {color: #777}
+.nDvA, .nDvN {background-color: #dfd}
+.nDvC, .nDvE {color: #00b}
+.nDvD {
+    display: block;
+    font-family: monospace;
+    overflow: hidden;
+    transition-duration: .15s;
+    transition-property: height;
+    white-space: pre;
+}
+.nDvH {color: #707}
+.nDvO, .nDvR {background-color: #fdd}
 """.replace(' ', '').replace('\n', '')
 
     def get_script(self):
         """Return script for generated HTML page."""
         script = """
+var PREV = null;
+
 document.querySelector('.nDvD').addEventListener('click', event => {
     tgt = event.target;
 
@@ -290,13 +302,23 @@ document.querySelector('.nDvD').addEventListener('click', event => {
 
     dif = tgt.nextSibling;  // diff is below the key line (nDvD div)
 
-    if (dif.style.display === 'none') {
-        dif.style.display = 'block';
-        tgt.innerHTML = tgt.innerHTML.replace(/^./, dif.__nDstash);
+    if (!!PREV && !Object.is(PREV, dif)) {
+        // restore height (captured value may, depends folded children or not)
+        PREV.style.height = 'initial';
+    }
+
+    dif.style.height = dif.offsetHeight + 'px';
+
+    if (dif.style.height === '0px') {
+        dif.style.height = dif.__nDh + 'px';
+        PREV = dif;
+        tgt.innerHTML = tgt.innerHTML.replace(/^./, dif.__nDc);
         tgt.style.fontWeight = 'normal'
     } else {
-        dif.style.display = 'none';
-        dif.__nDstash = tgt.innerHTML.substring(1, 2);
+        dif.__nDh = dif.offsetHeight;
+        dif.style.height = '0px';
+        PREV = null;
+        dif.__nDc = tgt.innerHTML.substring(1, 2);
         tgt.innerHTML = tgt.innerHTML.replace(/^./, '*');
         tgt.style.fontWeight = 'bold'
     }
