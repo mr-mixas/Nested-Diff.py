@@ -65,6 +65,47 @@ class App(nested_diff.cli.App):
 
         return differ.diff(a, b)
 
+    def generate_diffs(self):
+        """Generate diffs."""
+        a = None
+        headers_enabled = False
+
+        if self.args.show:
+            if len(self.args.files) > 1:
+                headers_enabled = True
+        else:
+            if len(self.args.files) < 2:
+                self.argparser.error('Two or more arguments expected for diff')
+            elif len(self.args.files) > 2:
+                headers_enabled = True
+
+        for file_ in self.args.files:
+            header = ''
+
+            if self.args.show:
+                if headers_enabled:
+                    header = self.dumper.get_diff_header(
+                        '/dev/null (' + file_.name + ')',
+                        '/dev/null (' + file_.name + ')',
+                    )
+                diff = self.load(file_)
+                equal = not diff or 'U' in diff
+            else:
+                b = {'name': file_.name, 'data': self.load(file_)}
+
+                if a is None:
+                    a = b
+                    continue
+
+                equal, diff = self.diff(a['data'], b['data'])
+
+                if headers_enabled:
+                    header = self.dumper.get_diff_header(a['name'], b['name'])
+
+                a = b
+
+            yield header, equal, diff
+
     def get_optional_args_parser(self):
         """Return parser for optional part (dash prefixed) of CLI args."""
         parser = super().get_optional_args_parser()
@@ -155,65 +196,23 @@ class App(nested_diff.cli.App):
 
     def run(self):
         """Diff app object entry point."""
-        if self.args.show:
-            return self.run_format()
-
-        if len(self.args.files) < 2:
-            self.argparser.error('Two or more arguments expected for diff')
-
-        return self.run_diff()
-
-    def run_diff(self):
-        """Compute and print diff."""
-        if len(self.args.files) > 2:
-            if self.args.out.isatty():
-                header_template = '\033[33m--- {a}\n+++ {b}\033[0m\n'
-            else:
-                header_template = '--- {a}\n+++ {b}\n'
-        else:
-            header_template = ''
-
-        a = None
         exit_code = 0
 
-        for file_ in self.args.files:
-            b = {'name': file_.name, 'data': self.load(file_)}
+        self.args.out.write(self.dumper.header)
 
-            if a is not None:
-                equal, diff = self.diff(a['data'], b['data'])
+        for diff_header, equal, diff in self.generate_diffs():
+            if not equal:
+                exit_code = 1
 
-                if not equal:
-                    exit_code = 1
+            if self.args.quiet:
+                continue
 
-                if self.args.quiet:
-                    continue
+            self.args.out.write(diff_header)
+            self.dumper.dump(self.args.out, diff)
 
-                header = header_template.format(a=a['name'], b=b['name'])
-                self.dump(self.args.out, diff, self.args.ofmt, header=header)
-
-            a = b
+        self.args.out.write(self.dumper.footer)
 
         return exit_code
-
-    def run_format(self):
-        """Format and print diff."""
-        if len(self.args.files) > 1:
-            if self.args.out.isatty():
-                header_template = '\033[33m=== {filename}\033[0m\n'
-            else:
-                header_template = '=== {filename}\n'
-        else:
-            header_template = ''
-
-        for file_ in self.args.files:
-            self.dump(
-                self.args.out,
-                self.load(file_),
-                self.args.ofmt,
-                header=header_template.format(filename=file_.name),
-            )
-
-        return 0
 
 
 class AbstractFmtDumper(nested_diff.cli.Dumper):
@@ -251,45 +250,36 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 class HtmlDumper(AbstractFmtDumper):
     """Human friendly HTML dumper for nested diff."""
 
-    def __init__(self, html_opts=(('lang', 'en'), ('title', 'Nested diff')),
-                 **kwargs):
+    def __init__(
+        self,
+        header=None,
+        footer=None,
+        lang='en',
+        title='Nested diff',
+        **kwargs  # noqa C816
+    ):
         """Initialize dumper.
 
         Args:
-            html_opts: May contain `header` (default is brief HTML5
-                boilerplate) and `footer` (page closing tags). Also `lang` and
-                `title` supported which define according values for default
-                `header`.
-            kwargs: Passed to `fmt.HtmlFormatter`.
+            header: HTML page header. Brief HTML5 boilerplate used by default.
+            footer: HTML page closing tags.
+            lang: Value for lang HTML option.
+            title: HTML page title.
+            kwargs: Passed to `fmt.HtmlFormatter` as is.
 
         """
-        super().__init__()
-        from html import escape
         from nested_diff.formatters import HtmlFormatter
 
-        self.html_opts = dict(html_opts)
-        self.formatter = HtmlFormatter(**self.get_opts(kwargs))
+        self.encoder = HtmlFormatter(**self.get_opts(kwargs))
+        self.get_diff_header = self.encoder.get_diff_header
 
-        if 'header' not in self.html_opts:
-            self.html_opts['header'] = (
-                '<!DOCTYPE html><html lang="' + self.html_opts['lang'] +
-                '"><head><title>' + escape(self.html_opts['title']) +
-                '</title><style>' + self.formatter.get_css() +
-                '</style></head><body>'
-            )
-        if 'footer' not in self.html_opts:
-            self.html_opts['footer'] = (
-                '<script>' + self.formatter.get_script() +
-                '</script></body></html>'
-            )
+        if header is None:
+            header = self.encoder.get_page_header(lang=lang, title=title)
 
-    def encode(self, data):
-        """Format nested diff as HTML string."""
-        return self.formatter.format(
-            data,
-            header=self.html_opts['header'],
-            footer=self.html_opts['footer'],
-        )
+        if footer is None:
+            footer = self.encoder.get_page_footer()
+
+        super().__init__(header=header, footer=footer)
 
 
 class TermDumper(AbstractFmtDumper):
@@ -305,6 +295,7 @@ class TermDumper(AbstractFmtDumper):
         super().__init__()
         from nested_diff.formatters import TermFormatter
         self.encoder = TermFormatter(**self.get_opts(kwargs))
+        self.get_diff_header = self.encoder.get_diff_header
 
 
 class TextDumper(AbstractFmtDumper):
@@ -320,6 +311,7 @@ class TextDumper(AbstractFmtDumper):
         super().__init__()
         from nested_diff.formatters import TextFormatter
         self.encoder = TextFormatter(**self.get_opts(kwargs))
+        self.get_diff_header = self.encoder.get_diff_header
 
 
 def cli():

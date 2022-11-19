@@ -100,9 +100,9 @@ class AbstractFormatter():
         for handler in handlers:
             self.set_handler(handler)
 
-    def format(self, diff, header='', footer='', **kwargs):  # noqa A003
+    def format(self, diff, **kwargs):  # noqa A003
         """Return formatted diff as string."""
-        return ''.join((header, *self.generate_diff(diff, **kwargs), footer))
+        return ''.join(self.generate_diff(diff, **kwargs))
 
     def set_handler(self, handler):
         """Set handler.
@@ -200,6 +200,11 @@ class TextFormatter(AbstractFormatter):
         yield self.line_separator
 
     @staticmethod
+    def get_diff_header(name_a, name_b):
+        """Return diff header."""
+        return '--- ' + name_a + '\n+++ ' + name_b + '\n'
+
+    @staticmethod
     def format_key(key):
         """Return key/index representation."""
         return key.__repr__()
@@ -224,21 +229,20 @@ class HtmlFormatter(TextFormatter):
 
     """
 
-    def __init__(self, *args, line_separator='', **kwargs):
+    def __init__(self, *args, **kwargs):
         """Initialize formatter.
 
         Args:
             args: Passed to base class as is.
-            line_separator: Lines delimiter.
             kwargs: Passed to base class as is.
 
         """
-        super().__init__(*args, line_separator=line_separator, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.diff_prefix = '<div class="nDvD">'
         self.diff_suffix = '</div>'
 
-        self.line_separator = '</div>' + self.line_separator
+        self.line_separator = '</div>'
 
         for key, val in self.key_line_prefix.items():
             self.key_line_prefix[key] = '<div>' + val
@@ -281,6 +285,27 @@ class HtmlFormatter(TextFormatter):
 .nDvH {color: #707}
 .nDvO, .nDvR {background-color: #fdd}
 """.replace(' ', '').replace('\n', '')
+
+    @staticmethod
+    def get_diff_header(name_a, name_b):
+        """Return diff header."""
+        return (
+            '<div class="NDvH">--- ' + name_a +
+            '<br>+++ ' + name_b + '</div>'
+        )
+
+    def get_page_footer(self):
+        """Return HTML page footer."""
+        return '<script>' + self.get_script() + '</script></body></html>'
+
+    def get_page_header(self, lang='en', title='Nested diff'):
+        """Return HTML page header."""
+        return (
+            '<!DOCTYPE html><html lang="' + lang +
+            '"><head><title>' + escape_html(title) +
+            '</title><style>' + self.get_css() +
+            '</style></head><body>'
+        )
 
     def get_script(self):
         """Return script for generated HTML page."""
@@ -375,3 +400,8 @@ class TermFormatter(TextFormatter):
         self.val_line_prefix['N'] = '\033[32m' + self.val_line_prefix['N']
         self.val_line_prefix['O'] = '\033[31m' + self.val_line_prefix['O']
         self.val_line_prefix['R'] = '\033[31m' + self.val_line_prefix['R']
+
+    @staticmethod
+    def get_diff_header(name_a, name_b):
+        """Return diff header."""
+        return '\033[33m--- ' + name_a + '\n+++ ' + name_b + '\033[0m\n'

@@ -422,9 +422,6 @@ RESULTS = {
     'unsupported_extension': {
         'raises': ValueError,
     },
-    'wrapping_text': {
-        'result': 'Header\n- 0\n+ 1\nFooter\n',
-    },
 }
 
 

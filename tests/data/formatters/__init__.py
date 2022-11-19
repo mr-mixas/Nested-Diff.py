@@ -69,15 +69,6 @@ def get_tests():
             'diff_opts': {'text_diff_ctx': 2},
             'formatter_opts': {'type_hints': False},
         },
-        'wrapping_text': {
-            'a': 0,
-            'b': 1,
-            'diff': {'N': 1, 'O': 0},
-            'format_func_opts': {
-                'header': 'Header\n',
-                'footer': 'Footer\n',
-            },
-        },
         'redefined_depth': {
             'a': 0,
             'b': 1,

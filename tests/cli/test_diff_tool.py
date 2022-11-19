@@ -207,7 +207,7 @@ def test_html_ofmt_opts(capsys, expected, rpath):
         rpath('shared.lists.a.json'),
         rpath('shared.lists.b.json'),
         '--ofmt', 'html',
-        '--ofmt-opts', '{"html_opts": {"lang": "es", "title": "<título>"}}',
+        '--ofmt-opts', '{"lang": "es", "title": "<título>"}',
     )).run()
 
     captured = capsys.readouterr()
@@ -222,7 +222,7 @@ def test_html_ofmt_wrappings(capsys, expected, rpath):
         rpath('shared.lists.a.json'),
         rpath('shared.lists.b.json'),
         '--ofmt', 'html',
-        '--ofmt-opts', '{"html_opts": {"header": "<html>", "footer": "</html>", "title": "ignored"}}',
+        '--ofmt-opts', '{"header": "<html>", "footer": "</html>", "title": "ignored"}',
     )).run()
 
     captured = capsys.readouterr()
@@ -386,6 +386,22 @@ def test_diff_several_args_tty(capsys, rpath, stringio_tty):
     assert stringio_tty.getvalue().startswith('\033[33m--- tests')
 
 
+def test_diff_several_args_html(capsys, rpath, stringio_tty):
+    app = nested_diff.diff_tool.App(args=(
+        rpath('shared.lists.a.json'),
+        rpath('shared.lists.b.json'),
+        rpath('shared.lists.a.json'),
+        '--ofmt', 'html',
+    ))
+    app.args.out = stringio_tty
+    exit_code = app.run()
+
+    assert capsys.readouterr().err == ''
+    assert exit_code == 1
+
+    assert stringio_tty.getvalue().count('</html>') == 1
+
+
 def test_show_single_arg(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(args=(
         rpath('shared.ini.patch.json'),
@@ -394,7 +410,7 @@ def test_show_single_arg(capsys, expected, rpath):
 
     captured = capsys.readouterr()
     assert captured.err == ''
-    assert exit_code == 0
+    assert exit_code == 1
 
     assert captured.out == expected
 
@@ -408,9 +424,9 @@ def test_show_several_args(capsys, rpath):
 
     captured = capsys.readouterr()
     assert captured.err == ''
-    assert exit_code == 0
+    assert exit_code == 1
 
-    assert captured.out.startswith('=== tests')
+    assert captured.out.startswith('--- /dev/null')
 
 
 def test_show_several_args_tty(capsys, rpath, stringio_tty):
@@ -423,6 +439,6 @@ def test_show_several_args_tty(capsys, rpath, stringio_tty):
     exit_code = app.run()
 
     assert capsys.readouterr().err == ''
-    assert exit_code == 0
+    assert exit_code == 1
 
-    assert stringio_tty.getvalue().startswith('\033[33m=== tests')
+    assert stringio_tty.getvalue().startswith('\033[33m--- /dev/null')

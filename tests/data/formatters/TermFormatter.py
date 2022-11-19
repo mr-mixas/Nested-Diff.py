@@ -422,9 +422,6 @@ RESULTS = {
     'unsupported_extension': {
         'raises': ValueError,
     },
-    'wrapping_text': {
-        'result': 'Header\n\x1b[31m- 0\x1b[0m\n\x1b[32m+ 1\x1b[0m\nFooter\n',
-    },
 }
 
 

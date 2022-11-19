@@ -25,25 +25,31 @@ import nested_diff.cli
 class App(nested_diff.cli.App):
     """Patch tool for nested data structures."""
 
-    def dump(self, file_, data, fmt):
-        """Dump patched data using apropriate format.
+    def get_dumper(self, fmt, **kwargs):
+        """Create dumper object according to passed format.
 
         Args:
-            file_: File object to dump.
-            data: Data to dump.
-            fmt: Format for dump.
+            fmt: Dumper format.
+            kwargs: Passed to dumper's constructor as is.
+
+        Returns:
+            Dumper object.
 
         """
         if fmt == 'auto':
-            fmt = self.guess_fmt(file_, 'json')
+            fmt = self.guess_fmt(self.args.target_file, 'json')
 
-        super().dump(file_, data, fmt)
+        return super().get_dumper(fmt, **kwargs)
 
     def get_positional_args_parser(self):
         """Return parser for positional part of CLI args."""
         parser = super().get_positional_args_parser()
 
-        parser.add_argument('target_file')
+        parser.add_argument(
+            'target_file',
+            type=argparse.FileType('r+'),
+            help='file to patch',
+        )
         parser.add_argument(
             'patch_file',
             nargs='?',
@@ -71,15 +77,13 @@ class App(nested_diff.cli.App):
     def run(self):
         """Patch app object entry point."""
         patched = self.patch(
-            self.load(argparse.FileType()(self.args.target_file)),
+            self.load(self.args.target_file),
             self.load(self.args.patch_file),
         )
 
-        self.dump(
-            argparse.FileType('w')(self.args.target_file),
-            patched,
-            self.args.ofmt,
-        )
+        self.args.target_file.seek(0)
+        self.dumper.dump(self.args.target_file, patched)
+        self.args.target_file.truncate()
 
         return 0
 

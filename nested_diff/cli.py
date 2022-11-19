@@ -54,27 +54,17 @@ class App():
         import json
         return json.loads(opts)
 
-    def dump(self, file_, data, fmt, header='', footer=''):
-        """Dump data using apropriate format.
+    @property
+    def dumper(self):  # noqa D102
+        try:
+            return self.__dumper
+        except AttributeError:
+            self.__dumper = self.get_dumper(
+                self.args.ofmt,
+                **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
+            )
 
-        Args:
-            file_: File object.
-            data: Data to dump.
-            fmt: Format, one of self.supported_ofmts.
-            header: Optional leading string.
-            footer: Optional trailing string.
-
-        """
-        if header:
-            file_.write(header)
-
-        self.get_dumper(
-            fmt,
-            **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
-        ).dump(file_, data)
-
-        if footer:
-            file_.write(footer)
+            return self.__dumper
 
     def get_argparser(self, description=None):
         """Return complete CLI argument parser."""
@@ -245,6 +235,17 @@ class Dumper():
     """Base class for data dumpers."""
 
     tty_final_new_line = False
+
+    def __init__(self, header='', footer=''):
+        """Initialize dumper.
+
+        Args:
+            header: Optional header to dump.
+            footer: Optional footer to dump.
+
+        """
+        self.header = header
+        self.footer = footer
 
     def encode(self, data):
         """Encode data.
