@@ -284,19 +284,21 @@ class HtmlFormatter(TextFormatter):
 }
 .nDvH {color: #707}
 .nDvO, .nDvR {background-color: #fdd}
-""".replace(' ', '').replace('\n', '')
+.nDvD div:not([class]):hover {background-color: rgba(0, 0, 0, .05)}
+""".replace('    ', '').replace(': ', ':').replace(', ', ',').replace(
+            ' {', '{').replace('\n', '')
 
     @staticmethod
     def get_diff_header(name_a, name_b):
         """Return diff header."""
         return (
-            '<div class="NDvH">--- ' + name_a +
+            '<div class="nDvH">--- ' + name_a +
             '<br>+++ ' + name_b + '</div>'
         )
 
     def get_page_footer(self):
         """Return HTML page footer."""
-        return '<script>' + self.get_script() + '</script></body></html>'
+        return '</div><script>' + self.get_script() + '</script></body></html>'
 
     def get_page_header(self, lang='en', title='Nested diff'):
         """Return HTML page header."""
@@ -304,7 +306,7 @@ class HtmlFormatter(TextFormatter):
             '<!DOCTYPE html><html lang="' + lang +
             '"><head><title>' + escape_html(title) +
             '</title><style>' + self.get_css() +
-            '</style></head><body>'
+            '</style></head><body><div class="nDvD" style="width:fit-content">'
         )
 
     def get_script(self):
