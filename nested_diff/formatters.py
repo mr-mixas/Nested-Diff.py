@@ -263,6 +263,8 @@ class HtmlFormatter(TextFormatter):
     def get_css():
         """Return CSS for generated HTML page."""
         return """
+div:has(> [class^="nDk"]) {cursor: pointer}
+div:has(> [class^="nDv"]) {cursor: text}
 [class^="nDk"] {cursor: pointer}
 [class^="nDk"], [class^="nDv"] {
     border-radius: 2px;
