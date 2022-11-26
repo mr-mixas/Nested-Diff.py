@@ -266,7 +266,7 @@ class HtmlFormatter(TextFormatter):
 div:has(> [class^="nDk"]) {cursor: pointer}
 div:has(> [class^="nDv"]) {cursor: text}
 [class^="nDk"] {cursor: pointer}
-[class^="nDk"], [class^="nDv"] {
+[class^="nDk"], [class^="nDv"]:not(.nDvD) {
     border-radius: 2px;
     display: inline;
 }
@@ -348,7 +348,7 @@ document.querySelector('.nDvD').addEventListener('click', event => {
         dif.style.height = '0px';
         PREV = null;
         dif.__nDc = tgt.innerHTML.substring(0, 1);
-        tgt.innerHTML = tgt.innerHTML.replace(/^./, '*');
+        tgt.innerHTML = tgt.innerHTML.replace(/^./, '&#9660;');
         tgt.style.fontWeight = 'bold'
     }
 })
