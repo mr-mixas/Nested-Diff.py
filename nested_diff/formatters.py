@@ -345,7 +345,7 @@ document.querySelector('.nDvD').addEventListener('click', event => {
         dif.__nDh = dif.offsetHeight;
         dif.style.height = '0px';
         PREV = null;
-        dif.__nDc = tgt.innerHTML.substring(1, 2);
+        dif.__nDc = tgt.innerHTML.substring(0, 1);
         tgt.innerHTML = tgt.innerHTML.replace(/^./, '*');
         tgt.style.fontWeight = 'bold'
     }
