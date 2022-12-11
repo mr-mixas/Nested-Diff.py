@@ -164,7 +164,8 @@ class TextFormatter(AbstractFormatter):
                 yield from self.generate_string(
                     self._type_by_ext[extension_id].__name__, 'E', depth)
         else:
-            yield from self.generate_string(comment, 'C', depth)
+            for line in comment.splitlines():
+                yield from self.generate_string(line, 'C', depth)
 
         yield from generator(self, diff, depth)
 

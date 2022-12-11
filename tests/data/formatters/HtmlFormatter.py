@@ -39,7 +39,10 @@ RESULTS = {
         'result': '<div class="nDvD"><div>  <div class="nDkO">{&#x27;(&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;)&#x27;</div></div><div>+   <div class="nDvN">&#x27;(&#x27;</div></div></div><div>  <div class="nDkO">{&#x27;&lt;&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;&gt;&#x27;</div></div><div>+   <div class="nDvN">&#x27;&lt;&#x27;</div></div></div><div>  <div class="nDkO">{&#x27;[&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;]&#x27;</div></div><div>+   <div class="nDvN">&#x27;[&#x27;</div></div></div><div>  <div class="nDkO">{&#x27;{&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;}&#x27;</div></div><div>+   <div class="nDvN">&#x27;{&#x27;</div></div></div></div>',
     },
     'comment_is_empty_string': {
-        'result': '<div class="nDvD"><div># <div class="nDvC"></div></div><div>- <div class="nDvO">&#x27;old&#x27;</div></div><div>+ <div class="nDvN">&#x27;new&#x27;</div></div></div>',
+        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;old&#x27;</div></div><div>+ <div class="nDvN">&#x27;new&#x27;</div></div></div>',
+    },
+    'comment_is_multiline_string': {
+        'result': '<div class="nDvD"><div># <div class="nDvC">multi</div></div><div># <div class="nDvC">line</div></div><div># <div class="nDvC">comment</div></div><div>- <div class="nDvO">&#x27;old&#x27;</div></div><div>+ <div class="nDvN">&#x27;new&#x27;</div></div></div>',
     },
     'comment_vs_type_hint': {
         'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1,2 +1,2 @@</div></div><div>- <div class="nDvR">two</div></div><div>+ <div class="nDvA">2</div></div><div>  <div class="nDvU">lines</div></div></div>',

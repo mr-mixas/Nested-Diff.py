@@ -39,7 +39,10 @@ RESULTS = {
         'result': "  {'('}\n-   ')'\n+   '('\n  {'<'}\n-   '>'\n+   '<'\n  {'['}\n-   ']'\n+   '['\n  {'{'}\n-   '}'\n+   '{'\n",
     },
     'comment_is_empty_string': {
-        'result': "# \n- 'old'\n+ 'new'\n",
+        'result': "- 'old'\n+ 'new'\n",
+    },
+    'comment_is_multiline_string': {
+        'result': "# multi\n# line\n# comment\n- 'old'\n+ 'new'\n",
     },
     'comment_vs_type_hint': {
         'result': '# <str>\n  @@ -1,2 +1,2 @@\n- two\n+ 2\n  lines\n',

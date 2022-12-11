@@ -39,8 +39,10 @@ def get_tests():
             'formatter_opts': {'type_hints': True},  # type hint should be ignored
         },
         'comment_is_empty_string': {
-            # empty comments should be preserved
             'diff': {'C': '', 'N': 'new', 'O': 'old'},
+        },
+        'comment_is_multiline_string': {
+            'diff': {'C': 'multi\nline\ncomment', 'N': 'new', 'O': 'old'},
         },
         'comment_with_HTML_tags': {
             'diff': {'U': 'same', 'C': '<h1>comment</h1>'},

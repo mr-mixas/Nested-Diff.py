@@ -39,7 +39,10 @@ RESULTS = {
         'result': "  {'('}\x1b[0m\n\x1b[31m-   ')'\x1b[0m\n\x1b[32m+   '('\x1b[0m\n  {'<'}\x1b[0m\n\x1b[31m-   '>'\x1b[0m\n\x1b[32m+   '<'\x1b[0m\n  {'['}\x1b[0m\n\x1b[31m-   ']'\x1b[0m\n\x1b[32m+   '['\x1b[0m\n  {'{'}\x1b[0m\n\x1b[31m-   '}'\x1b[0m\n\x1b[32m+   '{'\x1b[0m\n",
     },
     'comment_is_empty_string': {
-        'result': "\x1b[34m# \x1b[0m\n\x1b[31m- 'old'\x1b[0m\n\x1b[32m+ 'new'\x1b[0m\n",
+        'result': "\x1b[31m- 'old'\x1b[0m\n\x1b[32m+ 'new'\x1b[0m\n",
+    },
+    'comment_is_multiline_string': {
+        'result': "\x1b[34m# multi\x1b[0m\n\x1b[34m# line\x1b[0m\n\x1b[34m# comment\x1b[0m\n\x1b[31m- 'old'\x1b[0m\n\x1b[32m+ 'new'\x1b[0m\n",
     },
     'comment_vs_type_hint': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1,2 +1,2 @@\x1b[0m\n\x1b[31m- two\x1b[0m\n\x1b[32m+ 2\x1b[0m\n  lines\x1b[0m\n',
