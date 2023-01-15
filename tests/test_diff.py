@@ -28,7 +28,7 @@ def test_local_objects():
     a = [local_function_cant_be_pickled]
     b = []
 
-    with pytest.raises(Exception, match="Can't pickle"):
+    with pytest.raises(Exception, match="Can't pickle"):  # noqa B017 (different exceptions on different python vers)
         diff(a, b)
 
 
