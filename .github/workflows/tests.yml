@@ -41,7 +41,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --quiet --upgrade pip setuptools
-        pip install --quiet --upgrade tox
+        pip install --quiet --upgrade tox==3.27.0
 
     - name: Run test without coverage
       if: ${{ matrix.tox-env != 'coverage' }}
