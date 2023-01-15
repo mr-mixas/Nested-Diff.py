@@ -1,11 +1,20 @@
 # Nested-Diff.py
 
-Recursive diff and patch for nested structures. **[Live Demo](https://nesteddiff.pythonanywhere.com/)**
+Recursive diff and patch for nested structures.
 
 [![Tests Status](https://github.com/mr-mixas/Nested-Diff.py/actions/workflows/tests.yml/badge.svg)](https://github.com/mr-mixas/Nested-Diff.py/actions?query=branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 [![License](https://img.shields.io/pypi/l/nested_diff.svg)](https://pypi.org/project/nested_diff/)
+
+## Main features
+
+* Mashine-readable diff structure.
+* Human-friendly diff visualization, collapsible html diffs.
+* All operation tags are optional and may be disabled.
+* Extensibility.
+
+**[See Live Demo!](https://nesteddiff.pythonanywhere.com/)**
 
 ## Install
 
@@ -18,16 +27,19 @@ For extra formats support (YAML, TOML) in cli tools, use
 ## Command line tools
 
 ```
-mixas:~/$ cat a.json b.json
+$ cat a.json b.json
 [0, [1],    3]
 [0, [1, 2], 3]
-mixas:~/$ nested_diff a.json b.json
+```
+```
+$ nested_diff a.json b.json
   [1]
 +   [1]
 +     2
-mixas:~/$
-mixas:~/$ nested_diff a.json b.json --ofmt json > patch.json
-mixas:~/$ nested_patch a.json patch.json
+```
+```
+$ nested_diff a.json b.json --ofmt json > patch.json
+$ nested_patch a.json patch.json
 ```
 
 ## Library usage
@@ -77,7 +89,9 @@ mixas:~/$ nested_patch a.json patch.json
 >>>
 ```
 
-See more examples in [HOWTO](./HOWTO.md) and [tests](./tests/).
+For more examples see [Live Demo](https://nesteddiff.pythonanywhere.com/),
+[HOWTO](https://github.com/mr-mixas/Nested-Diff.py/blob/master/HOWTO.md) and
+[tests](https://github.com/mr-mixas/Nested-Diff.py/tree/master/tests).
 
 ## Diff structure
 
@@ -137,7 +151,7 @@ Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.
 
 ## See Also
 
-[HOWTO](./HOWTO.md)
+[HOWTO](https://github.com/mr-mixas/Nested-Diff.py/blob/master/HOWTO.md)
 
 [deepdiff](https://pypi.org/project/deepdiff/),
 [jsondiff](https://pypi.org/project/jsondiff/),
