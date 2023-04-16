@@ -15,9 +15,7 @@ But when initial objects must remain unchanged custom handlers may be used:
 ```
 >>> from nested_diff import Differ, handlers
 >>>
->>> class FloatHandler(handlers.TypeHandler):
-...     handled_type = float
-...
+>>> class FloatHandler(handlers.FloatHandler):
 ...     def __init__(self, precision=2, *args, **kwargs):
 ...         super().__init__(*args, **kwargs)
 ...         self.precision = precision
@@ -35,7 +33,7 @@ But when initial objects must remain unchanged custom handlers may be used:
 >>> a = [0.001, 0.01, 0.1]
 >>> b = [0.002, 0.02, 0.2]
 >>>
->>> assert differ.diff(a, b) == (False, {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]})
+assert differ.diff(a, b) == (False, {'D': [{'I': 2, 'N': 0.2, 'O': 0.1}]})
 >>>
 ```
 
