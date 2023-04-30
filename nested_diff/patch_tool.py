@@ -72,7 +72,7 @@ class App(nested_diff.cli.App):
             Patched object.
 
         """
-        return nested_diff.patch(target, diff)
+        return nested_diff.Patcher().patch(target, diff)
 
     def run(self):
         """Patch app object entry point."""

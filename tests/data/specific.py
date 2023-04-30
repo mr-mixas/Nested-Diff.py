@@ -1,3 +1,6 @@
+from nested_diff.handlers import TextHandler
+
+
 def get_tests():
     return {
         'frozenset_extended': {
@@ -27,7 +30,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'inf_vs_inf': {
             'a': float('inf'),
@@ -45,13 +48,14 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_equal': {
             'a': 'A\nB\nC',
             'b': 'A\nB\nC',
             'diff': {},
-            'diff_opts': {'U': False, 'text_diff_ctx': 3},
+            'diff_opts': {'U': False},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_lcs': {
             'a': 'A\nB\nC',
@@ -65,7 +69,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_line_added': {
             'a': 'B\nC',
@@ -79,7 +83,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_line_changed': {
             'a': 'A\nB\nC',
@@ -94,7 +98,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_line_changed_ctx_0': {
             'a': 'A\nB\nC',
@@ -107,7 +111,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 0},
+            'handlers': {TextHandler: {'context': 0}},
         },
         'text_line_removed': {
             'a': 'A\nB\nC',
@@ -121,7 +125,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_multiple_hunks': {
             'a': 'A\nB\nC',
@@ -135,7 +139,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 0},
+            'handlers': {TextHandler: {'context': 0}},
         },
         'text_trailing_newlines': {
             'a': 'A\nB\n',
@@ -150,7 +154,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'text_vs_empty_string': {
             'a': 'A\nB',
@@ -164,7 +168,7 @@ def get_tests():
                 ],
                 'E': 5,
             },
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'set_extended': {
             'a': {1},
@@ -202,17 +206,11 @@ def get_tests():
             'diff_opts': {'A': False, 'U': False},
             'patched': {1},
         },
-        'text_diff_disabled': {
-            'a': 'A\nB',
-            'b': 'B\nC',
-            'diff': {'N': 'B\nC', 'O': 'A\nB'},
-            'diff_opts': {'text_diff_ctx': -1},
-        },
         'simple_strings_in_text_mode': {
             'a': 'bar',
             'b': 'baz',
             'diff': {'N': 'baz', 'O': 'bar'},
-            'diff_opts': {'text_diff_ctx': 3},
+            'handlers': {TextHandler: {'context': 3}},
         },
         'str_vs_bytes': {
             'a': 'a',

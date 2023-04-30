@@ -1,12 +1,12 @@
 import pytest
 
-from nested_diff import Iterator, diff
+from nested_diff import Iterator, Differ
 
 
 def test_scalar_diff():
     a = 0
     b = 1
-    d = diff(a, b)
+    _, d = Differ().diff(a, b)
 
     expected = [(d, None, None)]
     got = list(Iterator().iterate(d))
@@ -17,7 +17,7 @@ def test_scalar_diff():
 def test_dict_diff():
     a = {'1': 1, '2': {'9': 9, '10': 10}, '3': 3}
     b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4}
-    d = diff(a, b)
+    _, d = Differ().diff(a, b)
 
     expected = [
         (d, '1', d['D']['1']),
@@ -47,7 +47,7 @@ def test_dict_diff():
 def test_dict_diff__keys_sorted():
     a = {'1': 1, '2': {'9': 9, '10': 10}, '3': 3}
     b = {'1': 1, '2': {'9': 8, '10': 10}, '4': 4}
-    d = diff(a, b)
+    _, d = Differ().diff(a, b)
 
     expected = [
         (d, '1', d['D']['1']),
@@ -74,7 +74,7 @@ def test_dict_diff__keys_sorted():
 def test_list_diff():
     a = [0, [1], 3]
     b = [0, [1, 2], 3]
-    d = diff(a, b)
+    _, d = Differ().diff(a, b)
 
     expected = [
         (d, 0, d['D'][0]),
@@ -97,7 +97,7 @@ def test_list_diff():
 def test_list_diff__noU():  # noqa N802
     a = [0, [1], 3]
     b = [0, [1, 2], 3]
-    d = diff(a, b, U=False)
+    _, d = Differ(U=False).diff(a, b)
 
     expected = [
         (d, 1, d['D'][0]),
@@ -113,7 +113,7 @@ def test_list_diff__noU():  # noqa N802
 def test_set_diff():
     a = {0, 1}
     b = {0, 2}
-    d = diff(a, b)
+    _, d = Differ().diff(a, b)
 
     expected = [
         ({'D': [{'U': 0}, {'R': 1}, {'A': 2}], 'E': 3}, None, None),

@@ -1,27 +1,12 @@
 import os
 import pytest
 
-import nested_diff
-
 
 def do_test_function(test, func):
     if 'raises' in test:
         with test['raises']:
             func(test)
     else:
-        try:
-            a = test['a']
-            b = test['b']
-        except KeyError:  # initial values may absent in some test cases
-            pass
-        else:
-            # ensure diff is correct
-            diff_opts = test.get('diff_opts', {})
-            diff_should_be = nested_diff.diff(a, b, **diff_opts)
-
-            if test.get('diff', {}) != diff_should_be:
-                raise ValueError(diff_should_be)
-
         assert func(test) == test['result']
 
 
