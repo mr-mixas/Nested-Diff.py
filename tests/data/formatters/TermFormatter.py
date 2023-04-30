@@ -143,6 +143,9 @@ RESULTS = {
     'hashes_with_one_different_value_noO': {
         'result': "  {'one'}\x1b[0m\n\x1b[32m+   2\x1b[0m\n",
     },
+    'inf_vs_inf': {
+        'result': '  inf\x1b[0m\n',
+    },
     'line_added_to_empty_string': {
         'result': '\x1b[34m# <str>\x1b[0m\n\x1b[35m  @@ -1 +1,2 @@\x1b[0m\n  \x1b[0m\n\x1b[32m+ \x1b[0m\n',
     },

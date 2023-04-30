@@ -143,6 +143,9 @@ RESULTS = {
     'hashes_with_one_different_value_noO': {
         'result': "  {'one'}\n+   2\n",
     },
+    'inf_vs_inf': {
+        'result': '  inf\n',
+    },
     'line_added_to_empty_string': {
         'result': '# <str>\n  @@ -1 +1,2 @@\n  \n+ \n',
     },

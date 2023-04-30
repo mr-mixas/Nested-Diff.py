@@ -29,6 +29,11 @@ def get_tests():
             },
             'diff_opts': {'text_diff_ctx': 3},
         },
+        'inf_vs_inf': {
+            'a': float('inf'),
+            'b': float('inf'),
+            'diff': {'U': float('inf')},
+        },
         'line_added_to_empty_string': {
             'a': '',
             'b': '\n',

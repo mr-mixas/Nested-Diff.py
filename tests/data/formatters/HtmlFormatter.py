@@ -143,6 +143,9 @@ RESULTS = {
     'hashes_with_one_different_value_noO': {
         'result': '<div class="nDvD"><div>  <div class="nDkN">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvN">2</div></div></div></div>',
     },
+    'inf_vs_inf': {
+        'result': '<div class="nDvD"><div>  <div class="nDvU">inf</div></div></div>',
+    },
     'line_added_to_empty_string': {
         'result': '<div class="nDvD"><div># <div class="nDvE">&lt;str&gt;</div></div><div>  <div class="nDvH">@@ -1 +1,2 @@</div></div><div>  <div class="nDvU"></div></div><div>+ <div class="nDvA"></div></div></div>',
     },
