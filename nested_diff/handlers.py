@@ -17,6 +17,7 @@
 """Type handlers for nedted diff."""
 
 from difflib import SequenceMatcher
+from math import isnan
 from pickle import dumps
 
 
@@ -149,6 +150,27 @@ class FloatHandler(ScalarHandler):
     """float handler."""
 
     handled_type = float
+
+    def __init__(self, nans_equal=False):
+        """Initialize handler.
+
+        Args:
+            nans_equal: When True treat NaN (not a number) as equal to NaN.
+
+        """
+        super().__init__()
+
+        if nans_equal:
+            def _diff_nan_wrapper(differ, a, b):
+                if isnan(a) and isnan(b):
+                    if differ.op_u:
+                        return True, {'U': a}
+
+                    return True, {}
+
+                return self.diff(differ, a, b)
+
+            self.diff = _diff_nan_wrapper
 
 
 class StrHandler(ScalarHandler):

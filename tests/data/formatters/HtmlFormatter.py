@@ -203,6 +203,18 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '<div class="nDvD"><div>  <div class="nDkO">(0)</div></div><div class="nDvD"><div>-   <div class="nDvO">()</div></div><div>+   <div class="nDvN">frozenset()</div></div></div><div>  <div class="nDkD">(1)</div></div><div class="nDvD"><div>#   <div class="nDvE">&lt;set&gt;</div></div><div>+   <div class="nDvA">True</div></div></div></div>',
     },
+    'nan_vs_None_nans_equal_opt_enabled': {
+        'result': '<div class="nDvD"><div>- <div class="nDvO">nan</div></div><div>+ <div class="nDvN">None</div></div></div>',
+    },
+    'nan_vs_nan_nans_equal_opt_disabled': {
+        'result': '<div class="nDvD"><div>- <div class="nDvO">nan</div></div><div>+ <div class="nDvN">nan</div></div></div>',
+    },
+    'nan_vs_nan_nans_equal_opt_enabled': {
+        'result': '<div class="nDvD"><div>  <div class="nDvU">nan</div></div></div>',
+    },
+    'nan_vs_nan_nans_equal_opt_enabled_noU': {
+        'result': '<div class="nDvD"></div>',
+    },
     'nested_hashes': {
         'result': '<div class="nDvD"><div>+ <div class="nDkA">{&#x27;four&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvA">4</div></div></div><div>  <div class="nDkU">{&#x27;one&#x27;}</div></div><div class="nDvD"><div>    <div class="nDvU">1</div></div></div><div>- <div class="nDkR">{&#x27;three&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">3</div></div></div><div>  <div class="nDkD">{&#x27;two&#x27;}</div></div><div class="nDvD"><div>    <div class="nDkO">{&#x27;nine&#x27;}</div></div><div class="nDvD"><div>-     <div class="nDvO">9</div></div><div>+     <div class="nDvN">8</div></div></div><div>    <div class="nDkU">{&#x27;ten&#x27;}</div></div><div class="nDvD"><div>      <div class="nDvU">10</div></div></div></div></div>',
     },

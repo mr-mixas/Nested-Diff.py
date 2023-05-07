@@ -11,6 +11,12 @@ TESTS.update(specific.get_tests())
 
 @pytest.mark.parametrize('name', sorted(TESTS.keys()))
 def test_diff(name):
+    try:
+        if TESTS[name]['skip']['diff']['cond']:
+            pytest.skip(TESTS[name]['skip']['diff'].get('reason', ''))
+    except KeyError:
+        pass
+
     a = TESTS[name]['a']
     b = TESTS[name]['b']
 
@@ -22,7 +28,10 @@ def test_diff(name):
 
     _, got = differ.diff(a, b)
 
-    assert got == expected
+    try:
+        assert TESTS[name]['assert_func'](got, expected)
+    except KeyError:
+        assert got == expected
 
 
 def test_local_objects():

@@ -203,6 +203,18 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '  (0)\n-   ()\n+   frozenset()\n  (1)\n#   <set>\n+   True\n',
     },
+    'nan_vs_None_nans_equal_opt_enabled': {
+        'result': '- nan\n+ None\n',
+    },
+    'nan_vs_nan_nans_equal_opt_disabled': {
+        'result': '- nan\n+ nan\n',
+    },
+    'nan_vs_nan_nans_equal_opt_enabled': {
+        'result': '  nan\n',
+    },
+    'nan_vs_nan_nans_equal_opt_enabled_noU': {
+        'result': '',
+    },
     'nested_hashes': {
         'result': "+ {'four'}\n+   4\n  {'one'}\n    1\n- {'three'}\n-   3\n  {'two'}\n    {'nine'}\n-     9\n+     8\n    {'ten'}\n      10\n",
     },

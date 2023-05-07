@@ -1,4 +1,8 @@
-from nested_diff.handlers import TextHandler
+import sys
+
+from pickle import dumps
+
+from nested_diff.handlers import FloatHandler, TextHandler
 
 
 def get_tests():
@@ -49,6 +53,40 @@ def get_tests():
                 'E': 5,
             },
             'handlers': {TextHandler: {'context': 3}},
+        },
+        'nan_vs_None_nans_equal_opt_enabled': {
+            'a': float('nan'),
+            'b': None,
+            'diff': {'N': None, 'O': float('nan')},
+            'handlers': {FloatHandler: {'nans_equal': True}},
+            'assert_func': lambda a, b: dumps(a) == dumps(b),
+        },
+        'nan_vs_nan_nans_equal_opt_disabled': {
+            'a': float('nan'),
+            'b': float('nan'),
+            'diff': {'N': float('nan'), 'O': float('nan')},
+            'assert_func': lambda a, b: dumps(a) == dumps(b),
+            # float('nan') is float('nan') is true on PyPy, but not on CPython
+            # https://doc.pypy.org/en/latest/cpython_differences.html
+            'skip': {'diff': {
+                'cond': sys.implementation.name == 'pypy',
+                'reason': 'float("nan") is float("nan") is true on PyPy',
+            }},
+        },
+        'nan_vs_nan_nans_equal_opt_enabled': {
+            'a': float('nan'),
+            'b': float('nan'),
+            'diff': {'U': float('nan')},
+            'handlers': {FloatHandler: {'nans_equal': True}},
+            'assert_func': lambda a, b: dumps(a) == dumps(b),
+        },
+        'nan_vs_nan_nans_equal_opt_enabled_noU': {
+            'a': float('nan'),
+            'b': float('nan'),
+            'diff': {},
+            'diff_opts': {'U': False},
+            'handlers': {FloatHandler: {'nans_equal': True}},
+            'assert_func': lambda a, b: dumps(a) == dumps(b),
         },
         'text_equal': {
             'a': 'A\nB\nC',

@@ -203,6 +203,18 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '  (0)\x1b[0m\n\x1b[31m-   ()\x1b[0m\n\x1b[32m+   frozenset()\x1b[0m\n  (1)\x1b[0m\n\x1b[34m#   <set>\x1b[0m\n\x1b[32m+   True\x1b[0m\n',
     },
+    'nan_vs_None_nans_equal_opt_enabled': {
+        'result': '\x1b[31m- nan\x1b[0m\n\x1b[32m+ None\x1b[0m\n',
+    },
+    'nan_vs_nan_nans_equal_opt_disabled': {
+        'result': '\x1b[31m- nan\x1b[0m\n\x1b[32m+ nan\x1b[0m\n',
+    },
+    'nan_vs_nan_nans_equal_opt_enabled': {
+        'result': '  nan\x1b[0m\n',
+    },
+    'nan_vs_nan_nans_equal_opt_enabled_noU': {
+        'result': '',
+    },
     'nested_hashes': {
         'result': "\x1b[1;32m+ {'four'}\x1b[0m\n\x1b[32m+   4\x1b[0m\n  {'one'}\x1b[0m\n    1\x1b[0m\n\x1b[1;31m- {'three'}\x1b[0m\n\x1b[31m-   3\x1b[0m\n  {'two'}\x1b[0m\n    {'nine'}\x1b[0m\n\x1b[31m-     9\x1b[0m\n\x1b[32m+     8\x1b[0m\n    {'ten'}\x1b[0m\n      10\x1b[0m\n",
     },

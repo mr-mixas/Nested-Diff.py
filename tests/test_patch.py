@@ -20,7 +20,10 @@ def test_patch(name):
 
     got = Patcher().patch(target, TESTS[name]['diff'])
 
-    assert not Differ(U=False).diff(expected, got)[1]
+    try:
+        assert TESTS[name]['assert_func'](got, expected)
+    except KeyError:
+        assert not Differ(U=False).diff(expected, got)[1]
 
 
 # Test what doesn't covered by standard tests

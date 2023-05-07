@@ -304,6 +304,34 @@ def test_yaml_ofmt(capsys, expected, rpath):
     assert captured.out == expected
 
 
+# json parser return same NaN object for all NaN entries (at least for now),
+# so they all match `a is b` condition in Differ.diff and treated as equal.
+def test_json_nan(capsys, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.nan.json'),
+        rpath('shared.nan.json'),
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert captured.out == ''
+    assert exit_code == 0
+
+
+# yaml parser return same NaN object for all NaN entries (at least for now),
+# so they all match `a is b` condition in Differ.diff and treated as equal.
+def test_yaml_nan(capsys, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.nan.yaml'),
+        rpath('shared.nan.yaml'),
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert captured.out == ''
+    assert exit_code == 0
+
+
 def test_quiet_diff(capsys, rpath):
     exit_code = nested_diff.diff_tool.App(args=(
         rpath('shared.lists.a.json'),
