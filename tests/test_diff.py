@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import Differ
+from nested_diff import Differ, diff, handlers
 
 from tests.data import specific, standard
 
@@ -102,5 +102,15 @@ def test_dicts_with_same_data_but_different_sequence_in_list_u_enabled():
 
     expected = {'U': [{1: 1, 2: 2}]}
     _, got = Differ(U=True).diff(a, b)
+
+    assert got == expected
+
+
+def test_text_diff_func_extra_handlers_opt():
+    a = ['a']
+    b = ['a\nb']
+
+    expected = {'D': [{'D': [{'I': [0, 1, 0, 2]}, {'U': 'a'}, {'A': 'b'}], 'E': 5}]}
+    got = diff(a, b, extra_handlers=[handlers.TextHandler(context=3)])
 
     assert got == expected

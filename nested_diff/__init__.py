@@ -313,24 +313,28 @@ class Iterator():
             self._iters_by_ext[handler.extension_id] = handler.iterate_diff
 
 
-def diff(a, b, text_diff_ctx=-1, **kwargs):
+def diff(a, b, extra_handlers=(), text_diff_ctx=-1, **kwargs):
     """Calculate diff for two objects.
 
     Args:
         a: First object to diff.
         b: Second object to diff.
+        extra_handlers: List of additional type handlers.
         text_diff_ctx: Amount of context lines for text (multiline strings)
             diffs. Disabled entirely when value is negative. This opt is
             deprecated and should be avoided.
         kwargs: Passed to Differ's constructor as is.
 
     Returns:
-        Tuple: equality flag and nested diff.
+        Tuple: nested diff.
 
     """
     differ = Differ(**kwargs)
 
-    if text_diff_ctx >= 0 and kwargs.get('N', True) and kwargs.get('O', True):
+    for handler in extra_handlers:
+        differ.set_handler(handler)
+
+    if text_diff_ctx >= 0:
         warn('`text_diff_ctx` opt is deprecated and will be removed soon',
              DeprecationWarning, stacklevel=2)
 
