@@ -161,6 +161,8 @@ class FloatHandler(ScalarHandler):
         super().__init__()
 
         if nans_equal:
+            orig_diff_method = self.diff
+
             def _diff_nan_wrapper(differ, a, b):
                 if isnan(a) and isnan(b):
                     if differ.op_u:
@@ -168,7 +170,7 @@ class FloatHandler(ScalarHandler):
 
                     return True, {}
 
-                return self.diff(differ, a, b)
+                return orig_diff_method(differ, a, b)
 
             self.diff = _diff_nan_wrapper
 

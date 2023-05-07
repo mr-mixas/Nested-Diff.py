@@ -203,6 +203,9 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '<div class="nDvD"><div>  <div class="nDkO">(0)</div></div><div class="nDvD"><div>-   <div class="nDvO">()</div></div><div>+   <div class="nDvN">frozenset()</div></div></div><div>  <div class="nDkD">(1)</div></div><div class="nDvD"><div>#   <div class="nDvE">&lt;set&gt;</div></div><div>+   <div class="nDvA">True</div></div></div></div>',
     },
+    'nan_vs_0.0_nans_equal_opt_enabled': {
+        'result': '<div class="nDvD"><div>- <div class="nDvO">nan</div></div><div>+ <div class="nDvN">0.0</div></div></div>',
+    },
     'nan_vs_None_nans_equal_opt_enabled': {
         'result': '<div class="nDvD"><div>- <div class="nDvO">nan</div></div><div>+ <div class="nDvN">None</div></div></div>',
     },

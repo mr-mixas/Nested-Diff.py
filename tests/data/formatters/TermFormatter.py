@@ -203,6 +203,9 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '  (0)\x1b[0m\n\x1b[31m-   ()\x1b[0m\n\x1b[32m+   frozenset()\x1b[0m\n  (1)\x1b[0m\n\x1b[34m#   <set>\x1b[0m\n\x1b[32m+   True\x1b[0m\n',
     },
+    'nan_vs_0.0_nans_equal_opt_enabled': {
+        'result': '\x1b[31m- nan\x1b[0m\n\x1b[32m+ 0.0\x1b[0m\n',
+    },
     'nan_vs_None_nans_equal_opt_enabled': {
         'result': '\x1b[31m- nan\x1b[0m\n\x1b[32m+ None\x1b[0m\n',
     },

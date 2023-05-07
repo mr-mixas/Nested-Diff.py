@@ -61,6 +61,13 @@ def get_tests():
             'handlers': {FloatHandler: {'nans_equal': True}},
             'assert_func': lambda a, b: dumps(a) == dumps(b),
         },
+        'nan_vs_0.0_nans_equal_opt_enabled': {
+            'a': float('nan'),
+            'b': 0.0,
+            'diff': {'N': 0.0, 'O': float('nan')},
+            'handlers': {FloatHandler: {'nans_equal': True}},
+            'assert_func': lambda a, b: dumps(a) == dumps(b),
+        },
         'nan_vs_nan_nans_equal_opt_disabled': {
             'a': float('nan'),
             'b': float('nan'),

@@ -203,6 +203,9 @@ RESULTS = {
     'mixed_specific_structures': {
         'result': '  (0)\n-   ()\n+   frozenset()\n  (1)\n#   <set>\n+   True\n',
     },
+    'nan_vs_0.0_nans_equal_opt_enabled': {
+        'result': '- nan\n+ 0.0\n',
+    },
     'nan_vs_None_nans_equal_opt_enabled': {
         'result': '- nan\n+ None\n',
     },
