@@ -377,9 +377,6 @@ RESULTS = {
     'sublist_filled_noA': {
         'result': '',
     },
-    'text_diff_disabled': {
-        'result': "\x1b[31m- 'A\\nB'\x1b[0m\n\x1b[32m+ 'B\\nC'\x1b[0m\n",
-    },
     'text_equal': {
         'result': '',
     },

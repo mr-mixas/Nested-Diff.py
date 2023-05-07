@@ -377,9 +377,6 @@ RESULTS = {
     'sublist_filled_noA': {
         'result': '<div class="nDvD"></div>',
     },
-    'text_diff_disabled': {
-        'result': '<div class="nDvD"><div>- <div class="nDvO">&#x27;A\\nB&#x27;</div></div><div>+ <div class="nDvN">&#x27;B\\nC&#x27;</div></div></div>',
-    },
     'text_equal': {
         'result': '<div class="nDvD"></div>',
     },

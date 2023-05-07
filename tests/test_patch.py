@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import Differ, Patcher
+from nested_diff import Differ, Patcher, patch
 
 from tests.data import specific, standard
 
@@ -75,3 +75,7 @@ def test_unsupported_extension():
 def test_unsupported_patch_type():
     with pytest.raises(ValueError, match='unsupported patch type: module'):
         Patcher().patch(None, {'D': pytest})  # module
+
+
+def test_patch_func():
+    assert patch('a', {'N': 'b', 'O': 'a'}) == 'b'

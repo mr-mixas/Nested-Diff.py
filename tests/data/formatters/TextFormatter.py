@@ -377,9 +377,6 @@ RESULTS = {
     'sublist_filled_noA': {
         'result': '',
     },
-    'text_diff_disabled': {
-        'result': "- 'A\\nB'\n+ 'B\\nC'\n",
-    },
     'text_equal': {
         'result': '',
     },
