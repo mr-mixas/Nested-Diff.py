@@ -40,13 +40,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install --quiet --upgrade pip setuptools
-        pip install --quiet --upgrade tox==3.27.0
+        pip install --quiet --upgrade pip setuptools tox>=4.5.1
 
     - name: Run test without coverage
       if: ${{ matrix.tox-env != 'coverage' }}
       run: |
-        tox -e ${{ matrix.tox-env }}
+        tox run -e ${{ matrix.tox-env }}
 
     - name: Run tests with coverage
       if: ${{ matrix.tox-env == 'coverage' }}
@@ -54,5 +53,5 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pip install --quiet --upgrade coveralls
-        tox -e coverage
+        tox run -e coverage
         coveralls --service=github
