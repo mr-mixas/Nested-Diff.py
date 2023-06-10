@@ -3,10 +3,30 @@
 from tests.data import specific, standard
 
 
+def get_formatter_opt_values_tests():
+    return {
+        'values_format_default': {
+            'diff': {'D': {'KEY': {'A': 'VAL'}, 'key': {'R': 'val'}}},
+            'formatter_opts': {'values': None},
+        },
+
+        'values_format_disabled': {
+            'diff': {'D': {'KEY': {'A': 'VAL'}, 'key': {'R': 'val'}}},
+            'formatter_opts': {'values': ''},
+        },
+        'values_format_unsupported': {
+            'diff': {},
+            'formatter_opts': {'values': 'unsupported_value'},
+            'raises': ValueError,
+        },
+    }
+
+
 def get_tests():
     tests = {}
     tests.update(standard.get_tests())
     tests.update(specific.get_tests())
+    tests.update(get_formatter_opt_values_tests())
 
     # structures
     tests.update({

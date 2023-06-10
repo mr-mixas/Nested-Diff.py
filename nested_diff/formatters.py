@@ -127,17 +127,28 @@ class AbstractFormatter():
 class TextFormatter(AbstractFormatter):
     """Produce human friendly text diff with indenting formatting."""
 
-    def __init__(self, *args, type_hints=True, **kwargs):
+    def __init__(self, *args, type_hints=True, values=None, **kwargs):
         """Initialize formatter.
 
         Args:
             args: Passed to base class as is.
             kwargs: Passed to base class as is.
             type_hints: Print values types when True.
+            values: Empty string will disable values generating.
+
+        Raises:
+            ValueError: Unsupported values format mode.
 
         """
         super().__init__(*args, **kwargs)
         self.type_hints = type_hints
+
+        if values is None:
+            pass
+        elif values == '':
+            self.generate_value = lambda *x: (yield '')
+        else:
+            raise ValueError('unsupported values format mode')
 
     def generate_diff(self, diff, depth=0):
         """Generate formatted diff."""

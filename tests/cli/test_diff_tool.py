@@ -470,3 +470,31 @@ def test_show_several_args_tty(capsys, rpath, stringio_tty):
     assert exit_code == 1
 
     assert stringio_tty.getvalue().startswith('\033[33m--- /dev/null')
+
+
+def test_values_none(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.lists.a.json'),
+        rpath('shared.lists.b.json'),
+        '--values', 'none',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
+def test_values_repr(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.lists.a.json'),
+        rpath('shared.lists.b.json'),
+        '--values', 'repr',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected

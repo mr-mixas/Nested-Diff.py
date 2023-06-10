@@ -440,6 +440,15 @@ RESULTS = {
     'unsupported_extension': {
         'raises': ValueError,
     },
+    'values_format_default': {
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">{&#x27;KEY&#x27;}</div></div><div class="nDvD"><div>+   <div class="nDvA">&#x27;VAL&#x27;</div></div></div><div>- <div class="nDkR">{&#x27;key&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvR">&#x27;val&#x27;</div></div></div></div>',
+    },
+    'values_format_disabled': {
+        'result': '<div class="nDvD"><div>+ <div class="nDkA">{&#x27;KEY&#x27;}</div></div><div class="nDvD"></div><div>- <div class="nDkR">{&#x27;key&#x27;}</div></div><div class="nDvD"></div></div>',
+    },
+    'values_format_unsupported': {
+        'raises': ValueError,
+    },
 }
 
 

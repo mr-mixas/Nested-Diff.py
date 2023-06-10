@@ -440,6 +440,15 @@ RESULTS = {
     'unsupported_extension': {
         'raises': ValueError,
     },
+    'values_format_default': {
+        'result': "+ {'KEY'}\n+   'VAL'\n- {'key'}\n-   'val'\n",
+    },
+    'values_format_disabled': {
+        'result': "+ {'KEY'}\n- {'key'}\n",
+    },
+    'values_format_unsupported': {
+        'raises': ValueError,
+    },
 }
 
 

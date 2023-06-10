@@ -141,6 +141,14 @@ class App(nested_diff.cli.App):
             help="don't show diff, exit code is the only difference indicator",
         )
 
+        parser.add_argument(
+            '--values',
+            choices=('repr', 'none'),
+            default='repr',
+            help='format for values; "none" will lead to brief diff, '
+                 'default is "%(default)s"',
+        )
+
         parser.add_argument('-A', type=int, choices=(0, 1), default=1,
                             help='show added items; enabled by default')
         parser.add_argument('-N', type=int, choices=(0, 1), default=1,
@@ -185,12 +193,17 @@ class App(nested_diff.cli.App):
             else:
                 fmt = 'text'
 
+        if self.args.values == 'repr':
+            values = None
+        elif self.args.values == 'none':
+            values = ''
+
         if fmt == 'term':
-            return TermDumper(**kwargs)
+            return TermDumper(values=values, **kwargs)
         if fmt == 'text':
-            return TextDumper(**kwargs)
+            return TextDumper(values=values, **kwargs)
         if fmt == 'html':
-            return HtmlDumper(**kwargs)
+            return HtmlDumper(values=values, **kwargs)
 
         return super().get_dumper(fmt, **kwargs)
 
