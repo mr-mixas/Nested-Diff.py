@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import html
 
 from nested_diff.formatters import HtmlFormatter, TextFormatter
@@ -9,7 +11,7 @@ def main():
     print('<!DOCTYPE html><html><head><style type="text/css">')
     print(HtmlFormatter().get_css())
     print('pre {margin: 0}')
-    print('</style></head><body><table border=1 cellspacing=0>')
+    print('</style></head><body><center><table border=1 cellspacing=0>')
 
     for name, test in sorted(tests.data.formatters.get_tests().items()):
         if 'raises' in test:
@@ -17,15 +19,9 @@ def main():
 
         diff = test['diff']
         fmt_obj_opts = test.get('formatter_opts', {})
-        fmt_func_opts = test.get('format_func_opts', {})
 
-        try:
-            txt = TextFormatter(**fmt_obj_opts).format(diff, **fmt_func_opts)
-            htm = HtmlFormatter(**fmt_obj_opts).format(diff, **fmt_func_opts)
-        except ValueError as e:
-            if str(e).startswith('unsupported extension: '):
-                continue
-            raise
+        txt = TextFormatter(**fmt_obj_opts).format(diff)
+        htm = HtmlFormatter(**fmt_obj_opts).format(diff)
 
         print('<tr><td colspan=2>' + name + '</td></tr>')
         print('<tr><td><pre>')
@@ -34,7 +30,7 @@ def main():
         print(htm)
         print('</td></tr>')
 
-    print('</table></body></html>')
+    print('</table></center></body></html>')
 
 
 if __name__ == '__main__':

@@ -99,6 +99,7 @@ def get_tests():
         },
         'unsupported_extension': {
             'diff': {'D': None, 'E': 'garbage'},
+            'raises': ValueError,
         },
     })
 
