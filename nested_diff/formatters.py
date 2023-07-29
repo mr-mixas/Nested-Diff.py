@@ -127,7 +127,7 @@ class AbstractFormatter():
 class TextFormatter(AbstractFormatter):
     """Produce human friendly text diff with indenting formatting."""
 
-    def __init__(self, *args, type_hints=True, values=None, **kwargs):
+    def __init__(self, *args, type_hints=True, values='repr', **kwargs):
         """Initialize formatter.
 
         Args:
@@ -143,9 +143,9 @@ class TextFormatter(AbstractFormatter):
         super().__init__(*args, **kwargs)
         self.type_hints = type_hints
 
-        if values is None:
+        if values == 'repr':
             pass
-        elif values == '':
+        elif values == 'none':
             self.generate_value = lambda *x: (yield '')
         else:
             raise ValueError('unsupported values format mode')

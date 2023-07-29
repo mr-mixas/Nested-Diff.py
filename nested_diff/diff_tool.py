@@ -193,10 +193,7 @@ class App(nested_diff.cli.App):
             else:
                 fmt = 'text'
 
-        if self.args.values == 'repr':
-            values = None
-        elif self.args.values == 'none':
-            values = ''
+        values = self.args.values
 
         if fmt == 'term':
             return TermDumper(values=values, **kwargs)

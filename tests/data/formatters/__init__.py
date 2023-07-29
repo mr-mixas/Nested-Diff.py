@@ -7,16 +7,16 @@ def get_formatter_opt_values_tests():
     return {
         'values_format_default': {
             'diff': {'D': {'KEY': {'A': 'VAL'}, 'key': {'R': 'val'}}},
-            'formatter_opts': {'values': None},
+            'formatter_opts': {'values': 'repr'},
         },
 
         'values_format_disabled': {
             'diff': {'D': {'KEY': {'A': 'VAL'}, 'key': {'R': 'val'}}},
-            'formatter_opts': {'values': ''},
+            'formatter_opts': {'values': 'none'},
         },
         'values_format_unsupported': {
             'diff': {},
-            'formatter_opts': {'values': 'unsupported_value'},
+            'formatter_opts': {'values': ''},
         },
     }
 
