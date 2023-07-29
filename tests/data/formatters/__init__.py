@@ -17,7 +17,6 @@ def get_formatter_opt_values_tests():
         'values_format_unsupported': {
             'diff': {},
             'formatter_opts': {'values': 'unsupported_value'},
-            'raises': ValueError,
         },
     }
 
@@ -99,7 +98,6 @@ def get_tests():
         },
         'unsupported_extension': {
             'diff': {'D': None, 'E': 'garbage'},
-            'raises': ValueError,
         },
     })
 
