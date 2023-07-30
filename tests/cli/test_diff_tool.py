@@ -1,3 +1,4 @@
+import builtins
 import json
 import pytest
 import sys
@@ -296,6 +297,35 @@ def test_yaml_ofmt(capsys, expected, rpath):
         rpath('shared.lists.b.json'),
         '--ofmt', 'yaml',
     )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
+@pytest.mark.skipif(
+    sys.implementation.name == 'pypy',
+    reason='FIXME: Fails on pypy in irrelevant place (argparse)',
+)
+def test_python_yaml_impl(capsys, expected, rpath):
+    orig_import = builtins.__import__
+
+    def overrided_import(name, globals, locals, fromlist, level):  # noqa A002
+        if name == 'yaml' and fromlist is not None:
+            for sym in ('CSafeDumper', 'CSafeLoader'):
+                if sym in fromlist:
+                    raise ImportError('Mocked import error for yaml.' + sym)
+
+        return orig_import(name, globals, locals, fromlist, level)  # noqa A002
+
+    with mock.patch('builtins.__import__', overrided_import):
+        exit_code = nested_diff.diff_tool.App(args=(
+            rpath('shared.lists.a.yaml'),
+            rpath('shared.lists.b.yaml'),
+            '--ifmt', 'yaml', '--ofmt', 'yaml',
+        )).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
