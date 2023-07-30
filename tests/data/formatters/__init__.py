@@ -5,11 +5,14 @@ from tests.data import specific, standard
 
 def get_formatter_opt_values_tests():
     return {
+        'values_format_callable': {
+            'diff': {'D': {'KEY': {'A': '3\n4'}, 'key': {'R': '1\n2'}}},
+            'formatter_opts': {'values': lambda x: x.splitlines()},
+        },
         'values_format_default': {
             'diff': {'D': {'KEY': {'A': 'VAL'}, 'key': {'R': 'val'}}},
             'formatter_opts': {'values': 'repr'},
         },
-
         'values_format_disabled': {
             'diff': {'D': {'KEY': {'A': 'VAL'}, 'key': {'R': 'val'}}},
             'formatter_opts': {'values': 'none'},

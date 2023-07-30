@@ -440,6 +440,9 @@ RESULTS = {
     'unsupported_extension': {
         'raises': ValueError,
     },
+    'values_format_callable': {
+        'result': "\x1b[1;32m+ {'KEY'}\x1b[0m\n\x1b[32m+   3\x1b[0m\n\x1b[32m+   4\x1b[0m\n\x1b[1;31m- {'key'}\x1b[0m\n\x1b[31m-   1\x1b[0m\n\x1b[31m-   2\x1b[0m\n",
+    },
     'values_format_default': {
         'result': "\x1b[1;32m+ {'KEY'}\x1b[0m\n\x1b[32m+   'VAL'\x1b[0m\n\x1b[1;31m- {'key'}\x1b[0m\n\x1b[31m-   'val'\x1b[0m\n",
     },

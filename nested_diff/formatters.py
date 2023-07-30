@@ -134,7 +134,11 @@ class TextFormatter(AbstractFormatter):
             args: Passed to base class as is.
             kwargs: Passed to base class as is.
             type_hints: Print values types when True.
-            values: Empty string will disable values generating.
+            values: values formatting method, one of
+                * 'repr': format values using `repr` (default).
+                * 'none': values disabled.
+                * callback: custom values formatter; iterable with strings
+                            expected for output.
 
         Raises:
             ValueError: Unsupported values format mode.
@@ -147,6 +151,12 @@ class TextFormatter(AbstractFormatter):
             pass
         elif values == 'none':
             self.generate_value = lambda *x: (yield '')
+        elif callable(values):
+            def overrided(value, *args, **kwargs):
+                for line in values(value):
+                    yield from self.generate_string(line, *args, **kwargs)
+
+            self.generate_value = overrided
         else:
             raise ValueError('unsupported values format mode')
 
