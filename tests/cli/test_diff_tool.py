@@ -528,3 +528,31 @@ def test_values_repr(capsys, expected, rpath):
     assert exit_code == 1
 
     assert captured.out == expected
+
+
+def test_values_json(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.a.ini'),
+        rpath('shared.b.ini'),
+        '--values', 'json',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
+def test_values_yaml(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.a.ini'),
+        rpath('shared.b.ini'),
+        '--values', 'yaml',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected

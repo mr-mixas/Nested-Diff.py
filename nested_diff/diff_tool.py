@@ -143,9 +143,10 @@ class App(nested_diff.cli.App):
 
         parser.add_argument(
             '--values',
-            choices=('repr', 'none'),
+            choices=('repr', 'none', 'json', 'yaml'),
             default='repr',
-            help='format for values; "none" will lead to brief diff, '
+            help='values format; "none" means no values printed, "repr" is a '
+                 'python representation of the object, rest are themselves; '
                  'default is "%(default)s"',
         )
 
@@ -193,14 +194,8 @@ class App(nested_diff.cli.App):
             else:
                 fmt = 'text'
 
-        values = self.args.values
-
-        if fmt == 'term':
-            return TermDumper(values=values, **kwargs)
-        if fmt == 'text':
-            return TextDumper(values=values, **kwargs)
-        if fmt == 'html':
-            return HtmlDumper(values=values, **kwargs)
+        if fmt in FormatterDumper.supported_fmts:
+            return FormatterDumper(fmt=fmt, values=self.args.values, **kwargs)
 
         return super().get_dumper(fmt, **kwargs)
 
@@ -225,8 +220,59 @@ class App(nested_diff.cli.App):
         return exit_code
 
 
-class AbstractFmtDumper(nested_diff.cli.Dumper):
-    """Base class for diff formatters dumpers."""
+class FormatterDumper(nested_diff.cli.Dumper):
+    """Nested diff builtin formatters dumper."""
+
+    supported_fmts = ('term', 'text', 'html')
+
+    def __init__(
+        self,
+        fmt,
+        header=None,
+        footer=None,
+        lang='en',
+        title='Nested diff',
+        values='repr',
+        **kwargs  # noqa C816
+    ):
+        """Initialize dumper.
+
+        Args:
+            fmt: formatter to use.
+            header: page header.
+            footer: page footer.
+            lang: lang HTML option.
+            title: HTML page title.
+            values: format for values.
+            kwargs: Passed to base formatter as is.
+
+        """
+        import nested_diff.formatters
+
+        if fmt == 'term':
+            base_class = nested_diff.formatters.TermFormatter
+        elif fmt == 'html':
+            base_class = nested_diff.formatters.HtmlFormatter
+        else:
+            base_class = nested_diff.formatters.TextFormatter
+
+        fmt_class = self.get_formatter_class(base_class, values=values)
+        self.encoder = fmt_class(**self.get_opts(kwargs))
+
+        if header is None:
+            if hasattr(self.encoder, 'get_page_header'):
+                header = self.encoder.get_page_header(lang=lang, title=title)
+            else:
+                header = ''
+
+        if footer is None:
+            if hasattr(self.encoder, 'get_page_footer'):
+                footer = self.encoder.get_page_footer()
+            else:
+                footer = ''
+
+        super().__init__(header=header, footer=footer)
+        self.get_diff_header = self.encoder.get_diff_header
 
     def encode(self, data):
         """Encode (format) diff.
@@ -239,6 +285,37 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
 
         """
         return self.encoder.format(data)
+
+    def get_formatter_class(self, base_class, values='repr'):
+        """Return formatter class."""
+
+        class __Formatter(base_class):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+
+                if values == 'repr':
+                    return
+
+                if values == 'none':
+                    self.generate_value = self.generate_empty_value
+                    return
+
+                if values == 'json':
+                    self.__val_encoder = nested_diff.cli.JsonDumper(indent=2)
+                elif values == 'yaml':
+                    self.__val_encoder = nested_diff.cli.YamlDumper(
+                        explicit_start=False)
+
+                self.generate_value = self.generate_multiline_value
+
+            def generate_empty_value(*args):
+                yield ''
+
+            def generate_multiline_value(self, value, tag, depth):
+                for line in self.__val_encoder.encode(value).splitlines():
+                    yield from super().generate_string(line, tag, depth)
+
+        return __Formatter
 
     @staticmethod
     def get_opts(opts):
@@ -255,73 +332,6 @@ class AbstractFmtDumper(nested_diff.cli.Dumper):
         """
         opts.setdefault('sort_keys', True)
         return opts
-
-
-class HtmlDumper(AbstractFmtDumper):
-    """Human friendly HTML dumper for nested diff."""
-
-    def __init__(
-        self,
-        header=None,
-        footer=None,
-        lang='en',
-        title='Nested diff',
-        **kwargs  # noqa C816
-    ):
-        """Initialize dumper.
-
-        Args:
-            header: HTML page header. Brief HTML5 boilerplate used by default.
-            footer: HTML page closing tags.
-            lang: Value for lang HTML option.
-            title: HTML page title.
-            kwargs: Passed to `fmt.HtmlFormatter` as is.
-
-        """
-        from nested_diff.formatters import HtmlFormatter
-
-        self.encoder = HtmlFormatter(**self.get_opts(kwargs))
-        self.get_diff_header = self.encoder.get_diff_header
-
-        if header is None:
-            header = self.encoder.get_page_header(lang=lang, title=title)
-
-        if footer is None:
-            footer = self.encoder.get_page_footer()
-
-        super().__init__(header=header, footer=footer)
-
-
-class TermDumper(AbstractFmtDumper):
-    """Same as TextDumper but with ANSI term colors."""
-
-    def __init__(self, **kwargs):
-        """Initialize dumper.
-
-        Args:
-            kwargs: Passed to `fmt.TermFormatter` as is.
-
-        """
-        super().__init__()
-        from nested_diff.formatters import TermFormatter
-        self.encoder = TermFormatter(**self.get_opts(kwargs))
-        self.get_diff_header = self.encoder.get_diff_header
-
-
-class TextDumper(AbstractFmtDumper):
-    """Human friendly text dumper for nested diff."""
-
-    def __init__(self, **kwargs):
-        """Initialize dumper.
-
-        Args:
-            kwargs: Passed to `fmt.TextFormatter` as is.
-
-        """
-        super().__init__()
-        from nested_diff.formatters import TextFormatter
-        self.encoder = TextFormatter(**self.get_opts(kwargs))
-        self.get_diff_header = self.encoder.get_diff_header
 
 
 def cli():
