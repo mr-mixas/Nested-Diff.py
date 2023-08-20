@@ -114,13 +114,3 @@ def test_text_diff_func_extra_handlers_opt():
     got = diff(a, b, extra_handlers=[handlers.TextHandler(context=3)])
 
     assert got == expected
-
-
-def test_text_diff_func_text_diff_ctx_opt():
-    a = ['a']
-    b = ['a\nb']
-
-    expected = {'D': [{'D': [{'I': [0, 1, 0, 2]}, {'U': 'a'}, {'A': 'b'}], 'E': 5}]}
-    got = diff(a, b, text_diff_ctx=3)
-
-    assert got == expected

@@ -16,8 +16,6 @@
 
 """Recursive diff and patch for nested structures."""
 
-from warnings import warn
-
 import nested_diff.handlers
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
@@ -313,16 +311,13 @@ class Iterator():
             self._iters_by_ext[handler.extension_id] = handler.iterate_diff
 
 
-def diff(a, b, extra_handlers=(), text_diff_ctx=-1, **kwargs):
+def diff(a, b, extra_handlers=(), **kwargs):
     """Calculate diff for two objects.
 
     Args:
         a: First object to diff.
         b: Second object to diff.
         extra_handlers: List of additional type handlers.
-        text_diff_ctx: Amount of context lines for text (multiline strings)
-            diffs. Disabled entirely when value is negative. This opt is
-            deprecated and should be avoided.
         kwargs: Passed to Differ's constructor as is.
 
     Returns:
@@ -333,13 +328,6 @@ def diff(a, b, extra_handlers=(), text_diff_ctx=-1, **kwargs):
 
     for handler in extra_handlers:
         differ.set_handler(handler)
-
-    if text_diff_ctx >= 0:
-        warn('`text_diff_ctx` opt is deprecated and will be removed soon',
-             DeprecationWarning, stacklevel=2)
-
-        differ.set_handler(nested_diff.handlers.TextHandler(
-            context=text_diff_ctx))
 
     return differ.diff(a, b)[1]
 
