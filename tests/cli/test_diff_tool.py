@@ -21,7 +21,7 @@ def test_default_diff(capsys, expected, rpath):
     assert captured.out == expected
 
 
-def test_default_diff_with_tty(capsys, expected, rpath, stringio_tty):
+def test_default_diff_with_tty(capsys, expected, rpath):
     with mock.patch('sys.stdout.isatty', return_value=True):
         exit_code = nested_diff.diff_tool.App(args=(
             rpath('shared.lists.a.json'),
@@ -37,7 +37,7 @@ def test_default_diff_with_tty(capsys, expected, rpath, stringio_tty):
 
 def test_diff_method_kwargs_override(capsys, expected, rpath):
     class TestApp(nested_diff.diff_tool.App):
-        def diff(self, a, b, **kwargs):
+        def diff(self, a, b, **kwargs):  # noqa U100
             return super().diff(a, b, A=0, U=1)
 
     exit_code = TestApp(args=(
@@ -407,7 +407,7 @@ def test_entry_point(capsys):
     assert captured.err == ''
 
 
-def test_diff_single_arg(capsys, rpath):
+def test_diff_single_arg(rpath):
     with pytest.raises(SystemExit) as e:
         nested_diff.diff_tool.App(args=[rpath('shared.lists.a.json')]).run()
 

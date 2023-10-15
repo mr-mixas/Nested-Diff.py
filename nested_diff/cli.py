@@ -247,7 +247,7 @@ class Dumper():
         self.header = header
         self.footer = footer
 
-    def encode(self, data):
+    def encode(self, data):  # noqa U100
         """Encode data.
 
         Args:
@@ -283,7 +283,7 @@ class Dumper():
 class Loader():
     """Base class for data loaders."""
 
-    def decode(self, data):
+    def decode(self, data):  # noqa U100
         """Decode data.
 
         Args:
@@ -431,7 +431,7 @@ class IniLoader(Loader):
 class TomlDumper(Dumper):
     """TOML dumper."""
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         """Initialize dumper."""
         super().__init__()
 
@@ -446,7 +446,7 @@ class TomlDumper(Dumper):
 class TomlLoader(Loader):
     """TOML loader."""
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         """Initialize loader."""
         super().__init__()
 

@@ -450,4 +450,4 @@ if __name__ == '__main__':
     for name in names:
         if headers:
             print('========== ' + name + ' ==========')
-        print(RESULTS[name].get('result', None), end='')
+        print(RESULTS[name].get('result'), end='')

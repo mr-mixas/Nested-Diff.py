@@ -308,7 +308,7 @@ class FormatterDumper(nested_diff.cli.Dumper):
 
                 self.generate_value = self.generate_multiline_value
 
-            def generate_empty_value(*args):
+            def generate_empty_value(*args):  # noqa U101
                 yield ''
 
             def generate_multiline_value(self, value, tag, depth):
