@@ -378,6 +378,9 @@ RESULTS = {
         'result': '',
     },
     'text_equal': {
+        'result': "  'A\\nB\\nC'\x1b[0m\n",
+    },
+    'text_equal_noU': {
         'result': '',
     },
     'text_lcs': {

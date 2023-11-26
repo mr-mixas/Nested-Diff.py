@@ -378,6 +378,9 @@ RESULTS = {
         'result': '<div class="nDvD"></div>',
     },
     'text_equal': {
+        'result': '<div class="nDvD"><div>  <div class="nDvU">&#x27;A\\nB\\nC&#x27;</div></div></div>',
+    },
+    'text_equal_noU': {
         'result': '<div class="nDvD"></div>',
     },
     'text_lcs': {

@@ -98,6 +98,12 @@ def get_tests():
         'text_equal': {
             'a': 'A\nB\nC',
             'b': 'A\nB\nC',
+            'diff': {'U': 'A\nB\nC'},
+            'handlers': {TextHandler: {'context': 3}},
+        },
+        'text_equal_noU': {
+            'a': 'A\nB\nC',
+            'b': 'A\nB\nC',
             'diff': {},
             'diff_opts': {'U': False},
             'handlers': {TextHandler: {'context': 3}},

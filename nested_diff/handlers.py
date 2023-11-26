@@ -711,7 +711,7 @@ class TextHandler(TypeHandler):
         if diff:
             return equal, {'D': diff, 'E': self.extension_id}
 
-        return equal, {}
+        return equal, {'U': a} if differ.op_u else {}
 
     def patch(self, patcher, target, diff):  # noqa U100
         """Patch text (multiline string).
