@@ -9,7 +9,7 @@ Recursive diff and patch for nested structures.
 
 ## Main features
 
-* Mashine-readable diff structure.
+* Machine-readable diff structure.
 * Human-friendly diff visualization, collapsible html diffs.
 * All operation tags are optional and may be disabled.
 * Extensibility.
