@@ -20,7 +20,7 @@ import nested_diff.handlers
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
-__version__ = '1.3.1'
+__version__ = '1.3.2'
 __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
@@ -321,7 +321,7 @@ def diff(a, b, extra_handlers=(), **kwargs):
         kwargs: Passed to Differ's constructor as is.
 
     Returns:
-        Tuple: nested diff.
+        Nested diff.
 
     """
     differ = Differ(**kwargs)
