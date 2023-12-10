@@ -1,0 +1,6 @@
+{
+   "text_with_single_line": "one",
+   "text_with_specific_symbols": "one:two\n\\nthree",
+   "text_with_trailing_lines": "one\n\n\n",
+   "text_with_two_lines": "one\ntwo"
+}

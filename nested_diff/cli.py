@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019-2022 Michael Samoglyadov
+# Copyright 2019-2023 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -472,12 +472,19 @@ class YamlDumper(Dumper):
 
         import yaml
         try:
-            from yaml import CSafeDumper as YamlDumper
+            from yaml import CSafeDumper as ImportedYamlDumper
         except ImportError:
-            from yaml import SafeDumper as YamlDumper
+            from yaml import SafeDumper as ImportedYamlDumper
+
+        class _YamlDumper(ImportedYamlDumper):
+            def represent_scalar(self, tag, value, style=None):
+                if isinstance(value, str) and '\n' in value:
+                    return super().represent_scalar(tag, value, style='|')
+
+                return super().represent_scalar(tag, value, style=style)
 
         self.yaml = yaml
-        self.yaml_dumper = YamlDumper
+        self.yaml_dumper = _YamlDumper
         self.opts = self.get_opts(kwargs)
 
     def encode(self, data):

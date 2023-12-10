@@ -556,3 +556,18 @@ def test_values_yaml(capsys, expected, rpath):
     assert exit_code == 1
 
     assert captured.out == expected
+
+
+def test_values_yaml_multiline_strings(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(args=(
+        rpath('shared.multiline_strings.json'),
+        rpath('shared.multiline_strings.json'),
+        '-U', '1',
+        '--values', 'yaml',
+    )).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 0
+
+    assert captured.out == expected

@@ -1,0 +1,11 @@
+  text_with_single_line: one
+  text_with_specific_symbols: |-
+    one:two
+    \nthree
+  text_with_trailing_lines: |+
+    one
+  
+  
+  text_with_two_lines: |-
+    one
+    two
