@@ -42,8 +42,8 @@ setuptools.setup(
     packages=['nested_diff'],
     entry_points={
         'console_scripts': [
-            'nested_diff=nested_diff.diff_tool:cli',
-            'nested_patch=nested_diff.patch_tool:cli',
+            'nested_diff=nested_diff.diff_tool:App.cli',
+            'nested_patch=nested_diff.patch_tool:App.cli',
         ],
     },
     extras_require={

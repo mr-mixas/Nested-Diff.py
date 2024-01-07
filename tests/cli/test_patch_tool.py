@@ -155,7 +155,7 @@ def test_toml_fmt(capsys, content, rpath, tmp_path):
 def test_entry_point(capsys):
     with mock.patch('sys.argv', ['nested_patch', '-h']):
         with pytest.raises(SystemExit) as e:
-            nested_diff.patch_tool.cli()
+            nested_diff.patch_tool.App.cli()
 
         assert e.value.code == 0
 

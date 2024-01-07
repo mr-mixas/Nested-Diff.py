@@ -54,6 +54,11 @@ class App():
         import json
         return json.loads(opts)
 
+    @classmethod
+    def cli(cls):
+        """Cli tool entry point."""
+        return cls().run()
+
     @property
     def dumper(self):  # noqa D102
         try:

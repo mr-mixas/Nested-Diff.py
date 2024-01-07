@@ -332,8 +332,3 @@ class FormatterDumper(nested_diff.cli.Dumper):
         """
         opts.setdefault('sort_keys', True)
         return opts
-
-
-def cli():
-    """Cli tool entry point."""
-    return App().run()

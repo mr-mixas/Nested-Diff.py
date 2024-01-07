@@ -86,8 +86,3 @@ class App(nested_diff.cli.App):
         self.args.target_file.truncate()
 
         return 0
-
-
-def cli():
-    """Cli tool entry point."""
-    return App().run()

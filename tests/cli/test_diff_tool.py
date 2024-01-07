@@ -398,7 +398,7 @@ def test_exit_code_diff_absent_U_opt_enabled(rpath):  # noqa N802
 def test_entry_point(capsys):
     with mock.patch('sys.argv', ['nested_diff', '-h']):
         with pytest.raises(SystemExit) as e:
-            nested_diff.diff_tool.cli()
+            nested_diff.diff_tool.App.cli()
 
         assert e.value.code == 0
 
