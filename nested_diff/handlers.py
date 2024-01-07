@@ -18,7 +18,6 @@
 
 from difflib import SequenceMatcher
 from math import isnan
-from pickle import dumps
 
 
 class TypeHandler():
@@ -50,7 +49,7 @@ class TypeHandler():
         diff = {}
         equal = True
 
-        if dumps(a, -1) == dumps(b, -1):
+        if differ.dump(a) == differ.dump(b):
             if differ.op_u:
                 diff['U'] = a
         else:
@@ -342,8 +341,8 @@ class ListHandler(TypeHandler):
         (False, {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]})
         >>>
         """
-        self.lcs.set_seq1(tuple(dumps(i, -1) for i in a))
-        self.lcs.set_seq2(tuple(dumps(i, -1) for i in b))
+        self.lcs.set_seq1(tuple(differ.dump(i) for i in a))
+        self.lcs.set_seq2(tuple(differ.dump(i) for i in b))
 
         diff = []
         equal = True

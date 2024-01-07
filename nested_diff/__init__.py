@@ -16,6 +16,8 @@
 
 """Recursive diff and patch for nested structures."""
 
+import pickle
+
 import nested_diff.handlers
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
@@ -101,7 +103,7 @@ class Differ():
     default_differ = DEFAULT_HANDLER.diff
 
     def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
-                 trimR=False, handlers=None):
+                 trimR=False, dumper=None, handlers=None):
         """Initialize Differ.
 
         Args:
@@ -111,6 +113,7 @@ class Differ():
             R: Enable/disable removed items.
             U: Enable/disable unchanged items.
             trimR: When enabled will replace removed data by None.
+            dumper: Optional objects serialiser.
             handlers: A list of type handlers.
 
         """
@@ -120,6 +123,8 @@ class Differ():
         self.op_r = R
         self.op_u = U
         self.op_trim_r = trimR
+
+        self.dump = dumper or pickle.dumps
 
         self._differs = {}
 

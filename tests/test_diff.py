@@ -1,4 +1,5 @@
 import pytest
+import sys
 
 from nested_diff import Differ, diff, handlers
 
@@ -70,6 +71,43 @@ def test_different_object_attributes():
 
     expected = {'N': b, 'O': a}
     _, got = Differ().diff(a, b)
+
+    assert got == expected
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8),
+                    reason='reducer_override appeared in 3.8')
+def test_custom_dumper():
+    import io
+    import pickle
+
+    class ClassToTestDiff:
+        pass
+
+    class _Pickler(pickle.Pickler):
+        def reducer_override(self, obj):
+            if type(obj) is ClassToTestDiff:
+                return str, tuple('ClassToTestDiff obj, id: ' + str(id(obj)))
+
+            return NotImplemented
+
+    def _dumper(obj):
+        buf = io.BytesIO()
+        pickler = _Pickler(buf)
+        pickler.dump(obj)
+        return buf.getvalue()
+
+    a = ClassToTestDiff()
+    b = ClassToTestDiff()
+
+    expected = {
+        'D': [
+            {'U': a},
+            {'O': a, 'N': b},
+            {'U': 42},
+        ],
+    }
+    _, got = Differ(dumper=_dumper).diff([a, a, 42], [a, b, 42])
 
     assert got == expected
 
