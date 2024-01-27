@@ -1,2 +1,4 @@
 [one.two]
-three = 4
+three = [
+    { four = "five" },
+]

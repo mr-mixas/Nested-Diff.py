@@ -440,8 +440,8 @@ class TomlDumper(Dumper):
         """Initialize dumper."""
         super().__init__()
 
-        import toml
-        self.codec = toml
+        import tomli_w
+        self.codec = tomli_w
 
     def encode(self, data):
         """Encode data as TOML string."""
@@ -455,8 +455,12 @@ class TomlLoader(Loader):
         """Initialize loader."""
         super().__init__()
 
-        import toml
-        self.codec = toml
+        if sys.version_info >= (3, 11):
+            import tomllib  # pragma nocover
+        else:
+            import tomli as tomllib  # pragma nocover
+
+        self.codec = tomllib
 
     def decode(self, data):
         """Parse TOML string."""

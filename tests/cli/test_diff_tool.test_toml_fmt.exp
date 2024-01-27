@@ -1,3 +1,4 @@
 [D.one.D.two.D.three]
-N = "four"
-O = 4
+D = [
+    { D = { four = { N = 5, O = "five" } } },
+]
