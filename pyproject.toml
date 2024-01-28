@@ -1,0 +1,83 @@
+[build-system]
+requires = ['flit_core >=3.2,<4']
+build-backend = 'flit_core.buildapi'
+
+[project]
+name = 'nested_diff'
+authors = [{name = 'Michael Samoglyadov', email = 'mixas.sr@gmail.com'}]
+readme = 'README.md'
+license = {file = 'LICENSE'}
+keywords = [
+    'diff',
+    'nested-diff',
+    'recursive-diff',
+    'nested-data',
+    'data-structures',
+]
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'Intended Audience :: System Administrators',
+    'License :: OSI Approved :: Apache Software License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Programming Language :: Python :: Implementation :: PyPy',
+    'Topic :: File Formats :: JSON',
+    'Topic :: Software Development :: Quality Assurance',
+    'Topic :: Software Development :: Testing',
+    'Topic :: System :: Systems Administration',
+    'Topic :: Utilities',
+]
+dynamic = ['version', 'description']
+dependencies = []
+requires-python = '>=3.7'
+
+[project.optional-dependencies]
+cli = [
+    'pyyaml',
+    'tomli >= 1.1.0 ; python_version < "3.11"',
+    'tomli-w >= 1.0.0'
+]
+lint = [
+    'darglint',
+    'flake8 < 5',  # temp workaround (https://github.com/tholo/pytest-flake8/issues/87)
+    'flake8-builtins',
+    'flake8-bugbear',
+    'flake8-commas',
+    'flake8-comprehensions',
+    'flake8-docstrings',
+    'flake8-eradicate',
+    'flake8-pytest-style',
+    'flake8_quotes',
+    'flake8-return',
+    'flake8-simplify',
+    'flake8-unused-arguments',
+    'pep8-naming',
+    'pytest-flake8',
+]
+test = [
+    'pytest',
+]
+
+[project.scripts]
+nested_diff = 'nested_diff.diff_tool:App.cli'
+nested_patch = 'nested_diff.patch_tool:App.cli'
+
+[project.urls]
+Homepage = 'https://github.com/mr-mixas/Nested-Diff.py'
+Repository = 'https://github.com/mr-mixas/Nested-Diff.py.git'
+
+[tool.pytest.ini_options]
+addopts = '-vv'
+doctest_optionflags = 'NORMALIZE_WHITESPACE'
+testpaths = 'nested_diff tests'
