@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright 2022-2023 Michael Samoglyadov
+# Copyright 2022-2024 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,7 +71,7 @@ class TypeHandler:
             Patched object.
 
         Raises:
-            ValueError: Inapropriate diff tag found.
+            ValueError: Inappropriate diff tag found.
 
         """
         try:

@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright 2019-2022 Michael Samoglyadov
+# Copyright 2019-2024 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -226,8 +224,7 @@ class TextFormatter(AbstractFormatter):
 
 
 class HtmlFormatter(TextFormatter):
-    """
-    Produce human friendly HTML diff with indenting formatting.
+    """Produce human friendly HTML diff with indenting formatting.
 
     Text copied from the browser should be exactly the same as TextFormatter
     produce.

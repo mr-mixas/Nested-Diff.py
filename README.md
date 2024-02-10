@@ -26,25 +26,27 @@ For extra formats support (YAML, TOML) in cli tools, use
 
 ## Command line tools
 
-```
+```sh
 $ cat a.json b.json
 [0, [1],    3]
 [0, [1, 2], 3]
 ```
-```
+
+```sh
 $ nested_diff a.json b.json
   [1]
 +   [1]
 +     2
 ```
-```
+
+```sh
 $ nested_diff a.json b.json --ofmt json > patch.json
 $ nested_patch a.json patch.json
 ```
 
 ## Library usage
 
-```
+```py
 >>> from nested_diff import diff, patch
 >>>
 >>> a = {'one': 1, 'two': 2, 'three': 3}
@@ -67,7 +69,7 @@ $ nested_patch a.json patch.json
 
 ### Formatting diffs
 
-```
+```py
 >>> from nested_diff import diff, handlers
 >>> from nested_diff.formatters import TextFormatter
 >>>
@@ -117,9 +119,9 @@ key, except `D` may be omitted during diff computation. `E` key is used with
 `D` when entity unable to contain diff by itself (set, frozenset for example);
 `D` contain a list of subdiffs in this case.
 
-### Annotated example:
+### Annotated example
 
-```
+```text
 a:  {"one": [5,7]}
 b:  {"one": [5], "two": 2}
 opts: U=False  # omit unchanged items

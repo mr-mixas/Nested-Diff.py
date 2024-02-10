@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright 2019-2023 Michael Samoglyadov
+# Copyright 2019-2024 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,7 +59,8 @@ class App:
         return cls().run()
 
     @property
-    def dumper(self):  # noqa D102
+    def dumper(self):
+        """Return appropriate data dumper."""
         try:
             return self.__dumper
         except AttributeError:
@@ -195,7 +194,7 @@ class App:
         raise RuntimeError(f'Unsupported input format: {fmt}')
 
     def load(self, file_):
-        """Load data from file using apropriate loader.
+        """Load data from file using appropriate loader.
 
         Args:
             file_: File object to load from.
@@ -214,8 +213,7 @@ class App:
 
     @staticmethod
     def override_excepthook():
-        """
-        Change default exit code for unhandled exceptions from 1 to 127.
+        """Change default exit code for unhandled exceptions from 1 to 127.
 
         Mainly for diff tool (version control systems treat 1 as difference
         in files).

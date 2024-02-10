@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright 2018-2023 Michael Samoglyadov
+# Copyright 2018-2024 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -199,7 +197,7 @@ class Patcher:
     def patch(self, target, ndiff):
         """Patch object using nested diff.
 
-        This method calls apropriate handler for target value according to
+        This method calls appropriate handler for target value according to
         it's type.
 
         Args:
@@ -271,7 +269,7 @@ class Iterator:
             self.set_handler(handler)
 
     def _get_iterator(self, ndiff):
-        """Return apropriate iterator for passed nested diff."""
+        """Return appropriate iterator for passed nested diff."""
         try:
             extension_id = ndiff['E']
             try:

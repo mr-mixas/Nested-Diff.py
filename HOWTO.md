@@ -12,7 +12,8 @@ differences already eliminated (strings converted to numbers, floats rounded
 with same precision and so on).
 
 But when initial objects must remain unchanged custom handlers may be used:
-```
+
+```py
 >>> from nested_diff import Differ, handlers
 >>>
 >>> class FloatHandler(handlers.FloatHandler):
@@ -45,7 +46,7 @@ Ensure `nested_diff` command available, otherwise install it with `pip`:
 
 Add to `.gitconfig` following section:
 
-```
+```ini
 [difftool "nested_diff"]
   cmd = nested_diff $LOCAL $REMOTE
 ```
@@ -53,3 +54,15 @@ Add to `.gitconfig` following section:
 and `ndiff = difftool --no-prompt --tool nested_diff` to section `[aliases]`.
 
 Now `ndiff` subcommand available and may be used in the same manner as `diff`.
+
+### How to run tests locally
+
+```sh
+# prepare environment
+python3 -m venv venv && \
+    . venv/bin/activate && \
+    pip install -e '.[cli,test]'
+
+# run tests
+pytest
+```
