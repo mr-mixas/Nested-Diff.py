@@ -22,7 +22,7 @@ import nested_diff
 import nested_diff.handlers
 
 
-class AbstractFormatter():
+class AbstractFormatter:
     """Base class for nested diff formatters."""
 
     default_generator = nested_diff.DEFAULT_HANDLER.generate_formatted_diff
@@ -148,8 +148,9 @@ class TextFormatter(AbstractFormatter):
             try:
                 generator = self._gens_by_ext[extension_id]
             except KeyError:
-                raise ValueError('unsupported extension: '
-                                 + extension_id) from None
+                raise ValueError(
+                    f'unsupported extension: {extension_id}',
+                ) from None
         except KeyError:
             extension_id = None
             try:
@@ -162,7 +163,10 @@ class TextFormatter(AbstractFormatter):
         except KeyError:
             if extension_id is not None and self.type_hints:
                 yield from self.generate_string(
-                    self._type_by_ext[extension_id].__name__, 'E', depth)
+                    self._type_by_ext[extension_id].__name__,
+                    'E',
+                    depth,
+                )
         else:
             for line in comment.splitlines():
                 yield from self.generate_string(line, 'C', depth)
@@ -203,7 +207,7 @@ class TextFormatter(AbstractFormatter):
     @staticmethod
     def get_diff_header(name_a, name_b):
         """Return diff header."""
-        return '--- ' + name_a + '\n+++ ' + name_b + '\n'
+        return f'--- {name_a}\n+++ {name_b}\n'
 
     @staticmethod
     def format_key(key):
@@ -246,24 +250,25 @@ class HtmlFormatter(TextFormatter):
         self.line_separator = '</div>'
 
         for key, val in self.key_line_prefix.items():
-            self.key_line_prefix[key] = '<div>' + val
+            self.key_line_prefix[key] = f'<div>{val}'
         for key, val in self.val_line_prefix.items():
-            self.val_line_prefix[key] = '<div>' + val
+            self.val_line_prefix[key] = f'<div>{val}'
 
         for key in self.key_line_prefix:
-            self.key_prefix[key] = '<div class="nDk' + key + '">'
+            self.key_prefix[key] = f'<div class="nDk{key}">'
             self.key_suffix[key] = '</div>'
 
         for key, val in self.val_prefix.items():
-            self.val_prefix[key] = ('<div class="nDv' + key + '">' +
-                                    escape_html(val))
+            self.val_prefix[key] = f'<div class="nDv{key}">{escape_html(val)}'
+
         for key, val in self.val_suffix.items():
-            self.val_suffix[key] = escape_html(val) + '</div>'
+            self.val_suffix[key] = f'{escape_html(val)}</div>'
 
     @staticmethod
     def get_css():
         """Return CSS for generated HTML page."""
-        return """
+        return (
+            """
 div:has(> [class^="nDk"]) {cursor: pointer}
 div:has(> [class^="nDv"]) {cursor: text}
 [class^="nDk"] {cursor: pointer}
@@ -288,28 +293,28 @@ div:has(> [class^="nDv"]) {cursor: text}
 .nDvH {color: #707}
 .nDvO, .nDvR {background-color: #fdd}
 .nDvD div:not([class]):hover {background-color: rgba(0, 0, 0, .05)}
-""".replace('    ', '').replace(': ', ':').replace(', ', ',').replace(
-            ' {', '{').replace('\n', '')
+""".replace('    ', '')
+            .replace(': ', ':')
+            .replace(', ', ',')
+            .replace(' {', '{')
+            .replace('\n', '')
+        )
 
     @staticmethod
     def get_diff_header(name_a, name_b):
         """Return diff header."""
-        return (
-            '<div class="nDvH">--- ' + name_a +
-            '<br>+++ ' + name_b + '</div>'
-        )
+        return f'<div class="nDvH">--- {name_a}<br>+++ {name_b}</div>'
 
     def get_page_footer(self):
         """Return HTML page footer."""
-        return '</div><script>' + self.get_script() + '</script></body></html>'
+        return f'</div><script>{self.get_script()}</script></body></html>'
 
     def get_page_header(self, lang='en', title='Nested diff'):
         """Return HTML page header."""
         return (
-            '<!DOCTYPE html><html lang="' + lang +
-            '"><head><title>' + escape_html(title) +
-            '</title><style>' + self.get_css() +
-            '</style></head><body><div class="nDvD" style="width:fit-content">'
+            f'<!DOCTYPE html><html lang="{lang}"><head><title>'
+            f'{escape_html(title)}</title><style>{self.get_css()}</style>'
+            '</head><body><div class="nDvD" style="width:fit-content">'
         )
 
     def get_script(self):
@@ -393,20 +398,20 @@ class TermFormatter(TextFormatter):
         """
         super().__init__(*args, **kwargs)
 
-        self.line_separator = '\033[0m' + self.line_separator
+        self.line_separator = f'\x1b[0m{self.line_separator}'
 
-        self.key_line_prefix['A'] = '\033[1;32m' + self.key_line_prefix['A']
-        self.key_line_prefix['R'] = '\033[1;31m' + self.key_line_prefix['R']
+        self.key_line_prefix['A'] = f"\x1b[1;32m{self.key_line_prefix['A']}"
+        self.key_line_prefix['R'] = f"\x1b[1;31m{self.key_line_prefix['R']}"
 
-        self.val_line_prefix['A'] = '\033[32m' + self.val_line_prefix['A']
-        self.val_line_prefix['C'] = '\033[34m' + self.val_line_prefix['C']
-        self.val_line_prefix['E'] = '\033[34m' + self.val_line_prefix['E']
-        self.val_line_prefix['H'] = '\033[35m' + self.val_line_prefix['H']
-        self.val_line_prefix['N'] = '\033[32m' + self.val_line_prefix['N']
-        self.val_line_prefix['O'] = '\033[31m' + self.val_line_prefix['O']
-        self.val_line_prefix['R'] = '\033[31m' + self.val_line_prefix['R']
+        self.val_line_prefix['A'] = f"\x1b[32m{self.val_line_prefix['A']}"
+        self.val_line_prefix['C'] = f"\x1b[34m{self.val_line_prefix['C']}"
+        self.val_line_prefix['E'] = f"\x1b[34m{self.val_line_prefix['E']}"
+        self.val_line_prefix['H'] = f"\x1b[35m{self.val_line_prefix['H']}"
+        self.val_line_prefix['N'] = f"\x1b[32m{self.val_line_prefix['N']}"
+        self.val_line_prefix['O'] = f"\x1b[31m{self.val_line_prefix['O']}"
+        self.val_line_prefix['R'] = f"\x1b[31m{self.val_line_prefix['R']}"
 
     @staticmethod
     def get_diff_header(name_a, name_b):
         """Return diff header."""
-        return '\033[33m--- ' + name_a + '\n+++ ' + name_b + '\033[0m\n'
+        return f'\x1b[33m--- {name_a}\n+++ {name_b}\x1b[0m\n'

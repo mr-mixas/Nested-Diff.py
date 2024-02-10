@@ -19,7 +19,7 @@ def content():
 @pytest.fixture()
 def expected(request):
     filename = os.path.splitext(request.module.__file__)[0]
-    filename += '.' + request.function.__name__ + '.exp'
+    filename += f'.{request.function.__name__}.exp'
 
     with open(filename) as f:
         return f.read()

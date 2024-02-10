@@ -20,7 +20,12 @@ def get_tests():
         'mixed_specific_structures': {
             'a': ((), set()),
             'b': (frozenset(), {True}),
-            'diff': {'D': ({'N': frozenset(), 'O': ()}, {'D': [{'A': True}], 'E': 3})},
+            'diff': {
+                'D': (
+                    {'N': frozenset(), 'O': ()},
+                    {'D': [{'A': True}], 'E': 3},
+                ),
+            },
         },
         'empty_string_vs_text': {
             'a': '',
@@ -75,10 +80,12 @@ def get_tests():
             'assert_func': lambda a, b: dumps(a) == dumps(b),
             # float('nan') is float('nan') is true on PyPy, but not on CPython
             # https://doc.pypy.org/en/latest/cpython_differences.html
-            'skip': {'diff': {
-                'cond': sys.implementation.name == 'pypy',
-                'reason': 'float("nan") is float("nan") is true on PyPy',
-            }},
+            'skip': {
+                'diff': {
+                    'cond': sys.implementation.name == 'pypy',
+                    'reason': 'float("nan") is float("nan") is true on PyPy',
+                },
+            },
         },
         'nan_vs_nan_nans_equal_opt_enabled': {
             'a': float('nan'),
@@ -276,7 +283,15 @@ def get_tests():
         'tuples_lcs': {
             'a': (1, 2, 4, 5),
             'b': (0, 1, 2, 3),
-            'diff': {'D': ({'A': 0}, {'U': 1}, {'U': 2}, {'N': 3, 'O': 4}, {'R': 5})},
+            'diff': {
+                'D': (
+                    {'A': 0},
+                    {'U': 1},
+                    {'U': 2},
+                    {'N': 3, 'O': 4},
+                    {'R': 5},
+                ),
+            },
         },
         'tuples_lcs_noOU': {
             'a': (1, 2, 4, 5),

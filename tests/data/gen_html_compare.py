@@ -22,18 +22,18 @@ def main():
         try:
             txt = TextFormatter(**fmt_obj_opts).format(diff)
         except Exception as e:
-            txt = '<div class="error">ERROR: ' + str(e) + '</div>'
+            txt = f'<div class="error">ERROR: {str(e)}</div>'
         else:
-            txt = '<pre>' + html.escape(txt) + '</pre>'
+            txt = f'<pre>{html.escape(txt)}</pre>'
 
         try:
             htm = HtmlFormatter(**fmt_obj_opts).format(diff)
         except Exception as e:
-            htm = '<div class="error">ERROR: ' + str(e) + '</div>'
+            htm = f'<div class="error">ERROR: {str(e)}</div>'
 
-        print('<tr><td colspan=2 class="label">' + name + '</td></tr>')
-        print('<tr><td>' + txt + '</td>')
-        print('<td>' + htm + '</td></tr>')
+        print(f'<tr><td colspan=2 class="label">{name}</td></tr>')
+        print(f'<tr><td>{txt}</td>')
+        print(f'<td>{htm}</td></tr>')
 
     print('</table></center></body></html>')
 

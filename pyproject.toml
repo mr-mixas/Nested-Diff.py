@@ -67,6 +67,8 @@ lint = [
 ]
 test = [
     'pytest',
+    'pytest-ruff',
+    'ruff==0.1.15',  # pin for reproducible results
 ]
 
 [project.scripts]
@@ -78,6 +80,22 @@ Homepage = 'https://github.com/mr-mixas/Nested-Diff.py'
 Repository = 'https://github.com/mr-mixas/Nested-Diff.py.git'
 
 [tool.pytest.ini_options]
-addopts = '-vv'
+addopts = """
+          --ruff \
+          --ruff-format \
+          --verbosity=2 \
+          """
 doctest_optionflags = 'NORMALIZE_WHITESPACE'
 testpaths = 'nested_diff tests'
+
+[tool.ruff]
+extend-exclude = [
+    'tests/data/formatters',
+    'tests/data/standard.py',
+]
+line-length = 79
+select = []
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = 'single'

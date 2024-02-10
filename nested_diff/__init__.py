@@ -35,7 +35,6 @@ TYPE_HANDLERS = (
     nested_diff.handlers.TupleHandler(),
     nested_diff.handlers.SetHandler(),
     nested_diff.handlers.FrozenSetHandler(),
-
     nested_diff.handlers.IntHandler(),
     nested_diff.handlers.FloatHandler(),
     nested_diff.handlers.StrHandler(),
@@ -43,7 +42,7 @@ TYPE_HANDLERS = (
 )
 
 
-class Differ():
+class Differ:
     """
     Compute recursive diff for two passed objects.
 
@@ -102,8 +101,17 @@ class Differ():
 
     default_differ = DEFAULT_HANDLER.diff
 
-    def __init__(self, A=True, N=True, O=True, R=True, U=True,  # noqa: E501 E741 N803
-                 trimR=False, dumper=None, handlers=None):
+    def __init__(
+        self,
+        A=True,  # noqa: N803
+        N=True,
+        O=True,  # noqa: E741
+        R=True,
+        U=True,
+        trimR=False,
+        dumper=None,
+        handlers=None,
+    ):
         """Initialize Differ.
 
         Args:
@@ -167,7 +175,7 @@ class Differ():
         self._differs[handler.handled_type] = handler.diff
 
 
-class Patcher():
+class Patcher:
     """Patch objects using nested diff."""
 
     default_patcher = DEFAULT_HANDLER.patch
@@ -211,16 +219,18 @@ class Patcher():
                 try:
                     patcher = self._patchers_by_ext[extension_id]
                 except KeyError:
-                    raise ValueError('unsupported extension: '
-                                     + extension_id) from None
+                    raise ValueError(
+                        f'unsupported extension: {extension_id}',
+                    ) from None
             except KeyError:
                 cls = ndiff['D'].__class__
 
                 try:
                     patcher = self._patchers_by_cls[cls]
                 except KeyError:
-                    raise ValueError('unsupported patch type: '
-                                     + cls.__name__) from None
+                    raise ValueError(
+                        f'unsupported patch type: {cls.__name__}',
+                    ) from None
 
             return patcher(self, target, ndiff)
 
@@ -239,7 +249,7 @@ class Patcher():
             self._patchers_by_ext[handler.extension_id] = handler.patch
 
 
-class Iterator():
+class Iterator:
     """Nested diff iterator."""
 
     default_iterator = DEFAULT_HANDLER.iterate_diff
@@ -267,8 +277,9 @@ class Iterator():
             try:
                 iterator = self._iters_by_ext[extension_id]
             except KeyError:
-                raise ValueError('unsupported extension: '
-                                 + extension_id) from None
+                raise ValueError(
+                    f'unsupported extension: {extension_id}',
+                ) from None
         except KeyError:
             try:
                 iterator = self._iters_by_cls[ndiff['D'].__class__]

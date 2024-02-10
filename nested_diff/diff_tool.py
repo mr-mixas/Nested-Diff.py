@@ -45,7 +45,7 @@ class App(nested_diff.cli.App):
         diff_opts = {
             'A': self.args.A,
             'N': self.args.N,
-            'O': self.args.O,  # noqa: E741
+            'O': self.args.O,
             'R': self.args.R,
             'U': self.args.U,
         }
@@ -60,8 +60,9 @@ class App(nested_diff.cli.App):
         differ = nested_diff.Differ(**diff_opts)
 
         if self.args.text_ctx >= 0:
-            differ.set_handler(nested_diff.handlers.TextHandler(
-                context=self.args.text_ctx))
+            differ.set_handler(
+                nested_diff.handlers.TextHandler(context=self.args.text_ctx),
+            )
 
         return differ.diff(a, b)
 
@@ -85,8 +86,8 @@ class App(nested_diff.cli.App):
             if self.args.show:
                 if headers_enabled:
                     header = self.dumper.get_diff_header(
-                        '/dev/null (' + file_.name + ')',
-                        '/dev/null (' + file_.name + ')',
+                        f'/dev/null ({file_.name})',
+                        f'/dev/null ({file_.name})',
                     )
                 diff = self.load(file_)
                 equal = not diff or 'U' in diff
@@ -114,7 +115,7 @@ class App(nested_diff.cli.App):
             '--show',
             action='store_true',
             help="don't diff arguments, just format and show them; nested "
-                 'diffs expected on input',
+            'diffs expected for input',
         )
 
         parser.add_argument(
@@ -123,8 +124,7 @@ class App(nested_diff.cli.App):
             metavar='NUM',
             type=int,
             help='amount of context lines for text (multiline strings) diffs; '
-                 'negative value will disable such diffs, default is '
-                 '"%(default)s"',
+            'negative value will disable such diffs, default is "%(default)s"',
         )
 
         parser.add_argument(
@@ -136,7 +136,8 @@ class App(nested_diff.cli.App):
         )
 
         parser.add_argument(
-            '-q', '--quiet',
+            '-q',
+            '--quiet',
             action='store_true',
             help="don't show diff, exit code is the only difference indicator",
         )
@@ -146,21 +147,45 @@ class App(nested_diff.cli.App):
             choices=('repr', 'none', 'json', 'yaml'),
             default='repr',
             help='values format; "none" means no values printed, "repr" is a '
-                 'python representation of the object, rest are themselves; '
-                 'default is "%(default)s"',
+            'python representation of the object, rest are themselves; default'
+            ' is "%(default)s"',
         )
 
-        parser.add_argument('-A', type=int, choices=(0, 1), default=1,
-                            help='show added items; enabled by default')
-        parser.add_argument('-N', type=int, choices=(0, 1), default=1,
-                            help="show item's new values; enabled by default")
-        parser.add_argument('-O', type=int, choices=(0, 1), default=1,
-                            help="show item's old values; enabled by default")
-        parser.add_argument('-R', choices=('0', '1', 'trim'), default=1,
-                            help='Show removed items; enabled (1) by default. '
-                            'Value will be replaced by null when "trim" used')
-        parser.add_argument('-U', type=int, choices=(0, 1), default=0,
-                            help='show unchanged items; disabled by default')
+        parser.add_argument(
+            '-A',
+            choices=(0, 1),
+            default=1,
+            help='show added items; enabled by default',
+            type=int,
+        )
+        parser.add_argument(
+            '-N',
+            choices=(0, 1),
+            default=1,
+            help="show item's new values; enabled by default",
+            type=int,
+        )
+        parser.add_argument(
+            '-O',
+            choices=(0, 1),
+            default=1,
+            help="show item's old values; enabled by default",
+            type=int,
+        )
+        parser.add_argument(
+            '-R',
+            choices=('0', '1', 'trim'),
+            default=1,
+            help='Show removed items; enabled (1) by default. '
+            'Value will be replaced by null when "trim" used',
+        )
+        parser.add_argument(
+            '-U',
+            choices=(0, 1),
+            default=0,
+            help='show unchanged items; disabled by default',
+            type=int,
+        )
 
         return parser
 
@@ -233,7 +258,7 @@ class FormatterDumper(nested_diff.cli.Dumper):
         lang='en',
         title='Nested diff',
         values='repr',
-        **kwargs  # noqa C816
+        **kwargs,
     ):
         """Initialize dumper.
 
@@ -304,7 +329,8 @@ class FormatterDumper(nested_diff.cli.Dumper):
                     self.__val_encoder = nested_diff.cli.JsonDumper(indent=2)
                 elif values == 'yaml':
                     self.__val_encoder = nested_diff.cli.YamlDumper(
-                        explicit_start=False)
+                        explicit_start=False,
+                    )
 
                 self.generate_value = self.generate_multiline_value
 

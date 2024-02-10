@@ -75,8 +75,10 @@ def test_different_object_attributes():
     assert got == expected
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8),
-                    reason='reducer_override appeared in 3.8')
+@pytest.mark.skipif(
+    sys.version_info < (3, 8),
+    reason='reducer_override appeared in 3.8',
+)
 def test_custom_dumper():
     import io
     import pickle
@@ -87,7 +89,7 @@ def test_custom_dumper():
     class _Pickler(pickle.Pickler):
         def reducer_override(self, obj):
             if type(obj) is ClassToTestDiff:
-                return str, tuple('ClassToTestDiff obj, id: ' + str(id(obj)))
+                return str, tuple(f'ClassToTestDiff obj, id: {str(id(obj))}')
 
             return NotImplemented
 
@@ -148,7 +150,9 @@ def test_text_diff_func_extra_handlers_opt():
     a = ['a']
     b = ['a\nb']
 
-    expected = {'D': [{'D': [{'I': [0, 1, 0, 2]}, {'U': 'a'}, {'A': 'b'}], 'E': 5}]}
+    expected = {
+        'D': [{'D': [{'I': [0, 1, 0, 2]}, {'U': 'a'}, {'A': 'b'}], 'E': 5}],
+    }
     got = diff(a, b, extra_handlers=[handlers.TextHandler(context=3)])
 
     assert got == expected

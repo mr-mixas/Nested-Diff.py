@@ -9,10 +9,12 @@ import nested_diff.diff_tool
 
 
 def test_default_diff(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.yaml'),
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.yaml'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -23,10 +25,12 @@ def test_default_diff(capsys, expected, rpath):
 
 def test_default_diff_with_tty(capsys, expected, rpath):
     with mock.patch('sys.stdout.isatty', return_value=True):
-        exit_code = nested_diff.diff_tool.App(args=(
-            rpath('shared.lists.a.json'),
-            rpath('shared.lists.b.json'),
-        )).run()
+        exit_code = nested_diff.diff_tool.App(
+            args=(
+                rpath('shared.lists.a.json'),
+                rpath('shared.lists.b.json'),
+            ),
+        ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -40,12 +44,16 @@ def test_diff_method_kwargs_override(capsys, expected, rpath):
         def diff(self, a, b, **kwargs):  # noqa U100
             return super().diff(a, b, A=0, U=1)
 
-    exit_code = TestApp(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.yaml'),
-        '-A', '1',
-        '-U', '0',
-    )).run()
+    exit_code = TestApp(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.yaml'),
+            '-A',
+            '1',
+            '-U',
+            '0',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -55,12 +63,17 @@ def test_diff_method_kwargs_override(capsys, expected, rpath):
 
 
 def test_enable_U_ops(capsys, expected, rpath):  # noqa N802
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'json',
-        '-U=1', '-U', '1',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'json',
+            '-U=1',
+            '-U',
+            '1',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -70,11 +83,15 @@ def test_enable_U_ops(capsys, expected, rpath):  # noqa N802
 
 
 def test_trimR_ops(capsys, expected, rpath):  # noqa N802
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.b.json'),
-        rpath('shared.lists.a.json'),
-        '-R=trim', '-R', 'trim',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.b.json'),
+            rpath('shared.lists.a.json'),
+            '-R=trim',
+            '-R',
+            'trim',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -84,13 +101,17 @@ def test_trimR_ops(capsys, expected, rpath):  # noqa N802
 
 
 def test_output_file(capsys, content, expected, rpath, tmp_path):
-    result_file_name = '{}.got'.format(tmp_path)
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'json',
-        '--out', result_file_name,
-    )).run()
+    result_file_name = f'{tmp_path}.got'
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'json',
+            '--out',
+            result_file_name,
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -101,12 +122,16 @@ def test_output_file(capsys, content, expected, rpath, tmp_path):
 
 
 def test_json_ofmt_opts(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'json',
-        '--ofmt-opts', '{"indent": null}',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'json',
+            '--ofmt-opts',
+            '{"indent": null}',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -116,12 +141,16 @@ def test_json_ofmt_opts(capsys, expected, rpath):
 
 
 def test_ini_ifmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.a.ini'),
-        rpath('shared.b.ini'),
-        '--ifmt', 'ini',
-        '--ofmt', 'json',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.a.ini'),
+            rpath('shared.b.ini'),
+            '--ifmt',
+            'ini',
+            '--ofmt',
+            'json',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -131,10 +160,12 @@ def test_ini_ifmt(capsys, expected, rpath):
 
 
 def test_text_default(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.text.a.json'),
-        rpath('shared.text.b.json'),
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.text.a.json'),
+            rpath('shared.text.b.json'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -144,11 +175,14 @@ def test_text_default(capsys, expected, rpath):
 
 
 def test_text_default_term(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.text.a.json'),
-        rpath('shared.text.b.json'),
-        '--ofmt', 'term',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.text.a.json'),
+            rpath('shared.text.b.json'),
+            '--ofmt',
+            'term',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -158,11 +192,14 @@ def test_text_default_term(capsys, expected, rpath):
 
 
 def test_text_context_0(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.text.a.json'),
-        rpath('shared.text.b.json'),
-        '--text-ctx', '0',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.text.a.json'),
+            rpath('shared.text.b.json'),
+            '--text-ctx',
+            '0',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -172,11 +209,14 @@ def test_text_context_0(capsys, expected, rpath):
 
 
 def test_text_disabled(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.text.a.json'),
-        rpath('shared.text.b.json'),
-        '--text-ctx', '-1',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.text.a.json'),
+            rpath('shared.text.b.json'),
+            '--text-ctx',
+            '-1',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -186,11 +226,14 @@ def test_text_disabled(capsys, expected, rpath):
 
 
 def test_html_ofmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'html',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'html',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -204,12 +247,16 @@ def test_html_ofmt(capsys, expected, rpath):
     reason='win use non utf-8 encoding by default, we have utf-8 only sample',
 )
 def test_html_ofmt_opts(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'html',
-        '--ofmt-opts', '{"lang": "es", "title": "<título>"}',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'html',
+            '--ofmt-opts',
+            '{"lang": "es", "title": "<título>"}',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -219,12 +266,16 @@ def test_html_ofmt_opts(capsys, expected, rpath):
 
 
 def test_html_ofmt_wrappings(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'html',
-        '--ofmt-opts', '{"header": "<html>", "footer": "</html>", "title": "ignored"}',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'html',
+            '--ofmt-opts',
+            '{"header": "<html>", "footer": "</html>", "title": "ignored"}',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -234,11 +285,14 @@ def test_html_ofmt_wrappings(capsys, expected, rpath):
 
 
 def test_text_ofmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'text',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'text',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -248,11 +302,14 @@ def test_text_ofmt(capsys, expected, rpath):
 
 
 def test_term_ofmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'term',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'term',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -263,11 +320,14 @@ def test_term_ofmt(capsys, expected, rpath):
 
 @pytest.mark.skipif(sys.version_info < (3, 6), reason='different keys order')
 def test_toml_fmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.dict.a.toml'),
-        rpath('shared.dict.b.toml'),
-        '--ofmt', 'toml',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.dict.a.toml'),
+            rpath('shared.dict.b.toml'),
+            '--ofmt',
+            'toml',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -277,12 +337,16 @@ def test_toml_fmt(capsys, expected, rpath):
 
 
 def test_yaml_ifmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.yaml'),
-        rpath('shared.lists.b.yaml'),
-        '--ifmt', 'yaml',
-        '--ofmt', 'json',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.yaml'),
+            rpath('shared.lists.b.yaml'),
+            '--ifmt',
+            'yaml',
+            '--ofmt',
+            'json',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -292,11 +356,14 @@ def test_yaml_ifmt(capsys, expected, rpath):
 
 
 def test_yaml_ofmt(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--ofmt', 'yaml',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ofmt',
+            'yaml',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -316,16 +383,21 @@ def test_python_yaml_impl(capsys, expected, rpath):
         if name == 'yaml' and fromlist is not None:
             for sym in ('CSafeDumper', 'CSafeLoader'):
                 if sym in fromlist:
-                    raise ImportError('Mocked import error for yaml.' + sym)
+                    raise ImportError(f'Mocked import error for yaml.{sym}')
 
         return orig_import(name, globals, locals, fromlist, level)  # noqa A002
 
     with mock.patch('builtins.__import__', overrided_import):
-        exit_code = nested_diff.diff_tool.App(args=(
-            rpath('shared.lists.a.yaml'),
-            rpath('shared.lists.b.yaml'),
-            '--ifmt', 'yaml', '--ofmt', 'yaml',
-        )).run()
+        exit_code = nested_diff.diff_tool.App(
+            args=(
+                rpath('shared.lists.a.yaml'),
+                rpath('shared.lists.b.yaml'),
+                '--ifmt',
+                'yaml',
+                '--ofmt',
+                'yaml',
+            ),
+        ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -337,10 +409,12 @@ def test_python_yaml_impl(capsys, expected, rpath):
 # json parser return same NaN object for all NaN entries (at least for now),
 # so they all match `a is b` condition in Differ.diff and treated as equal.
 def test_json_nan(capsys, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.nan.json'),
-        rpath('shared.nan.json'),
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.nan.json'),
+            rpath('shared.nan.json'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -351,10 +425,12 @@ def test_json_nan(capsys, rpath):
 # yaml parser return same NaN object for all NaN entries (at least for now),
 # so they all match `a is b` condition in Differ.diff and treated as equal.
 def test_yaml_nan(capsys, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.nan.yaml'),
-        rpath('shared.nan.yaml'),
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.nan.yaml'),
+            rpath('shared.nan.yaml'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -363,11 +439,13 @@ def test_yaml_nan(capsys, rpath):
 
 
 def test_quiet_diff(capsys, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.yaml'),
-        '--quiet',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.yaml'),
+            '--quiet',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -377,20 +455,24 @@ def test_quiet_diff(capsys, rpath):
 
 
 def test_exit_code_diff_absent(rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.a.json'),
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.a.json'),
+        ),
+    ).run()
 
     assert exit_code == 0
 
 
 def test_exit_code_diff_absent_U_opt_enabled(rpath):  # noqa N802
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.a.json'),
-        '-U=1',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.a.json'),
+            '-U=1',
+        ),
+    ).run()
 
     assert exit_code == 0
 
@@ -415,11 +497,13 @@ def test_diff_single_arg(rpath):
 
 
 def test_diff_several_args(capsys, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        rpath('shared.lists.a.json'),
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            rpath('shared.lists.a.json'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -430,11 +514,13 @@ def test_diff_several_args(capsys, rpath):
 
 
 def test_diff_several_args_tty(capsys, rpath, stringio_tty):
-    app = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        rpath('shared.lists.a.json'),
-    ))
+    app = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            rpath('shared.lists.a.json'),
+        ),
+    )
     app.args.out = stringio_tty
     exit_code = app.run()
 
@@ -445,12 +531,15 @@ def test_diff_several_args_tty(capsys, rpath, stringio_tty):
 
 
 def test_diff_several_args_html(capsys, rpath, stringio_tty):
-    app = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        rpath('shared.lists.a.json'),
-        '--ofmt', 'html',
-    ))
+    app = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            rpath('shared.lists.a.json'),
+            '--ofmt',
+            'html',
+        ),
+    )
     app.args.out = stringio_tty
     exit_code = app.run()
 
@@ -461,10 +550,12 @@ def test_diff_several_args_html(capsys, rpath, stringio_tty):
 
 
 def test_show_single_arg(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.ini.patch.json'),
-        '--show',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.ini.patch.json'),
+            '--show',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -474,11 +565,13 @@ def test_show_single_arg(capsys, expected, rpath):
 
 
 def test_show_several_args(capsys, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.ini.patch.json'),
-        rpath('shared.ini.patch.json'),
-        '--show',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.ini.patch.json'),
+            rpath('shared.ini.patch.json'),
+            '--show',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -488,11 +581,13 @@ def test_show_several_args(capsys, rpath):
 
 
 def test_show_several_args_tty(capsys, rpath, stringio_tty):
-    app = nested_diff.diff_tool.App(args=(
-        rpath('shared.ini.patch.json'),
-        rpath('shared.ini.patch.json'),
-        '--show',
-    ))
+    app = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.ini.patch.json'),
+            rpath('shared.ini.patch.json'),
+            '--show',
+        ),
+    )
     app.args.out = stringio_tty
     exit_code = app.run()
 
@@ -503,11 +598,14 @@ def test_show_several_args_tty(capsys, rpath, stringio_tty):
 
 
 def test_values_none(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--values', 'none',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--values',
+            'none',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -517,11 +615,14 @@ def test_values_none(capsys, expected, rpath):
 
 
 def test_values_repr(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.lists.a.json'),
-        rpath('shared.lists.b.json'),
-        '--values', 'repr',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--values',
+            'repr',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -531,11 +632,14 @@ def test_values_repr(capsys, expected, rpath):
 
 
 def test_values_json(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.a.ini'),
-        rpath('shared.b.ini'),
-        '--values', 'json',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.a.ini'),
+            rpath('shared.b.ini'),
+            '--values',
+            'json',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -545,11 +649,14 @@ def test_values_json(capsys, expected, rpath):
 
 
 def test_values_yaml(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.a.ini'),
-        rpath('shared.b.ini'),
-        '--values', 'yaml',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.a.ini'),
+            rpath('shared.b.ini'),
+            '--values',
+            'yaml',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''
@@ -559,12 +666,16 @@ def test_values_yaml(capsys, expected, rpath):
 
 
 def test_values_yaml_multiline_strings(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(args=(
-        rpath('shared.multiline_strings.json'),
-        rpath('shared.multiline_strings.json'),
-        '-U', '1',
-        '--values', 'yaml',
-    )).run()
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.multiline_strings.json'),
+            rpath('shared.multiline_strings.json'),
+            '-U',
+            '1',
+            '--values',
+            'yaml',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.err == ''

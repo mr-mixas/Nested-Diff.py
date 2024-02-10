@@ -28,6 +28,7 @@ def test_patch(name):
 
 # Test what doesn't covered by standard tests
 
+
 def test_incorrect_diff_type():
     with pytest.raises(TypeError, match='is not iterable'):
         Patcher().patch(None, None)

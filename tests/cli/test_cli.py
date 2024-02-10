@@ -74,7 +74,7 @@ def test_excepthook_raise_system_exit_127():
 
 
 def test_guess_fmt_aliases():
-    class FakeFP():
+    class FakeFP:
         name = None
 
     aliases = {
@@ -83,7 +83,7 @@ def test_guess_fmt_aliases():
     fake_fp = FakeFP()
 
     for ext in sorted(aliases):
-        fake_fp.name = 'filename.' + ext
+        fake_fp.name = f'filename.{ext}'
         assert cli.App(args=()).guess_fmt(fake_fp, 'default') == aliases[ext]
 
 
@@ -93,12 +93,18 @@ def test_guess_fmt_ignore_fp_defaults():
 
 
 def test_get_dumper_unsupported_fmt():
-    with pytest.raises(RuntimeError, match='Unsupported output format: garbage'):
+    with pytest.raises(
+        RuntimeError,
+        match='Unsupported output format: garbage',
+    ):
         cli.App(args=()).get_dumper('garbage')
 
 
 def test_get_loader_unsupported_fmt():
-    with pytest.raises(RuntimeError, match='Unsupported input format: garbage'):
+    with pytest.raises(
+        RuntimeError,
+        match='Unsupported input format: garbage',
+    ):
         cli.App(args=()).get_loader('garbage')
 
 

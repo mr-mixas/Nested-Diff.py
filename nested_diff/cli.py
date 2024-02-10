@@ -23,7 +23,7 @@ import sys
 import nested_diff
 
 
-class App():
+class App:
     """Base class for command line tools."""
 
     default_ifmt = 'auto'
@@ -52,6 +52,7 @@ class App():
             return {}
 
         import json
+
         return json.loads(opts)
 
     @classmethod
@@ -66,7 +67,7 @@ class App():
         except AttributeError:
             self.__dumper = self.get_dumper(
                 self.args.ofmt,
-                **self._decode_fmt_opts(self.args.ofmt_opts)  # noqa C815
+                **self._decode_fmt_opts(self.args.ofmt_opts),
             )
 
             return self.__dumper
@@ -87,7 +88,7 @@ class App():
         parser.add_argument(
             '--version',
             action='version',
-            version='%(prog)s {}'.format(self.version),
+            version=f'%(prog)s {self.version}',
             help='print version and exit',
         )
 
@@ -152,7 +153,7 @@ class App():
         if fmt == 'toml':
             return TomlDumper(**kwargs)
 
-        raise RuntimeError('Unsupported output format: ' + fmt)
+        raise RuntimeError(f'Unsupported output format: {fmt}')
 
     @staticmethod
     def guess_fmt(fp, default, ignore_fps=(sys.stdin, sys.stdout, sys.stderr)):
@@ -191,7 +192,7 @@ class App():
         if fmt == 'toml':
             return TomlLoader(**kwargs)
 
-        raise RuntimeError('Unsupported input format: ' + fmt)
+        raise RuntimeError(f'Unsupported input format: {fmt}')
 
     def load(self, file_):
         """Load data from file using apropriate loader.
@@ -220,6 +221,7 @@ class App():
         in files).
 
         """
+
         def overrided(*args, **kwargs):
             sys.__excepthook__(*args, **kwargs)  # do all the same
             raise SystemExit(127)  # but change exit code
@@ -236,7 +238,7 @@ class App():
         raise NotImplementedError
 
 
-class Dumper():
+class Dumper:
     """Base class for data dumpers."""
 
     tty_final_new_line = False
@@ -285,7 +287,7 @@ class Dumper():
         file_.flush()
 
 
-class Loader():
+class Loader:
     """Base class for data loaders."""
 
     def decode(self, data):  # noqa U100
@@ -333,6 +335,7 @@ class JsonDumper(Dumper):
         super().__init__()
 
         import json
+
         self.encoder = json.JSONEncoder(**self.get_opts(kwargs))
 
     def encode(self, data):
@@ -370,6 +373,7 @@ class JsonLoader(Loader):
         super().__init__()
 
         import json
+
         self.decoder = json.JSONDecoder(**self.get_opts(kwargs))
 
     def decode(self, data):
@@ -391,6 +395,7 @@ class IniDumper(Dumper):
 
         import configparser
         import io
+
         self.encoder = configparser.ConfigParser(**self.get_opts(kwargs))
         self.stringio = io.StringIO()
 
@@ -415,6 +420,7 @@ class IniLoader(Loader):
         super().__init__()
 
         import configparser
+
         self.decoder = configparser.ConfigParser(**kwargs)
 
     def decode(self, data):
@@ -441,6 +447,7 @@ class TomlDumper(Dumper):
         super().__init__()
 
         import tomli_w
+
         self.codec = tomli_w
 
     def encode(self, data):
@@ -480,6 +487,7 @@ class YamlDumper(Dumper):
         super().__init__()
 
         import yaml
+
         try:
             from yaml import CSafeDumper as ImportedYamlDumper
         except ImportError:
@@ -532,6 +540,7 @@ class YamlLoader(Loader):
         super().__init__()
 
         import yaml
+
         try:
             from yaml import CSafeLoader as YamlLoader
         except ImportError:

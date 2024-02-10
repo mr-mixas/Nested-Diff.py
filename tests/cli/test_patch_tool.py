@@ -9,15 +9,17 @@ import nested_diff.patch_tool
 
 
 def test_default_patch(capsys, content, rpath, tmp_path):
-    result_file_name = '{}.got.json'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.json'
     copyfile(
         rpath('shared.lists.a.json'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.lists.patch.yaml'),
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.lists.patch.yaml'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -29,17 +31,21 @@ def test_default_patch(capsys, content, rpath, tmp_path):
 
 
 def test_json_ofmt_opts(capsys, content, expected, rpath, tmp_path):
-    result_file_name = '{}.got.json'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.json'
     copyfile(
         rpath('shared.lists.a.json'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.lists.patch.json'),
-        '--ofmt', 'json',
-        '--ofmt-opts', '{"indent": null}',
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.lists.patch.json'),
+            '--ofmt',
+            'json',
+            '--ofmt-opts',
+            '{"indent": null}',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -50,15 +56,17 @@ def test_json_ofmt_opts(capsys, content, expected, rpath, tmp_path):
 
 
 def test_auto_fmts(capsys, content, expected, rpath, tmp_path):
-    result_file_name = '{}.got.yaml'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.yaml'
     copyfile(
         rpath('shared.lists.a.yaml'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.lists.patch.json'),
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.lists.patch.json'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -69,17 +77,21 @@ def test_auto_fmts(capsys, content, expected, rpath, tmp_path):
 
 
 def test_yaml_ifmt(capsys, content, rpath, tmp_path):
-    result_file_name = '{}.got'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got'
     copyfile(
         rpath('shared.lists.a.yaml'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.lists.patch.yaml'),
-        '--ifmt', 'yaml',
-        '--ofmt', 'json',
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.lists.patch.yaml'),
+            '--ifmt',
+            'yaml',
+            '--ofmt',
+            'json',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -92,16 +104,19 @@ def test_yaml_ifmt(capsys, content, rpath, tmp_path):
 
 
 def test_yaml_ofmt(capsys, content, expected, rpath, tmp_path):
-    result_file_name = '{}.got.json'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.json'
     copyfile(
         rpath('shared.lists.a.json'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.lists.patch.json'),
-        '--ofmt', 'yaml',
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.lists.patch.json'),
+            '--ofmt',
+            'yaml',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -112,16 +127,19 @@ def test_yaml_ofmt(capsys, content, expected, rpath, tmp_path):
 
 
 def test_ini_ofmt(capsys, content, rpath, tmp_path):
-    result_file_name = '{}.got.ini'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.ini'
     copyfile(
         rpath('shared.a.ini'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.ini.patch.json'),
-        '--ofmt', 'ini',
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.ini.patch.json'),
+            '--ofmt',
+            'ini',
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -133,15 +151,17 @@ def test_ini_ofmt(capsys, content, rpath, tmp_path):
 
 
 def test_toml_fmt(capsys, content, rpath, tmp_path):
-    result_file_name = '{}.got.toml'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.toml'
     copyfile(
         rpath('shared.dict.a.toml'),
         result_file_name,
     )
-    exit_code = nested_diff.patch_tool.App(args=(
-        result_file_name,
-        rpath('shared.dict.patch.toml'),
-    )).run()
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            result_file_name,
+            rpath('shared.dict.patch.toml'),
+        ),
+    ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''
@@ -165,7 +185,7 @@ def test_entry_point(capsys):
 
 
 def test_stdin_patch(capsys, content, rpath, tmp_path):
-    result_file_name = '{}.got.json'.format(tmp_path)
+    result_file_name = f'{tmp_path}.got.json'
     copyfile(
         rpath('shared.lists.a.json'),
         result_file_name,
@@ -175,7 +195,8 @@ def test_stdin_patch(capsys, content, rpath, tmp_path):
 
     with mock.patch('sys.stdin', patch):
         exit_code = nested_diff.patch_tool.App(
-            args=(result_file_name, '--ifmt', 'json')).run()
+            args=(result_file_name, '--ifmt', 'json'),
+        ).run()
 
     captured = capsys.readouterr()
     assert captured.out == ''

@@ -22,16 +22,13 @@ def test_dict_diff():
     expected = [
         (d, '1', d['D']['1']),
         (d['D']['1'], None, None),
-
         (d, '2', d['D']['2']),
         (d['D']['2'], '10', d['D']['2']['D']['10']),
         (d['D']['2']['D']['10'], None, None),
         (d['D']['2'], '9', d['D']['2']['D']['9']),
         (d['D']['2']['D']['9'], None, None),
-
         (d, '3', d['D']['3']),
         (d['D']['3'], None, None),
-
         (d, '4', d['D']['4']),
         (d['D']['4'], None, None),
     ]
@@ -52,16 +49,13 @@ def test_dict_diff__keys_sorted():
     expected = [
         (d, '1', d['D']['1']),
         (d['D']['1'], None, None),
-
         (d, '2', d['D']['2']),
         (d['D']['2'], '10', d['D']['2']['D']['10']),
         (d['D']['2']['D']['10'], None, None),
         (d['D']['2'], '9', d['D']['2']['D']['9']),
         (d['D']['2']['D']['9'], None, None),
-
         (d, '3', d['D']['3']),
         (d['D']['3'], None, None),
-
         (d, '4', d['D']['4']),
         (d['D']['4'], None, None),
     ]
@@ -79,15 +73,14 @@ def test_list_diff():
     expected = [
         (d, 0, d['D'][0]),
         (d['D'][0], None, None),
-
         (d, 1, d['D'][1]),
         (d['D'][1], 0, d['D'][1]['D'][0]),
         (d['D'][1]['D'][0], None, None),
         (d['D'][1], 1, d['D'][1]['D'][1]),
         (d['D'][1]['D'][1], None, None),
-
         (d, 2, d['D'][2]),
-        (d['D'][2], None, None)]
+        (d['D'][2], None, None),
+    ]
 
     got = list(Iterator().iterate(d))
 

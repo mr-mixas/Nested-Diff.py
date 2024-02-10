@@ -20,7 +20,7 @@ from difflib import SequenceMatcher
 from math import isnan
 
 
-class TypeHandler():
+class TypeHandler:
     """Base class for type handlers.
 
     Handlers provide diff, patch, generate_formatted_diff and iterate_diff
@@ -300,11 +300,14 @@ class DictHandler(TypeHandler):
             for tag in formatter.tags:
                 if tag in subdiff:
                     yield from formatter.generate_key(
-                        key, tag, self.handled_type, depth,
+                        key,
+                        tag,
+                        self.handled_type,
+                        depth,
                     )
                     break
 
-            yield from formatter.generate_diff(subdiff, depth=depth+1)
+            yield from formatter.generate_diff(subdiff, depth=depth + 1)
 
 
 class ListHandler(TypeHandler):
@@ -334,8 +337,8 @@ class ListHandler(TypeHandler):
 
         >>> from nested_diff import Differ
         >>>
-        >>> a = [0,1,2,3]
-        >>> b = [  1,2,4,5]
+        >>> a = [0, 1, 2, 3]
+        >>> b = [1, 2, 4, 5]
         >>>
         >>> Differ(handlers=[ListHandler()], O=False, U=False).diff(a, b)
         (False, {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]})
@@ -468,11 +471,14 @@ class ListHandler(TypeHandler):
             for tag in formatter.tags:
                 if tag in subdiff:
                     yield from formatter.generate_key(
-                        idx, tag, self.handled_type, depth,
+                        idx,
+                        tag,
+                        self.handled_type,
+                        depth,
                     )
                     break
 
-            yield from formatter.generate_diff(subdiff, depth=depth+1)
+            yield from formatter.generate_diff(subdiff, depth=depth + 1)
 
             idx += 1
 
@@ -499,8 +505,8 @@ class TupleHandler(ListHandler):
 
         >>> from nested_diff import Differ
         >>>
-        >>> a = (  1,2,4,5)
-        >>> b = (0,1,2,3)
+        >>> a = (1, 2, 4, 5)
+        >>> b = (0, 1, 2, 3)
         >>>
         >>> Differ(handlers=[TupleHandler()], O=False, U=False).diff(a, b)
         (False, {'D': ({'A': 0}, {'N': 3, 'I': 2}, {'R': 5})})
@@ -687,12 +693,16 @@ class TextHandler(TypeHandler):
         self.lcs.set_seq2(lines_b)
 
         for group in self.lcs.get_grouped_opcodes(self.context):
-            diff.append({
-                'I': [
-                    group[0][1], group[-1][2],
-                    group[0][3], group[-1][4],
-                ],
-            })
+            diff.append(
+                {
+                    'I': [
+                        group[0][1],
+                        group[-1][2],
+                        group[0][3],
+                        group[-1][4],
+                    ],
+                },
+            )
 
             for op, i1, i2, j1, j2 in group:
                 if op == 'equal':
@@ -780,6 +790,6 @@ class TextHandler(TypeHandler):
         length = stop - start
 
         if length > 1:
-            return '{},{}'.format(start + 1, length)
+            return f'{start + 1},{length}'
 
         return str(start + 1)
