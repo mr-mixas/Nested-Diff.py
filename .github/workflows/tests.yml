@@ -1,5 +1,5 @@
 name: tests
-on: ["push", "pull_request"]
+on: ['push', 'pull_request', 'workflow_call']
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
@@ -31,8 +31,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.architecture }}
-      uses: actions/setup-python@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
