@@ -56,7 +56,7 @@ def test_exit_code_wrong_args():
     assert e.value.code == 2
 
 
-def test_excepthook_overrided():
+def test_excepthook_overridden():
     orig_id = id(sys.excepthook)
     cli.App(args=())
 

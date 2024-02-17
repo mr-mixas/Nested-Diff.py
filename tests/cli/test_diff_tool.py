@@ -379,7 +379,7 @@ def test_yaml_ofmt(capsys, expected, rpath):
 def test_python_yaml_impl(capsys, expected, rpath):
     orig_import = builtins.__import__
 
-    def overrided_import(name, globals, locals, fromlist, level):  # noqa A002
+    def overridden_import(name, globals, locals, fromlist, level):  # noqa A002
         if name == 'yaml' and fromlist is not None:
             for sym in ('CSafeDumper', 'CSafeLoader'):
                 if sym in fromlist:
@@ -387,7 +387,7 @@ def test_python_yaml_impl(capsys, expected, rpath):
 
         return orig_import(name, globals, locals, fromlist, level)  # noqa A002
 
-    with mock.patch('builtins.__import__', overrided_import):
+    with mock.patch('builtins.__import__', overridden_import):
         exit_code = nested_diff.diff_tool.App(
             args=(
                 rpath('shared.lists.a.yaml'),

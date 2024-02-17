@@ -40,8 +40,8 @@ $ nested_diff a.json b.json
 ```
 
 ```sh
-$ nested_diff a.json b.json --ofmt json > patch.json
-$ nested_patch a.json patch.json
+nested_diff a.json b.json --ofmt json > patch.json
+nested_patch a.json patch.json
 ```
 
 ## Library usage

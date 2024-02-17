@@ -2,11 +2,11 @@
 #   <str>
     @@ -5,4 +5,4 @@
 -   First string for a.
--   Second striing for a.
+-   Second string for a.
 -   Third string, belongs to file a.
 -   And fourth. Again to a.
 +   First string for b.
-+   Second striing for b.
++   Second string for b.
 +   Third string, belongs to file b.
 +   And fourth. Again to b.
     @@ -11,3 +11,3 @@

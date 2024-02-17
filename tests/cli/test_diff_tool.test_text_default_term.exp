@@ -5,11 +5,11 @@
     And one more common line.[0m
     Still a common line, but last, next will be different.[0m
 [31m-   First string for a.[0m
-[31m-   Second striing for a.[0m
+[31m-   Second string for a.[0m
 [31m-   Third string, belongs to file a.[0m
 [31m-   And fourth. Again to a.[0m
 [32m+   First string for b.[0m
-[32m+   Second striing for b.[0m
+[32m+   Second string for b.[0m
 [32m+   Third string, belongs to file b.[0m
 [32m+   And fourth. Again to b.[0m
     Wow! Common strings began! =)[0m

@@ -115,7 +115,6 @@ class App(nested_diff.cli.App):
             help="don't diff arguments, just format and show them; nested "
             'diffs expected for input',
         )
-
         parser.add_argument(
             '--text-ctx',
             default=3,
@@ -124,7 +123,6 @@ class App(nested_diff.cli.App):
             help='amount of context lines for text (multiline strings) diffs; '
             'negative value will disable such diffs, default is "%(default)s"',
         )
-
         parser.add_argument(
             '--out',
             default=sys.stdout,
@@ -132,14 +130,12 @@ class App(nested_diff.cli.App):
             type=argparse.FileType('w'),
             help='output file; STDOUT is used if omitted',
         )
-
         parser.add_argument(
             '-q',
             '--quiet',
             action='store_true',
             help="don't show diff, exit code is the only difference indicator",
         )
-
         parser.add_argument(
             '--values',
             choices=('repr', 'none', 'json', 'yaml'),

@@ -33,7 +33,7 @@ class App:
     version = nested_diff.__version__
 
     def __init__(self, args=None):
-        """Initialize appplication.
+        """Initialize application.
 
         Args:
             args: Command line arguments; sys.argv used by default.
@@ -90,7 +90,6 @@ class App:
             version=f'%(prog)s {self.version}',
             help='print version and exit',
         )
-
         parser.add_argument(
             '--ifmt',
             type=str,
@@ -98,14 +97,12 @@ class App:
             choices=sorted(self.supported_ifmts),
             help='input files format; "%(default)s" is used by default',
         )
-
         parser.add_argument(
             '--ifmt-opts',
             metavar='JSON',
             type=str,
             help='input files format options (JSON string)',
         )
-
         parser.add_argument(
             '--ofmt',
             type=str,
@@ -113,7 +110,6 @@ class App:
             choices=sorted(self.supported_ofmts),
             help='output files format; "%(default)s" is used by default',
         )
-
         parser.add_argument(
             '--ofmt-opts',
             metavar='JSON',
@@ -156,7 +152,7 @@ class App:
 
     @staticmethod
     def guess_fmt(fp, default, ignore_fps=(sys.stdin, sys.stdout, sys.stderr)):
-        """Guess format of a file object according it's extention."""
+        """Guess format of a file object according it's extension."""
         if fp in ignore_fps:
             return default
 
@@ -169,7 +165,7 @@ class App:
 
     @staticmethod
     def get_loader(fmt, **kwargs):
-        """Create data loader object accordint to passed format.
+        """Create data loader object according to passed format.
 
         Args:
             fmt: Loader format.
@@ -220,11 +216,11 @@ class App:
 
         """
 
-        def overrided(*args, **kwargs):
+        def overridden(*args, **kwargs):
             sys.__excepthook__(*args, **kwargs)  # do all the same
             raise SystemExit(127)  # but change exit code
 
-        sys.excepthook = overrided
+        sys.excepthook = overridden
 
     def run(self):
         """App object entry point.
@@ -431,7 +427,7 @@ class IniLoader(Loader):
             for option in self.decoder.options(section):
                 out[section][option] = self.decoder.get(section, option)
 
-            # cleanup (parser accumulates all readed confs)
+            # cleanup (parser accumulates all confs)
             self.decoder.remove_section(section)
 
         return out

@@ -55,7 +55,7 @@ and `ndiff = difftool --no-prompt --tool nested_diff` to section `[aliases]`.
 
 Now `ndiff` subcommand available and may be used in the same manner as `diff`.
 
-### How to run tests locally
+## How to run tests locally
 
 ```sh
 # prepare environment
