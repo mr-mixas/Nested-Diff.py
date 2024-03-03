@@ -212,6 +212,7 @@ class DictHandler(TypeHandler):
         >>> Differ(handlers=[DictHandler()], O=False, U=False).diff(a, b)
         (False, {'D': {'three': {'R': 3}, 'two': {'N': 42}}})
         >>>
+
         """
         diff = {}
         equal = True
@@ -243,10 +244,7 @@ class DictHandler(TypeHandler):
                 diff[key] = subdiff
 
         if diff:
-            if equal:
-                diff = {'U': a}
-            else:
-                diff = {'D': diff}
+            diff = {'U': a} if equal else {'D': diff}
         elif equal and differ.op_u:
             diff = {'U': a}
 
@@ -341,6 +339,7 @@ class ListHandler(TypeHandler):
         >>> Differ(handlers=[ListHandler()], O=False, U=False).diff(a, b)
         (False, {'D': [{'R': 0}, {'N': 4, 'I': 3}, {'A': 5}]})
         >>>
+
         """
         self.lcs.set_seq1(tuple(differ.dump(i) for i in a))
         self.lcs.set_seq2(tuple(differ.dump(i) for i in b))
@@ -509,6 +508,7 @@ class TupleHandler(ListHandler):
         >>> Differ(handlers=[TupleHandler()], O=False, U=False).diff(a, b)
         (False, {'D': ({'A': 0}, {'N': 3, 'I': 2}, {'R': 5})})
         >>>
+
         """
         equal, diff = super().diff(differ, a, b)
 
@@ -559,6 +559,7 @@ class SetHandler(TypeHandler):
         >>> Differ(handlers=[SetHandler()], U=False).diff(a, b)
         (False, {'D': [{'R': 1}, {'A': 3}], 'E': 3})
         >>>
+
         """
         diff = []
         equal = True
@@ -677,6 +678,7 @@ class TextHandler(TypeHandler):
         (False,
          {'D': [{'I': [0, 1, 0, 2]}, {'U': 'one'}, {'A': 'two'}], 'E': 5})
         >>>
+
         """
         lines_a = a.split('\n', -1)
         lines_b = b.split('\n', -1)

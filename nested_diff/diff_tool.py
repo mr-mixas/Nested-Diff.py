@@ -208,10 +208,7 @@ class App(nested_diff.cli.App):
 
         """
         if fmt == 'auto':
-            if self.args.out.isatty():
-                fmt = 'term'
-            else:
-                fmt = 'text'
+            fmt = 'term' if self.args.out.isatty() else 'text'
 
         if fmt in FormatterDumper.supported_fmts:
             return FormatterDumper(fmt=fmt, values=self.args.values, **kwargs)

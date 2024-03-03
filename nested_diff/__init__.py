@@ -41,8 +41,7 @@ TYPE_HANDLERS = (
 
 
 class Differ:
-    """
-    Compute recursive diff for two passed objects.
+    """Compute recursive diff for two passed objects.
 
     Dicts, lists, tuples, sets and frozensets traversed recursively, other
     types compared by values. Any type diff may be customized by user-defined

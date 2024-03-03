@@ -228,7 +228,7 @@ class App:
         Raises:
             NotImplementedError: Must be implemented in derivatives.
 
-        """
+        """  # noqa: D406
         raise NotImplementedError
 
 

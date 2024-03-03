@@ -60,15 +60,15 @@ lint = [
     'flake8-pytest-style',
     'flake8_quotes',
     'flake8-return',
-    'flake8-simplify',
     'flake8-unused-arguments',
     'pep8-naming',
     'pytest-flake8',
 ]
 test = [
     'pytest',
+    'pytest-cov',
     'pytest-ruff',
-    'ruff==0.1.15',  # pin for reproducible results
+    'ruff==0.3.0',  # pin for reproducible results
 ]
 
 [project.scripts]
@@ -81,6 +81,10 @@ Repository = 'https://github.com/mr-mixas/Nested-Diff.py.git'
 
 [tool.pytest.ini_options]
 addopts = """
+          --cov=nested_diff \
+          --cov-fail-under=99 \
+          --cov-report term-missing \
+          --no-cov-on-fail \
           --ruff \
           --ruff-format \
           --verbosity=2 \
@@ -94,8 +98,23 @@ extend-exclude = [
     'tests/data/standard.py',
 ]
 line-length = 79
-select = []
+
+[tool.ruff.extend-per-file-ignores]
+'tests/*' = [
+    'D',  # docstrings
+]
 
 [tool.ruff.format]
 docstring-code-format = true
 quote-style = 'single'
+
+[tool.ruff.lint]
+select = [
+    'D',
+    'E501',
+    'SIM',
+]
+ignore = [
+    'D407',  # Missing dashed underline after section
+    'SIM105',  # contextlib.suppress is slower than try-except-pass
+]

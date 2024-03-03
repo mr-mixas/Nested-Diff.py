@@ -7,27 +7,24 @@ jobs:
       matrix:
         os: ['ubuntu-20.04']
         python-version:
-        - 3.7
-        - 3.8
-        - 3.9
-        - pypy-3.7
-        - pypy-3.8
-        - pypy-3.9
-        - pypy-3.10
+        - '3.7'
+        - '3.8'
+        - '3.9'
+        - 'pypy-3.7'
+        - 'pypy-3.8'
+        - 'pypy-3.9'
+        - 'pypy-3.10'
         tox-env: ['essential']
         include:
         - os: macos-latest
           python-version: '3.12'
           tox-env: essential
         - os: windows-latest
-          python-version: '3.12'
+          python-version: '3.11'
           tox-env: essential
         - os: ubuntu-latest
           python-version: '3.10'
-          tox-env: linters
-        - os: ubuntu-latest
-          python-version: '3.11'
-          tox-env: coverage
+          tox-env: extended
     steps:
     - uses: actions/checkout@v4
 
@@ -35,21 +32,22 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
     - name: Install dependencies
       run: |
         pip install --quiet --upgrade pip setuptools tox>=4.5.1
 
-    - name: Run test without coverage
-      if: ${{ matrix.tox-env != 'coverage' }}
+    - name: Run essential tests
+      if: ${{ matrix.tox-env != 'extended' }}
       run: |
         tox run -e ${{ matrix.tox-env }}
 
-    - name: Run tests with coverage
-      if: ${{ matrix.tox-env == 'coverage' }}
+    - name: Run linters and coverage
+      if: ${{ matrix.tox-env == 'extended' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pip install --quiet --upgrade coveralls
-        tox run -e coverage
+        tox run -e ${{ matrix.tox-env }}
         coveralls --service=github
