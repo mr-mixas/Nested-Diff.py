@@ -2,17 +2,18 @@
 
 Recursive diff and patch for nested structures.
 
-[![Tests Status](https://github.com/mr-mixas/Nested-Diff.py/actions/workflows/tests.yml/badge.svg)](https://github.com/mr-mixas/Nested-Diff.py/actions?query=branch%3Amaster)
-[![Coverage Status](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
+[![PyPi](https://img.shields.io/pypi/v/nested-diff.svg)](https://pypi.python.org/pypi/nested-diff)
+[![Tests](https://github.com/mr-mixas/Nested-Diff.py/actions/workflows/tests.yml/badge.svg)](https://github.com/mr-mixas/Nested-Diff.py/actions?query=branch%3Amaster)
+[![Coverage](https://coveralls.io/repos/github/mr-mixas/Nested-Diff.py/badge.svg)](https://coveralls.io/github/mr-mixas/Nested-Diff.py)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 [![License](https://img.shields.io/pypi/l/nested_diff.svg)](https://pypi.org/project/nested_diff/)
 
 ## Main features
 
-* Machine-readable diff structure.
-* Human-friendly diff visualization, collapsible html diffs.
-* All operation tags are optional and may be disabled.
-* Extensibility.
+* Machine readable diff structure.
+* Human friendly diff visualization, collapsible html diffs.
+* All ops (added/removed/changed/unchanged) are optional and may be disabled.
+* Any data types support may be added by external handlers.
 
 **[See Live Demo!](https://nesteddiff.pythonanywhere.com/)**
 
@@ -48,52 +49,42 @@ nested_patch a.json patch.json
 
 ```py
 >>> from nested_diff import diff, patch
+>>> from nested_diff.formatters import TextFormatter
 >>>
 >>> a = {'one': 1, 'two': 2, 'three': 3}
 >>> b = {'one': 1, 'two': 42}
 >>>
->>> diff(a, b)
+>>>
+>>> full_diff = diff(a, b)
+>>> full_diff
 {'D': {'three': {'R': 3}, 'two': {'N': 42, 'O': 2}, 'one': {'U': 1}}}
 >>>
->>> diff(a, b, O=False, U=False)
+>>> short_diff = diff(a, b, O=False, U=False)  # omit old and unchanged items
+>>> short_diff
 {'D': {'three': {'R': 3}, 'two': {'N': 42}}}
 >>>
 >>>
->>> c = [0,1,2,3]
->>> d = [  1,2,4,5]
+>>> a = patch(a, short_diff)
+>>> assert a == b
 >>>
->>> c = patch(c, diff(c, d))
->>> assert c == d
 >>>
-```
-
-### Formatting diffs
-
-```py
->>> from nested_diff import diff, handlers
->>> from nested_diff.formatters import TextFormatter
->>>
->>> a = {'one': 1, 'two': 'some\ntext\ninside'}
->>> b = {'one': 0, 'two': 'some\ntext'}
->>>
->>> d = diff(a, b, U=False, extra_handlers=[handlers.TextHandler(context=3)])
->>> print(TextFormatter().format(d))
+>>> human_readable = TextFormatter().format(full_diff)
+>>> print(human_readable)
   {'one'}
--   1
-+   0
+    1
+- {'three'}
+-   3
   {'two'}
-#   <str>
-    @@ -1,3 +1,2 @@
-    some
-    text
--   inside
+-   2
++   42
 <BLANKLINE>
 >>>
 ```
 
-For more examples see [Live Demo](https://nesteddiff.pythonanywhere.com/),
+HTML and ANSI colored terminal formatters also available out of the box.  
+See [Live Demo](https://nesteddiff.pythonanywhere.com/),
 [HOWTO](https://github.com/mr-mixas/Nested-Diff.py/blob/master/HOWTO.md) and
-[tests](https://github.com/mr-mixas/Nested-Diff.py/tree/master/tests).
+[nested\_diff.formatters](https://github.com/mr-mixas/Nested-Diff.py/tree/master/nested_diff/formatters.py).
 
 ## Diff structure
 
