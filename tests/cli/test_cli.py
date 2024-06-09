@@ -15,8 +15,7 @@ def test_abstract_dumper_encode():
 
 
 def test_abstract_loader_decode():
-    with pytest.raises(NotImplementedError):
-        cli.Loader().decode('data')
+    assert cli.Loader().decode('data') == 'data'
 
 
 def test_dumper_dump_default_with_tty(stringio_tty):

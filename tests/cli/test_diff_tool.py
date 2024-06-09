@@ -284,6 +284,23 @@ def test_html_ofmt_wrappings(capsys, expected, rpath):
     assert captured.out == expected
 
 
+def test_plaintext_ifmt(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+            '--ifmt',
+            'plaintext',
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
 def test_text_ofmt(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(
         args=(

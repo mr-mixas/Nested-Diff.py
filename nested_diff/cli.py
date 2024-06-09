@@ -27,7 +27,14 @@ class App:
     default_ifmt = 'auto'
     default_ofmt = 'auto'
 
-    supported_ifmts = ('auto', 'ini', 'json', 'toml', 'yaml')
+    supported_ifmts = (
+        'auto',
+        'ini',
+        'json',
+        'plaintext',
+        'toml',
+        'yaml',
+    )
     supported_ofmts = ('auto', 'ini', 'json', 'toml', 'yaml')
 
     version = nested_diff.__version__
@@ -186,6 +193,8 @@ class App:
             return IniLoader(**kwargs)
         if fmt == 'toml':
             return TomlLoader(**kwargs)
+        if fmt == 'plaintext':
+            return Loader(**kwargs)
 
         raise RuntimeError(f'Unsupported input format: {fmt}')
 
@@ -290,11 +299,11 @@ class Loader:
         Args:
             data: Data to decode.
 
-        Raises:
-            NotImplementedError: Must be implemented in derivatives.
+        Returns:
+            Decoded data structure.
 
         """
-        raise NotImplementedError
+        return data
 
     @staticmethod
     def get_opts(opts):

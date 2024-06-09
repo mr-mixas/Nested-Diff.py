@@ -211,6 +211,9 @@ class App(nested_diff.cli.App):
             fmt = 'term' if self.args.out.isatty() else 'text'
 
         if fmt in FormatterDumper.supported_fmts:
+            if self.args.ifmt == 'plaintext':
+                kwargs.setdefault('type_hints', False)
+
             return FormatterDumper(fmt=fmt, values=self.args.values, **kwargs)
 
         return super().get_dumper(fmt, **kwargs)
