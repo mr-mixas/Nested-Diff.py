@@ -59,7 +59,7 @@ class TypeHandler:
 
         return equal, diff
 
-    def patch(self, patcher, target, diff):  # noqa U100
+    def patch(self, patcher, target, diff):  # noqa: ARG002
         """Patch object.
 
         Args:
@@ -82,7 +82,7 @@ class TypeHandler:
 
         raise ValueError(diff)
 
-    def iterate_diff(self, iterator, diff):  # noqa U100
+    def iterate_diff(self, iterator, diff):  # noqa: ARG002
         """Iterate over nested diff.
 
         Args:
@@ -432,7 +432,7 @@ class ListHandler(TypeHandler):
 
         return target
 
-    def iterate_diff(self, iterator, diff):  # noqa U100
+    def iterate_diff(self, iterator, diff):  # noqa: ARG002
         """Iterate over nested diff.
 
         Args:
@@ -443,7 +443,7 @@ class ListHandler(TypeHandler):
             Tuples with diff, key and subdiff for each nested diff.
 
         """
-        idx = 0  # noqa SIM113
+        idx = 0
 
         for item in diff['D']:
             try:
@@ -457,7 +457,7 @@ class ListHandler(TypeHandler):
 
     def generate_formatted_diff(self, formatter, diff, depth):
         """Generate formatted list diff."""
-        idx = 0  # noqa SIM113
+        idx = 0
 
         for subdiff in diff['D']:
             try:
@@ -583,7 +583,7 @@ class SetHandler(TypeHandler):
 
         return equal, {}
 
-    def patch(self, patcher, target, diff):  # noqa U100
+    def patch(self, patcher, target, diff):  # noqa: ARG002
         """Patch set object.
 
         Args:
@@ -722,7 +722,7 @@ class TextHandler(TypeHandler):
 
         return equal, {'U': a} if differ.op_u else {}
 
-    def patch(self, patcher, target, diff):  # noqa U100
+    def patch(self, patcher, target, diff):  # noqa: ARG002
         """Patch text (multiline string).
 
         Unlike GNU patch, this algorithm does not implement any heuristics and
@@ -775,7 +775,7 @@ class TextHandler(TypeHandler):
 
                 if tag == 'I':
                     yield from formatter.generate_string(
-                        '@@ -{} +{} @@'.format(
+                        '@@ -{} +{} @@'.format(  # noqa: UP032
                             self._get_hunk_range(value[0], value[1]),
                             self._get_hunk_range(value[2], value[3]),
                         ),

@@ -41,7 +41,7 @@ def test_default_diff_with_tty(capsys, expected, rpath):
 
 def test_diff_method_kwargs_override(capsys, expected, rpath):
     class TestApp(nested_diff.diff_tool.App):
-        def diff(self, a, b, **kwargs):  # noqa U100
+        def diff(self, a, b, **kwargs):  # noqa: ARG002
             return super().diff(a, b, A=0, U=1)
 
     exit_code = TestApp(
@@ -62,7 +62,7 @@ def test_diff_method_kwargs_override(capsys, expected, rpath):
     assert captured.out == expected
 
 
-def test_enable_U_ops(capsys, expected, rpath):  # noqa N802
+def test_enable_U_ops(capsys, expected, rpath):  # noqa: N802
     exit_code = nested_diff.diff_tool.App(
         args=(
             rpath('shared.lists.a.json'),
@@ -82,7 +82,7 @@ def test_enable_U_ops(capsys, expected, rpath):  # noqa N802
     assert captured.out == expected
 
 
-def test_trimR_ops(capsys, expected, rpath):  # noqa N802
+def test_trimR_ops(capsys, expected, rpath):  # noqa: N802
     exit_code = nested_diff.diff_tool.App(
         args=(
             rpath('shared.lists.b.json'),
@@ -396,13 +396,13 @@ def test_yaml_ofmt(capsys, expected, rpath):
 def test_python_yaml_impl(capsys, expected, rpath):
     orig_import = builtins.__import__
 
-    def overridden_import(name, globals, locals, fromlist, level):  # noqa A002
+    def overridden_import(name, globals, locals, fromlist, level):  # noqa: A002
         if name == 'yaml' and fromlist is not None:
             for sym in ('CSafeDumper', 'CSafeLoader'):
                 if sym in fromlist:
                     raise ImportError(f'Mocked import error for yaml.{sym}')
 
-        return orig_import(name, globals, locals, fromlist, level)  # noqa A002
+        return orig_import(name, globals, locals, fromlist, level)
 
     with mock.patch('builtins.__import__', overridden_import):
         exit_code = nested_diff.diff_tool.App(
@@ -482,7 +482,7 @@ def test_exit_code_diff_absent(rpath):
     assert exit_code == 0
 
 
-def test_exit_code_diff_absent_U_opt_enabled(rpath):  # noqa N802
+def test_exit_code_diff_absent_U_opt_enabled(rpath):  # noqa: N802
     exit_code = nested_diff.diff_tool.App(
         args=(
             rpath('shared.lists.a.json'),

@@ -98,7 +98,7 @@ class AbstractFormatter:
         for handler in handlers:
             self.set_handler(handler)
 
-    def format(self, diff, **kwargs):  # noqa A003
+    def format(self, diff, **kwargs):
         """Return formatted diff as string."""
         return ''.join(self.generate_diff(diff, **kwargs))
 

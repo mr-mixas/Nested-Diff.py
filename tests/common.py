@@ -18,7 +18,7 @@ def iterate_test_suite(tests_map, results_mod, func):
             try:
                 test['result'] = func(test)
                 results_map[name] = {'result': test['result']}
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 results_map[name] = {
                     'raises': e if type(e) is type else type(e),
                 }

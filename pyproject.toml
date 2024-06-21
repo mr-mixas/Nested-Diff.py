@@ -50,25 +50,12 @@ cli = [
 ]
 lint = [
     'darglint',
-    'flake8 < 5',  # temp workaround (https://github.com/tholo/pytest-flake8/issues/87)
-    'flake8-builtins',
-    'flake8-bugbear',
-    'flake8-commas',
-    'flake8-comprehensions',
-    'flake8-docstrings',
-    'flake8-eradicate',
-    'flake8-pytest-style',
-    'flake8_quotes',
-    'flake8-return',
-    'flake8-unused-arguments',
-    'pep8-naming',
-    'pytest-flake8',
 ]
 test = [
     'pytest',
     'pytest-cov',
     'pytest-ruff',
-    'ruff==0.3.0',  # pin for reproducible results
+    'ruff==0.4.10',
 ]
 
 [project.scripts]
@@ -99,22 +86,57 @@ extend-exclude = [
 ]
 line-length = 79
 
-[tool.ruff.extend-per-file-ignores]
-'tests/*' = [
-    'D',  # docstrings
-]
-
 [tool.ruff.format]
 docstring-code-format = true
 quote-style = 'single'
 
 [tool.ruff.lint]
 select = [
+    'A',
+    'ARG',
+    'B',
+    'BLE',
+    'C4',
+    'COM',
     'D',
-    'E501',
+    'DTZ',
+    'E',
+    'ERA',
+    'EXE',
+#    'FBT',  # TODO
+    'FLY',
+    'G',
+    'ICN',
+    'ISC',
+    'LOG',
+    'N',
+    'PGH',
+    'PIE',
+    'PT',
+#    'PL',  # TODO
+    'PLE',
+    'Q',
+    'RET',
+    'RSE',
+    'RUF',
     'SIM',
+    'SLF',
+    'TD',
+    'UP',
+    'W',
 ]
 ignore = [
     'D407',  # Missing dashed underline after section
     'SIM105',  # contextlib.suppress is slower than try-except-pass
 ]
+
+[tool.ruff.lint.extend-per-file-ignores]
+'tests/*' = [
+    'D',  # docstrings
+]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = 'single'
+
+[tool.ruff.lint.pydocstyle]
+convention = 'google'

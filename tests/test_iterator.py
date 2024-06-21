@@ -87,7 +87,7 @@ def test_list_diff():
     assert got == expected
 
 
-def test_list_diff__noU():  # noqa N802
+def test_list_diff__noU():  # noqa: N802
     a = [0, [1], 3]
     b = [0, [1, 2], 3]
     _, d = Differ(U=False).diff(a, b)

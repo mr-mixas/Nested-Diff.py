@@ -42,7 +42,7 @@ def test_local_objects():
     a = [local_function_cant_be_pickled]
     b = []
 
-    with pytest.raises(Exception, match="Can't pickle"):  # noqa B017 (different exceptions on different python vers)
+    with pytest.raises(Exception, match="Can't pickle"):
         Differ().diff(a, b)
 
 
@@ -89,7 +89,7 @@ def test_custom_dumper():
     class _Pickler(pickle.Pickler):
         def reducer_override(self, obj):
             if type(obj) is ClassToTestDiff:
-                return str, tuple(f'ClassToTestDiff obj, id: {str(id(obj))}')
+                return str, tuple(f'ClassToTestDiff obj, id: {id(obj)}')
 
             return NotImplemented
 

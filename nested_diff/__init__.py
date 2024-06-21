@@ -101,11 +101,11 @@ class Differ:
     def __init__(
         self,
         A=True,  # noqa: N803
-        N=True,
-        O=True,  # noqa: E741
-        R=True,
-        U=True,
-        trimR=False,
+        N=True,  # noqa: N803
+        O=True,  # noqa: E741 N803
+        R=True,  # noqa: N803
+        U=True,  # noqa: N803
+        trimR=False,  # noqa: N803
         dumper=None,
         handlers=None,
     ):

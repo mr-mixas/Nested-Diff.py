@@ -35,7 +35,7 @@ def test_scalar_handler_diff_equal():
     assert got == expected
 
 
-def test_text_handler_diff_equal_noU():  # noqa N802
+def test_text_handler_diff_equal_noU():  # noqa: N802
     a = '1\n2'
     b = '1\n2'
 

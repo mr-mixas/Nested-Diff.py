@@ -237,7 +237,7 @@ class App:
         Raises:
             NotImplementedError: Must be implemented in derivatives.
 
-        """  # noqa: D406
+        """
         raise NotImplementedError
 
 
@@ -257,7 +257,7 @@ class Dumper:
         self.header = header
         self.footer = footer
 
-    def encode(self, data):  # noqa U100
+    def encode(self, data):
         """Encode data.
 
         Args:
@@ -293,7 +293,7 @@ class Dumper:
 class Loader:
     """Base class for data loaders."""
 
-    def decode(self, data):  # noqa U100
+    def decode(self, data):
         """Decode data.
 
         Args:

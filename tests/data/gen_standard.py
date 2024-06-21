@@ -32,7 +32,7 @@ def generate_tests(source_dir=sys.argv[1]):
                     test_opts['trimR'] = True
 
         if 'patched' in data:
-            patched = f"\n            'patched': {repr(data['patched'])},"
+            patched = f"\n            'patched': {data['patched']!r},"
         else:
             patched = ''
 

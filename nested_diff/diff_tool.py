@@ -72,11 +72,10 @@ class App(nested_diff.cli.App):
         if self.args.show:
             if len(self.args.files) > 1:
                 headers_enabled = True
-        else:
-            if len(self.args.files) < 2:
-                self.argparser.error('Two or more arguments expected for diff')
-            elif len(self.args.files) > 2:
-                headers_enabled = True
+        elif len(self.args.files) < 2:
+            self.argparser.error('Two or more arguments expected for diff')
+        elif len(self.args.files) > 2:
+            headers_enabled = True
 
         for file_ in self.args.files:
             header = ''
@@ -308,7 +307,7 @@ class FormatterDumper(nested_diff.cli.Dumper):
     def get_formatter_class(self, base_class, values='repr'):
         """Return formatter class."""
 
-        class __Formatter(base_class):
+        class _Formatter(base_class):
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
 
@@ -328,14 +327,14 @@ class FormatterDumper(nested_diff.cli.Dumper):
 
                 self.generate_value = self.generate_multiline_value
 
-            def generate_empty_value(*args):  # noqa U101
+            def generate_empty_value(*args):  # noqa: ARG002
                 yield ''
 
             def generate_multiline_value(self, value, tag, depth):
                 for line in self.__val_encoder.encode(value).splitlines():
                     yield from super().generate_string(line, tag, depth)
 
-        return __Formatter
+        return _Formatter
 
     @staticmethod
     def get_opts(opts):
