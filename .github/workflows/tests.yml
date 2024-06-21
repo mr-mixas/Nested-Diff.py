@@ -36,7 +36,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install --quiet --upgrade pip setuptools tox>=4.5.1
+        pip install --quiet --upgrade tox>=4.5.1
 
     - name: Run essential tests
       if: ${{ matrix.tox-env != 'extended' }}
