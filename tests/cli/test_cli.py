@@ -72,18 +72,22 @@ def test_excepthook_raise_system_exit_127():
     assert e.value.code == 127
 
 
-def test_guess_fmt_aliases():
+def test_guess_fmt():
     class FakeFP:
         name = None
 
-    aliases = {
+    exts = {
+        'ini': 'ini',
+        'json': 'json',
+        'py': 'default',
+        'txt': 'default',
         'yml': 'yaml',
     }
     fake_fp = FakeFP()
 
-    for ext in sorted(aliases):
+    for ext, fmt in sorted(exts.items()):
         fake_fp.name = f'filename.{ext}'
-        assert cli.App(args=()).guess_fmt(fake_fp, 'default') == aliases[ext]
+        assert cli.App(args=()).guess_fmt(fake_fp, 'default') == fmt
 
 
 def test_guess_fmt_ignore_fp_defaults():

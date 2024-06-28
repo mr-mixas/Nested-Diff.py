@@ -157,8 +157,12 @@ class App:
 
         raise RuntimeError(f'Unsupported output format: {fmt}')
 
-    @staticmethod
-    def guess_fmt(fp, default, ignore_fps=(sys.stdin, sys.stdout, sys.stderr)):
+    def guess_fmt(
+        self,
+        fp,
+        default,
+        ignore_fps=(sys.stdin, sys.stdout, sys.stderr),
+    ):
         """Guess format of a file object according it's extension."""
         if fp in ignore_fps:
             return default
@@ -168,7 +172,7 @@ class App:
         if fmt == 'yml':
             fmt = 'yaml'
 
-        return fmt if fmt else default
+        return fmt if fmt in self.supported_ifmts else default
 
     @staticmethod
     def get_loader(fmt, **kwargs):
@@ -209,7 +213,7 @@ class App:
 
         """
         if self.args.ifmt == 'auto':
-            fmt = self.guess_fmt(file_, 'json')
+            fmt = self.guess_fmt(file_, 'plaintext')
         else:
             fmt = self.args.ifmt
 

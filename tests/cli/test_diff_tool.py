@@ -284,6 +284,21 @@ def test_html_ofmt_wrappings(capsys, expected, rpath):
     assert captured.out == expected
 
 
+def test_fallback_ifmt(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.a.txt'),
+            rpath('shared.b.txt'),
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
 def test_plaintext_ifmt(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(
         args=(
