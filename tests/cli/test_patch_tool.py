@@ -172,6 +172,30 @@ def test_toml_fmt(capsys, content, rpath, tmp_path):
     assert content(result_file_name) == expected
 
 
+def test_plaintext_fmt(capsys, content, rpath, tmp_path):
+    result_file_name = f'{tmp_path}.got.txt'
+    copyfile(
+        rpath('shared.a.txt'),
+        result_file_name,
+    )
+    exit_code = nested_diff.patch_tool.App(
+        args=(
+            '--ofmt',
+            'plaintext',
+            result_file_name,
+            rpath('shared.txt.patch.json'),
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.out == ''
+    assert captured.err == ''
+    assert exit_code == 0
+
+    expected = content(rpath('shared.b.txt'))
+    assert content(result_file_name) == expected
+
+
 def test_entry_point(capsys):
     with mock.patch('sys.argv', ['nested_patch', '-h']):
         with pytest.raises(SystemExit) as e:

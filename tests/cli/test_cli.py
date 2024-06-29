@@ -9,12 +9,11 @@ class Dumper(cli.Dumper):
         return data
 
 
-def test_abstract_dumper_encode():
-    with pytest.raises(NotImplementedError):
-        cli.Dumper().encode('data')
+def test_base_dumper_encode():
+    assert cli.Dumper().encode('data') == 'data'
 
 
-def test_abstract_loader_decode():
+def test_base_loader_decode():
     assert cli.Loader().decode('data') == 'data'
 
 

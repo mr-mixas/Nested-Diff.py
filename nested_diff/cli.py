@@ -35,7 +35,7 @@ class App:
         'toml',
         'yaml',
     )
-    supported_ofmts = ('auto', 'ini', 'json', 'toml', 'yaml')
+    supported_ofmts = supported_ifmts
 
     version = nested_diff.__version__
 
@@ -154,6 +154,8 @@ class App:
             return IniDumper(**kwargs)
         if fmt == 'toml':
             return TomlDumper(**kwargs)
+        if fmt == 'plaintext':
+            return Dumper(**kwargs)
 
         raise RuntimeError(f'Unsupported output format: {fmt}')
 
@@ -267,11 +269,11 @@ class Dumper:
         Args:
             data: Data to encode.
 
-        Raises:
-            NotImplementedError: Must be implemented in derivatives.
+        Returns:
+            Encoded data.
 
         """
-        raise NotImplementedError
+        return data
 
     @staticmethod
     def get_opts(opts):
