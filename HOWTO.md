@@ -145,7 +145,8 @@ Add to `.gitconfig` following section:
 
 ```ini
 [difftool "nested_diff"]
-  cmd = nested_diff $LOCAL $REMOTE
+  cmd = HEADER_NAME_A="a/$MERGED" HEADER_NAME_B="b/$MERGED" \
+        nested_diff $LOCAL $REMOTE
 ```
 
 and `ndiff = difftool --no-prompt --tool nested_diff` to section `[aliases]`.
