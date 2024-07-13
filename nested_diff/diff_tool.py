@@ -15,6 +15,7 @@
 """Nested diff command line tool."""
 
 import argparse
+import os
 import sys
 
 import nested_diff
@@ -97,8 +98,17 @@ class App(nested_diff.cli.App):
 
                 equal, diff = self.diff(a['data'], b['data'])
 
+                try:
+                    name_a = os.environ['HEADER_NAME_A']
+                    name_b = os.environ['HEADER_NAME_B']
+                except KeyError:
+                    name_a = a['name']
+                    name_b = b['name']
+                else:
+                    headers_enabled = True
+
                 if headers_enabled:
-                    header = self.dumper.get_diff_header(a['name'], b['name'])
+                    header = self.dumper.get_diff_header(name_a, name_b)
 
                 a = b
 

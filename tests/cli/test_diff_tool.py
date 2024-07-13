@@ -629,6 +629,40 @@ def test_show_several_args_tty(capsys, rpath, stringio_tty):
     assert stringio_tty.getvalue().startswith('\033[33m--- /dev/null')
 
 
+@mock.patch('os.environ', {'HEADER_NAME_A': 'foo', 'HEADER_NAME_B': 'bar'})
+def test_header_names_from_env(capsys, rpath):
+    app = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+        ),
+    )
+    exit_code = app.run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out.startswith('--- foo\n+++ bar\n')
+
+
+@mock.patch('os.environ', {'HEADER_NAME_A': 'foo'})
+def test_header_names_from_env_partial(capsys, rpath):
+    app = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.lists.a.json'),
+            rpath('shared.lists.b.json'),
+        ),
+    )
+    exit_code = app.run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert not captured.out.startswith('--- ')
+
+
 def test_values_none(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(
         args=(
