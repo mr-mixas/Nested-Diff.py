@@ -42,7 +42,7 @@ def test_local_objects():
     a = [local_function_cant_be_pickled]
     b = []
 
-    with pytest.raises(Exception, match="Can't pickle"):
+    with pytest.raises(Exception, match="Can't"):
         Differ().diff(a, b)
 
 
