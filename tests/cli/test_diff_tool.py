@@ -748,3 +748,20 @@ def test_values_yaml_multiline_strings(capsys, expected, rpath):
     assert exit_code == 0
 
     assert captured.out == expected
+
+
+def test_yaml_custom_tags(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.custom_tags.a.yaml'),
+            rpath('shared.custom_tags.b.yaml'),
+            '-U',
+            '1',
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected

@@ -1,0 +1,15 @@
+---
+added: !added
+changed_value: !changed_value new_value
+changed_tag: !Changed_tag changed_tag_value
+unchanged_value: !unchanged_value unchanged_value
+
+recursive_mapping: !mapping
+  child: !mapping
+    var: baz
+  var: foo
+
+sequence: !sequence
+  - foo
+  - baz
+  - bar

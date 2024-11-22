@@ -110,6 +110,14 @@ def test_get_loader_unsupported_fmt():
         cli.App(args=()).get_loader('garbage')
 
 
+def test_loader_yaml_custom_tags():
+    loaded = cli.YamlLoader().decode('!custom_tag')
+
+    assert isinstance(loaded, cli.YamlNode)
+    assert loaded.tag == '!custom_tag'
+    assert loaded.value == ''
+
+
 def test_run():
     with pytest.raises(NotImplementedError):
         cli.App(args=()).run()

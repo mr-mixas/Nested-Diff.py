@@ -19,6 +19,7 @@ import os
 import sys
 
 import nested_diff
+import nested_diff.handlers
 
 
 class App:
@@ -220,6 +221,7 @@ class App:
             fmt = self.args.ifmt
 
         fmt_opts = self._decode_fmt_opts(self.args.ifmt_opts)
+
         return self.get_loader(fmt, **fmt_opts).load(file_)
 
     @staticmethod
@@ -550,15 +552,105 @@ class YamlLoader(Loader):
 
         import yaml
 
+        from yaml.nodes import (
+            ScalarNode as YamlScalarNode,
+            SequenceNode as YamlSequenceNode,
+            MappingNode as YamlMappingNode,
+        )
+
         try:
             from yaml import CSafeLoader as YamlLoader
         except ImportError:
             from yaml import SafeLoader as YamlLoader
 
+        self.opts = self.get_opts(kwargs)
         self.yaml = yaml
         self.yaml_loader = YamlLoader
-        self.opts = self.get_opts(kwargs)
+
+        def _default_constructor(loader, tag_suffix, node):  # noqa: ARG001
+            tag = node.tag
+
+            if isinstance(node, YamlScalarNode):
+                value = node.value
+            elif isinstance(node, YamlSequenceNode):
+                node.tag = 'tag:yaml.org,2002:seq'
+                value = loader.construct_sequence(node, deep=True)
+            elif isinstance(node, YamlMappingNode):
+                node.tag = 'tag:yaml.org,2002:map'
+                value = loader.construct_mapping(node, deep=True)
+
+            return YamlNode(tag, value)
+
+        self.yaml_loader.add_multi_constructor(None, _default_constructor)
 
     def decode(self, data):
         """Parse YAML string."""
         return self.yaml.load(data, Loader=self.yaml_loader, **self.opts)
+
+
+class YamlNode:
+    """Wrapper to represent YAML node."""
+
+    def __init__(self, tag, value):
+        """Initialize wrapper.
+
+        Args:
+            tag: YAML node tag.
+            value: YAML node value.
+
+        """
+        self.tag = tag
+        self.value = value
+
+    def __repr__(self):
+        """Repr for YAML node wrapper."""
+        return f"YamlNode(tag='{self.tag}', value={self.value!r})"
+
+
+class YamlNodeHandler(nested_diff.handlers.TypeHandler):
+    """YamlNode handler."""
+
+    extension_id = 'nested_diff.YamlNode'
+    handled_type = YamlNode
+
+    def diff(self, differ, a, b):
+        """Calculate diff for two YamlNode objects.
+
+        Args:
+            differ: nested_diff.Differ object.
+            a: First node to diff.
+            b: Second node to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
+
+        """
+        equal, _ = differ.diff(a.tag, b.tag)
+
+        if not equal:
+            return equal, {'N': b, 'O': a, 'E': self.extension_id}
+
+        equal, diff = differ.diff(a.value, b.value)
+
+        if diff:
+            diff = {
+                'D': {'value': diff},
+                'E': self.extension_id,
+                'tag': a.tag,
+            }
+
+        return equal, diff
+
+    def generate_formatted_diff(self, formatter, diff, depth):
+        """Generate formatted YamlNode diff."""
+        if 'D' in diff:
+            yield from formatter.generate_string(diff['tag'], 'D', depth)
+            yield from formatter.generate_diff(diff['D']['value'], depth + 1)
+
+            return
+
+        yield from formatter.generate_string(diff['O'].tag, 'O', depth)
+        yield from formatter.generate_value(diff['O'].value, 'O', depth + 1)
+
+        yield from formatter.generate_string(diff['N'].tag, 'N', depth)
+        yield from formatter.generate_value(diff['N'].value, 'N', depth + 1)

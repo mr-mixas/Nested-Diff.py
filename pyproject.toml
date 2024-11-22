@@ -44,7 +44,7 @@ requires-python = '>=3.7'
 
 [project.optional-dependencies]
 cli = [
-    'pyyaml',
+    'pyyaml >= 5.3',
     'tomli >= 1.1.0 ; python_version < "3.11"',
     'tomli-w >= 1.0.0'
 ]
