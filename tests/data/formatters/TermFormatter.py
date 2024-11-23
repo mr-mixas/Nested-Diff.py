@@ -326,6 +326,12 @@ RESULTS = {
     'quote_symbols': {
         'result': '  {\'"double"\'}\x1b[0m\n\x1b[31m-   \'""\'\x1b[0m\n\x1b[32m+   \'"\'\x1b[0m\n  {"\'single\'"}\x1b[0m\n\x1b[31m-   "\'\'"\x1b[0m\n\x1b[32m+   "\'"\x1b[0m\n  {\'`backticks`\'}\x1b[0m\n\x1b[31m-   \'``\'\x1b[0m\n\x1b[32m+   \'`\'\x1b[0m\n',
     },
+    'ranges_different': {
+        'result': '\x1b[31m- range(0, 4)\x1b[0m\n\x1b[32m+ range(0, 5)\x1b[0m\n',
+    },
+    'ranges_equal': {
+        'result': '  range(0, 4)\x1b[0m\n',
+    },
     'redefined_depth': {
         'result': '\x1b[31m-       0\x1b[0m\n\x1b[32m+       1\x1b[0m\n',
     },

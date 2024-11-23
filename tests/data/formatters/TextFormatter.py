@@ -326,6 +326,12 @@ RESULTS = {
     'quote_symbols': {
         'result': '  {\'"double"\'}\n-   \'""\'\n+   \'"\'\n  {"\'single\'"}\n-   "\'\'"\n+   "\'"\n  {\'`backticks`\'}\n-   \'``\'\n+   \'`\'\n',
     },
+    'ranges_different': {
+        'result': '- range(0, 4)\n+ range(0, 5)\n',
+    },
+    'ranges_equal': {
+        'result': '  range(0, 4)\n',
+    },
     'redefined_depth': {
         'result': '-       0\n+       1\n',
     },

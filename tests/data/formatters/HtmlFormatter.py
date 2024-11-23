@@ -326,6 +326,12 @@ RESULTS = {
     'quote_symbols': {
         'result': '<div class="nDvD"><div>  <div class="nDkO">{&#x27;&quot;double&quot;&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;&quot;&quot;&#x27;</div></div><div>+   <div class="nDvN">&#x27;&quot;&#x27;</div></div></div><div>  <div class="nDkO">{&quot;&#x27;single&#x27;&quot;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&quot;&#x27;&#x27;&quot;</div></div><div>+   <div class="nDvN">&quot;&#x27;&quot;</div></div></div><div>  <div class="nDkO">{&#x27;`backticks`&#x27;}</div></div><div class="nDvD"><div>-   <div class="nDvO">&#x27;``&#x27;</div></div><div>+   <div class="nDvN">&#x27;`&#x27;</div></div></div></div>',
     },
+    'ranges_different': {
+        'result': '<div class="nDvD"><div>- <div class="nDvO">range(0, 4)</div></div><div>+ <div class="nDvN">range(0, 5)</div></div></div>',
+    },
+    'ranges_equal': {
+        'result': '<div class="nDvD"><div>  <div class="nDvU">range(0, 4)</div></div></div>',
+    },
     'redefined_depth': {
         'result': '<div class="nDvD"><div>-       <div class="nDvO">0</div></div><div>+       <div class="nDvN">1</div></div></div>',
     },

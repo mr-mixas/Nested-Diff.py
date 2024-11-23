@@ -298,4 +298,14 @@ def get_tests():
             'diff': {'D': ({'A': 0}, {'I': 2, 'N': 3}, {'R': 5})},
             'diff_opts': {'O': False, 'U': False},
         },
+        'ranges_equal': {
+            'a': range(4),
+            'b': range(4),
+            'diff': {'U': range(4)},
+        },
+        'ranges_different': {
+            'a': range(4),
+            'b': range(5),
+            'diff': {'N': range(5), 'O': range(4)},
+        },
     }
