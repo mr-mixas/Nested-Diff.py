@@ -552,16 +552,14 @@ class YamlLoader(Loader):
 
         import yaml
 
-        from yaml.nodes import (
-            ScalarNode as YamlScalarNode,
-            SequenceNode as YamlSequenceNode,
-            MappingNode as YamlMappingNode,
-        )
-
         try:
             from yaml import CSafeLoader as YamlLoader
         except ImportError:
             from yaml import SafeLoader as YamlLoader
+
+        from yaml.nodes import MappingNode as YamlMappingNode
+        from yaml.nodes import ScalarNode as YamlScalarNode
+        from yaml.nodes import SequenceNode as YamlSequenceNode
 
         self.opts = self.get_opts(kwargs)
         self.yaml = yaml

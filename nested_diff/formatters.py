@@ -356,18 +356,7 @@ document.querySelector('.nDvD').addEventListener('click', event => {
     }
 })
 """
-        lines = []
-        for line in script.split('\n'):
-            try:
-                comment_starts = line.index('//')
-            except ValueError:
-                pass
-            else:
-                line = line[:comment_starts]
-
-            lines.append(line.strip())
-
-        return ''.join(lines)
+        return ''.join(x.split('//', 1)[0].strip() for x in script.split('\n'))
 
     def format_key(self, key):
         """Return key/index representation."""

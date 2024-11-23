@@ -1,10 +1,8 @@
 import pytest
 
-from nested_diff.formatters import TermFormatter
-
 import tests.data.formatters
 import tests.data.formatters.TermFormatter
-
+from nested_diff.formatters import TermFormatter
 from tests.common import do_test_function, iterate_test_suite
 
 

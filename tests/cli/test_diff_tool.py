@@ -1,9 +1,9 @@
 import builtins
 import json
-import pytest
 import sys
-
 from unittest import mock
+
+import pytest
 
 import nested_diff.diff_tool
 

@@ -1,7 +1,6 @@
 import pytest
 
 from nested_diff import Differ, Patcher, patch
-
 from tests.data import specific, standard
 
 TESTS = {}

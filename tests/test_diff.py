@@ -1,8 +1,8 @@
-import pytest
 import sys
 
-from nested_diff import Differ, diff, handlers
+import pytest
 
+from nested_diff import Differ, diff, handlers
 from tests.data import specific, standard
 
 TESTS = {}

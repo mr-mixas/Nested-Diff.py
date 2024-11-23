@@ -1,9 +1,9 @@
 import io
 import json
-import pytest
-
-from unittest import mock
 from shutil import copyfile
+from unittest import mock
+
+import pytest
 
 import nested_diff.patch_tool
 

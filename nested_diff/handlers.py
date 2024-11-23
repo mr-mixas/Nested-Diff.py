@@ -320,7 +320,7 @@ class ListHandler(TypeHandler):
         super().__init__()
         self.lcs = SequenceMatcher(isjunk=None, autojunk=False)
 
-    def diff(self, differ, a, b):
+    def diff(self, differ, a, b):  # noqa: C901 PLR0912
         """Calculate diff for two list objects.
 
         Args:
@@ -598,7 +598,7 @@ class SetHandler(TypeHandler):
         for subdiff in diff['D']:
             try:
                 target.add(subdiff['A'])
-            except KeyError:
+            except KeyError:  # noqa: PERF203
                 try:
                     target.remove(subdiff['R'])
                 except KeyError:

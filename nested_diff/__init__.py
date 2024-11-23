@@ -98,7 +98,7 @@ class Differ:
 
     default_differ = DEFAULT_HANDLER.diff
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         A=True,  # noqa: N803
         N=True,  # noqa: N803

@@ -1,10 +1,8 @@
 import pytest
 
-from nested_diff.formatters import HtmlFormatter
-
 import tests.data.formatters
 import tests.data.formatters.HtmlFormatter
-
+from nested_diff.formatters import HtmlFormatter
 from tests.common import do_test_function, iterate_test_suite
 
 

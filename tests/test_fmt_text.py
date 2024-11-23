@@ -1,10 +1,8 @@
 import pytest
 
-from nested_diff.formatters import TextFormatter
-
 import tests.data.formatters
 import tests.data.formatters.TextFormatter
-
+from nested_diff.formatters import TextFormatter
 from tests.common import do_test_function, iterate_test_suite
 
 

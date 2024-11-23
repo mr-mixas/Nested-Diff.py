@@ -1,5 +1,4 @@
 import sys
-
 from pickle import dumps
 
 from nested_diff.handlers import FloatHandler, TextHandler

@@ -1,6 +1,6 @@
 import pytest
 
-from nested_diff import Iterator, Differ
+from nested_diff import Differ, Iterator
 
 
 def test_scalar_diff():
@@ -118,7 +118,7 @@ def test_set_diff():
 
 
 def test_unknown_containers():
-    class UnknownContainer(tuple):
+    class UnknownContainer(tuple):  # noqa: SLOT001
         pass
 
     d = {'D': UnknownContainer([{'O': 0, 'N': 1}])}

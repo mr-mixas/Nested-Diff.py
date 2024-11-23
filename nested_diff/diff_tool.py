@@ -66,7 +66,7 @@ class App(nested_diff.cli.App):
 
         return differ.diff(a, b)
 
-    def generate_diffs(self):
+    def generate_diffs(self):  # noqa: C901
         """Generate diffs."""
         a = None
         headers_enabled = False
@@ -74,9 +74,9 @@ class App(nested_diff.cli.App):
         if self.args.show:
             if len(self.args.files) > 1:
                 headers_enabled = True
-        elif len(self.args.files) < 2:
+        elif len(self.args.files) < 2:  # noqa: PLR2004
             self.argparser.error('Two or more arguments expected for diff')
-        elif len(self.args.files) > 2:
+        elif len(self.args.files) > 2:  # noqa: PLR2004
             headers_enabled = True
 
         for file_ in self.args.files:
@@ -254,7 +254,7 @@ class FormatterDumper(nested_diff.cli.Dumper):
 
     supported_fmts = ('term', 'text', 'html')
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         fmt,
         header=None,

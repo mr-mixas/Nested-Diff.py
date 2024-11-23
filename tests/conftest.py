@@ -1,8 +1,7 @@
 import os
-import pytest
-
 from io import StringIO
 
+import pytest
 
 pytest.register_assert_rewrite('tests.common')
 

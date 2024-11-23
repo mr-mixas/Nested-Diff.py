@@ -2,9 +2,8 @@
 
 import html
 
-from nested_diff.formatters import HtmlFormatter, TextFormatter
-
 import tests.data.formatters
+from nested_diff.formatters import HtmlFormatter, TextFormatter
 
 
 def main():
