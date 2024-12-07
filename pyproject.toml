@@ -56,7 +56,7 @@ test = [
     'pytest',
     'pytest-cov',
     'pytest-ruff',
-    'ruff==0.8.0',
+    'ruff==0.8.2',
 ]
 
 [project.scripts]
@@ -68,15 +68,15 @@ Homepage = 'https://github.com/mr-mixas/Nested-Diff.py'
 Repository = 'https://github.com/mr-mixas/Nested-Diff.py.git'
 
 [tool.pytest.ini_options]
-addopts = """
-          --cov=nested_diff \
-          --cov-fail-under=99 \
-          --cov-report term-missing \
-          --no-cov-on-fail \
-          --ruff \
-          --ruff-format \
-          --verbosity=2 \
-          """
+addopts = [
+    '--cov=nested_diff',
+    '--cov-fail-under=99',
+    '--cov-report=term-missing',
+    '--no-cov-on-fail',
+    '--ruff',
+    '--ruff-format',
+    '--verbosity=2',
+]
 doctest_optionflags = 'NORMALIZE_WHITESPACE'
 testpaths = 'nested_diff tests'
 

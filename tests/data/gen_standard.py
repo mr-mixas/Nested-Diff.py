@@ -15,7 +15,7 @@ def format_test(**kwargs):
         }},""".format(**kwargs)
 
 
-def generate_tests(source_dir=sys.argv[1]):
+def generate_tests(source_dir):
     tests = []
     for file_name in sorted(os.listdir(source_dir)):
         with open(os.path.join(source_dir, file_name)) as f:
@@ -66,4 +66,4 @@ def get_tests():
 
 
 if __name__ == '__main__':
-    generate_tests()
+    generate_tests(sys.argv[1])
