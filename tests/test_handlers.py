@@ -1,3 +1,5 @@
+import pytest
+
 from nested_diff import Differ, handlers
 
 
@@ -23,6 +25,15 @@ def test_diff_handlers():
     got = differ.diff(a, b)
 
     assert got == expected
+
+
+def test_diff_handler_exceptions_propagated():
+    class IntHandler(handlers.IntHandler):
+        def diff(*args):  # noqa: ARG002
+            raise KeyError
+
+    with pytest.raises(KeyError):
+        Differ(handlers=[IntHandler()]).diff(1, 2)
 
 
 def test_scalar_handler_diff_equal():

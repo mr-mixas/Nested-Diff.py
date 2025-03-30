@@ -154,13 +154,15 @@ class Differ:
         if a is b:
             return True, {'U': a} if self.op_u else {}
 
+        differ = self.default_differ
+
         if a.__class__ is b.__class__:
             try:
-                return self._differs[a.__class__](self, a, b)
+                differ = self._differs[a.__class__]
             except KeyError:
                 pass
 
-        return self.default_differ(self, a, b)
+        return differ(self, a, b)
 
     def set_handler(self, handler):
         """Set handler.
