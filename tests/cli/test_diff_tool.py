@@ -714,6 +714,10 @@ def test_values_json(capsys, expected, rpath):
     assert captured.out == expected
 
 
+@pytest.mark.skipif(
+    sys.implementation.name == 'pypy',
+    reason='--values yaml is deprecated (produce explicit ends on pypy 3.8)',
+)
 def test_values_yaml(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(
         args=(

@@ -38,7 +38,7 @@ jobs:
     - name: Run essential tests
       if: ${{ matrix.tests != 'extended' }}
       run: |
-        pip install --quiet -e '.[cli,test]'
+        pip install -e '.[cli,test]'
         pytest
 
     - name: Run extra linters and report coverage
