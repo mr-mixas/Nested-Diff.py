@@ -350,7 +350,6 @@ def test_term_ofmt(capsys, expected, rpath):
     assert captured.out == expected
 
 
-@pytest.mark.skipif(sys.version_info < (3, 6), reason='different keys order')
 def test_toml_fmt(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(
         args=(
@@ -704,6 +703,24 @@ def test_values_json(capsys, expected, rpath):
             rpath('shared.b.ini'),
             '--values',
             'json',
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="no 'sort_dicts' option")
+def test_values_pprint(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.a.ini'),
+            rpath('shared.b.ini'),
+            '--values',
+            'pprint',
         ),
     ).run()
 

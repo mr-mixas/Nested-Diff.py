@@ -149,7 +149,7 @@ class App(nested_diff.cli.App):
         )
         parser.add_argument(
             '--values',
-            choices=('repr', 'none', 'json', 'yaml'),
+            choices=('repr', 'none', 'json', 'pprint', 'yaml'),
             default='repr',
             help='values format; "none" means no values printed, "repr" is a '
             'python representation of the object, rest are themselves; default'
@@ -334,6 +334,8 @@ class FormatterDumper(nested_diff.cli.Dumper):
 
                 if values == 'json':
                     self.__val_encoder = nested_diff.cli.JsonDumper(indent=2)
+                elif values == 'pprint':
+                    self.__val_encoder = nested_diff.cli.PprintDumper()
                 elif values == 'yaml':
                     warnings.warn(
                         (

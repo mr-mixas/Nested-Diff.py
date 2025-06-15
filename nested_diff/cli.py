@@ -450,6 +450,44 @@ class IniLoader(Loader):
         return out
 
 
+class PprintDumper(Dumper):
+    """Pprint dumper."""
+
+    def __init__(self, **kwargs):
+        """Initialize dumper."""
+        super().__init__()
+
+        import pprint
+
+        self.codec = pprint.PrettyPrinter(**self.get_opts(kwargs))
+
+    def encode(self, data):
+        """Encode data as pprint does."""
+        return self.codec.pformat(data)
+
+    @staticmethod
+    def get_opts(opts):
+        """Extend options by default values.
+
+        Args:
+            opts: Kwargs for pprint.PrettyPrinter as dict.
+
+        Returns:
+            Options extended by default values.
+
+        """
+        defaults = {
+            'indent': 1,
+            'width': 80,
+            'depth': None,
+            'compact': True,
+            'sort_dicts': True,
+        }
+        defaults.update(opts)
+
+        return defaults
+
+
 class TomlDumper(Dumper):
     """TOML dumper."""
 
