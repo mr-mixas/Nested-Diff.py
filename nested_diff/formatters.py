@@ -57,7 +57,7 @@ class AbstractFormatter:
             'U': '  ',
         }
 
-        self.key_prefix = {key: '' for key in self.key_line_prefix}
+        self.key_prefix = dict.fromkeys(self.key_line_prefix, '')
         self.key_suffix = self.key_prefix.copy()
 
         self.val_line_prefix = self.key_line_prefix.copy()
@@ -67,7 +67,7 @@ class AbstractFormatter:
         self.val_line_prefix['O'] = '- '
         self.val_line_prefix['N'] = '+ '
 
-        self.val_prefix = {key: '' for key in self.val_line_prefix}
+        self.val_prefix = dict.fromkeys(self.val_line_prefix, '')
         self.val_suffix = self.val_prefix.copy()
 
         self.val_prefix['E'] = '<'
@@ -386,16 +386,16 @@ class TermFormatter(TextFormatter):
 
         self.line_separator = f'\x1b[0m{self.line_separator}'
 
-        self.key_line_prefix['A'] = f"\x1b[1;32m{self.key_line_prefix['A']}"
-        self.key_line_prefix['R'] = f"\x1b[1;31m{self.key_line_prefix['R']}"
+        self.key_line_prefix['A'] = f'\x1b[1;32m{self.key_line_prefix["A"]}'
+        self.key_line_prefix['R'] = f'\x1b[1;31m{self.key_line_prefix["R"]}'
 
-        self.val_line_prefix['A'] = f"\x1b[32m{self.val_line_prefix['A']}"
-        self.val_line_prefix['C'] = f"\x1b[34m{self.val_line_prefix['C']}"
-        self.val_line_prefix['E'] = f"\x1b[34m{self.val_line_prefix['E']}"
-        self.val_line_prefix['H'] = f"\x1b[35m{self.val_line_prefix['H']}"
-        self.val_line_prefix['N'] = f"\x1b[32m{self.val_line_prefix['N']}"
-        self.val_line_prefix['O'] = f"\x1b[31m{self.val_line_prefix['O']}"
-        self.val_line_prefix['R'] = f"\x1b[31m{self.val_line_prefix['R']}"
+        self.val_line_prefix['A'] = f'\x1b[32m{self.val_line_prefix["A"]}'
+        self.val_line_prefix['C'] = f'\x1b[34m{self.val_line_prefix["C"]}'
+        self.val_line_prefix['E'] = f'\x1b[34m{self.val_line_prefix["E"]}'
+        self.val_line_prefix['H'] = f'\x1b[35m{self.val_line_prefix["H"]}'
+        self.val_line_prefix['N'] = f'\x1b[32m{self.val_line_prefix["N"]}'
+        self.val_line_prefix['O'] = f'\x1b[31m{self.val_line_prefix["O"]}'
+        self.val_line_prefix['R'] = f'\x1b[31m{self.val_line_prefix["R"]}'
 
     @staticmethod
     def get_diff_header(name_a, name_b):
