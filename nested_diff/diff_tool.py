@@ -58,6 +58,7 @@ class App(nested_diff.cli.App):
             diff_opts['R'] = int(diff_opts['R'])
 
         differ = nested_diff.Differ(**diff_opts)
+        differ.set_handler(nested_diff.cli.ListOfDocumentsHandler())
         differ.set_handler(nested_diff.cli.YamlNodeHandler())
 
         if self.args.text_ctx >= 0:
@@ -289,6 +290,7 @@ class FormatterDumper(nested_diff.cli.Dumper):
 
         fmt_class = self.get_formatter_class(base_class, values=values)
         self.encoder = fmt_class(**self.get_opts(kwargs))
+        self.encoder.set_handler(nested_diff.cli.ListOfDocumentsHandler())
         self.encoder.set_handler(nested_diff.cli.YamlNodeHandler())
 
         if header is None:

@@ -1,0 +1,2 @@
+- ListOfDocuments([{'one': 1}, {'two': 2}])
++ [0, [1, 2], 3]

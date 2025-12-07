@@ -621,7 +621,57 @@ class YamlLoader(Loader):
 
     def decode(self, data):
         """Parse YAML string."""
-        return self.yaml.load(data, Loader=self.yaml_loader, **self.opts)
+        items = list(
+            self.yaml.load_all(data, Loader=self.yaml_loader, **self.opts),
+        )
+
+        if len(items) == 1:
+            return items[0]
+
+        return ListOfDocuments(items)
+
+
+class ListOfDocuments:
+    """Wrapper to represent bunch of documents like YAML stream."""
+
+    def __init__(self, items):
+        """Initialize wrapper.
+
+        Args:
+            items: list of documents.
+
+        """
+        self.items = items
+
+    def __repr__(self):
+        """Repr for wrapper."""
+        return f'ListOfDocuments({self.items})'
+
+
+class ListOfDocumentsHandler(nested_diff.handlers.ListHandler):
+    """ListOfDocuments handler."""
+
+    extension_id = 'nested_diff.ListOfDocuments'
+    handled_type = ListOfDocuments
+
+    def diff(self, differ, a, b):
+        """Calculate diff for two ListOfDocuments objects.
+
+        Args:
+            differ: nested_diff.Differ object.
+            a: First object to diff.
+            b: Second object to diff.
+
+        Returns:
+            Tuple: equality flag and nested diff.
+
+        """
+        equal, diff = differ.diff(a.items, b.items)
+
+        if diff:
+            diff['E'] = self.extension_id
+
+        return equal, diff
 
 
 class YamlNode:

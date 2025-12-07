@@ -786,3 +786,33 @@ def test_yaml_custom_tags(capsys, expected, rpath):
     assert exit_code == 1
 
     assert captured.out == expected
+
+
+def test_yaml_streams(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.stream.a.yaml'),
+            rpath('shared.stream.b.yaml'),
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
+
+
+def test_yaml_stream_vs_single(capsys, expected, rpath):
+    exit_code = nested_diff.diff_tool.App(
+        args=(
+            rpath('shared.stream.a.yaml'),
+            rpath('shared.lists.b.yaml'),
+        ),
+    ).run()
+
+    captured = capsys.readouterr()
+    assert captured.err == ''
+    assert exit_code == 1
+
+    assert captured.out == expected
