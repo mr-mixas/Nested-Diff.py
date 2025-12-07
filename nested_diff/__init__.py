@@ -20,7 +20,7 @@ import nested_diff.handlers
 
 __all__ = ['Differ', 'Iterator', 'Patcher', 'diff', 'patch']
 
-__version__ = '1.8.0'
+__version__ = '1.9.0'
 __author__ = 'Michael Samoglyadov'
 __license__ = 'Apache License, Version 2.0'
 __website__ = 'https://github.com/mr-mixas/Nested-Diff.py'
