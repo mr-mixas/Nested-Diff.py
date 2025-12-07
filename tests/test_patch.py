@@ -58,7 +58,7 @@ def test_text_unsupported_op():
 
 
 def test_incorrect_diff_format():
-    with pytest.raises(ValueError, match="{'garbage': 'passed'}"):
+    with pytest.raises(ValueError, match=r"{'garbage': 'passed'}"):
         Patcher().patch({}, {'garbage': 'passed'})
 
 

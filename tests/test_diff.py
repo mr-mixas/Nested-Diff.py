@@ -80,8 +80,8 @@ def test_different_object_attributes():
     reason='reducer_override appeared in 3.8',
 )
 def test_custom_dumper():
-    import io
-    import pickle
+    import io  # noqa: PLC0415
+    import pickle  # noqa: PLC0415
 
     class ClassToTestDiff:
         pass

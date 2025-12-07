@@ -100,6 +100,7 @@ class Differ:
 
     def __init__(  # noqa: PLR0913
         self,
+        *,
         A=True,  # noqa: N803
         N=True,  # noqa: N803
         O=True,  # noqa: E741 N803
@@ -253,7 +254,7 @@ class Iterator:
 
     default_iterator = DEFAULT_HANDLER.iterate_diff
 
-    def __init__(self, handlers=None, sort_keys=False):
+    def __init__(self, *, handlers=None, sort_keys=False):
         """Initialize iterator.
 
         Args:

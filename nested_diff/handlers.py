@@ -148,7 +148,7 @@ class FloatHandler(ScalarHandler):
 
     handled_type = float
 
-    def __init__(self, nans_equal=False):
+    def __init__(self, *, nans_equal=False):
         """Initialize handler.
 
         Args:

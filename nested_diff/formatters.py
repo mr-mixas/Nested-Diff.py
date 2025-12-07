@@ -27,6 +27,7 @@ class AbstractFormatter:
 
     def __init__(
         self,
+        *,
         handlers=None,
         indent='  ',
         line_separator='\n',

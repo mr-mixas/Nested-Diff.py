@@ -279,7 +279,7 @@ class FormatterDumper(nested_diff.cli.Dumper):
             kwargs: Passed to base formatter as is.
 
         """
-        import nested_diff.formatters
+        import nested_diff.formatters  # noqa: PLC0415
 
         if fmt == 'term':
             base_class = nested_diff.formatters.TermFormatter
