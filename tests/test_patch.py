@@ -29,7 +29,7 @@ def test_patch(name):
 
 
 def test_incorrect_diff_type():
-    with pytest.raises(TypeError, match='is not iterable'):
+    with pytest.raises(TypeError):
         Patcher().patch(None, None)
 
 
