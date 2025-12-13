@@ -64,7 +64,10 @@ class App:
     @classmethod
     def cli(cls):
         """Cli tool entry point."""
-        return cls().run()
+        try:
+            return cls().run()
+        except KeyboardInterrupt:
+            return 2  # pragma nocover
 
     @property
     def dumper(self):
