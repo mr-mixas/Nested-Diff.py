@@ -160,17 +160,12 @@ class App:
 
         raise RuntimeError(f'Unsupported output format: {fmt}')
 
-    def guess_fmt(
-        self,
-        fp,
-        default,
-        ignore_fps=(sys.stdin, sys.stdout, sys.stderr),
-    ):
+    def guess_fmt(self, fp, default):
         """Guess format of a file object according it's extension."""
-        if fp in ignore_fps:
-            return default
-
-        fmt = os.path.splitext(fp.name)[-1].split('.')[-1].lower()
+        try:
+            fmt = os.path.splitext(fp.name)[-1].split('.')[-1].lower()
+        except Exception:  # noqa: BLE001
+            fmt = default
 
         if fmt == 'yml':
             fmt = 'yaml'
