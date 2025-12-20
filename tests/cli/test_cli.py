@@ -48,9 +48,20 @@ def test_dumper_dump_final_new_line_without_tty(stringio):
     assert stringio.getvalue() == 'text'
 
 
+def test_help_arg(capsys):
+    with pytest.raises(SystemExit) as e:
+        cli.App(args=['--help']).run()
+
+    captured = capsys.readouterr()
+    assert e.value.code == 0
+    assert captured.err == ''
+    assert 'usage:' in captured.out
+    assert 'examples:' in captured.out
+
+
 def test_exit_code_wrong_args():
     with pytest.raises(SystemExit) as e:
-        cli.App(args=('--unsupported-option')).run()
+        cli.App(args=['--unsupported-option']).run()
 
     assert e.value.code == 2
 

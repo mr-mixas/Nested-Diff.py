@@ -21,6 +21,12 @@ import sys
 import nested_diff
 import nested_diff.handlers
 
+HELP_EPILOG = """\
+examples:
+  Print version:
+    %(prog)s --version
+"""
+
 
 class App:
     """Base class for command line tools."""
@@ -49,7 +55,10 @@ class App:
         """
         self.override_excepthook()  # ASAP, but overridable by descendants
 
-        self.argparser = self.get_argparser(description=self.__doc__)
+        self.argparser = self.get_argparser(
+            description=self.__doc__,
+            epilog=getattr(sys.modules[self.__module__], 'HELP_EPILOG', None),
+        )
         self.args = self.argparser.parse_args(args=args)
 
     @staticmethod
@@ -82,7 +91,7 @@ class App:
 
             return self.__dumper
 
-    def get_argparser(self, description=None):
+    def get_argparser(self, description=None, epilog=None):
         """Return complete CLI argument parser."""
         return argparse.ArgumentParser(
             description=description,
@@ -90,6 +99,8 @@ class App:
                 self.get_optional_args_parser(),
                 self.get_positional_args_parser(),
             ),
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            epilog=epilog,
         )
 
     def get_optional_args_parser(self):

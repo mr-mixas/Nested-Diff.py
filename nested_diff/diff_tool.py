@@ -23,6 +23,24 @@ import nested_diff
 import nested_diff.cli
 import nested_diff.handlers
 
+HELP_EPILOG = """\
+examples:
+  diff two documents:
+    %(prog)s a.json b.yaml
+
+  dIff several documents pairwise:
+    %(prog)s a.json b.json c.json d.json
+
+  show changed elements but omit added and removed:
+    %(prog)s -A=0 -R=0 a.json b.json
+
+  render existing nested diff as HTML page:
+    %(prog)s --show --ofmt=html nd.json
+
+  show changed paths, but not values:
+    %(prog)s --values=none a.json b.json
+"""
+
 
 class App(nested_diff.cli.App):
     """Diff tool for nested data structures."""

@@ -205,6 +205,7 @@ def test_entry_point(capsys):
 
     captured = capsys.readouterr()
     assert captured.out.startswith('usage: nested_patch')
+    assert 'examples:' in captured.out
     assert captured.err == ''
 
 

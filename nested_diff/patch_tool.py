@@ -19,6 +19,15 @@ import sys
 
 import nested_diff.cli
 
+HELP_EPILOG = """\
+examples:
+  patch document:
+    %(prog)s target.json patch.json
+
+  redefine serialization options:
+    %(prog)s --ofmt json --ofmt-opts '{"indent": null}' target.json patch.json
+"""
+
 
 class App(nested_diff.cli.App):
     """Patch tool for nested data structures."""
