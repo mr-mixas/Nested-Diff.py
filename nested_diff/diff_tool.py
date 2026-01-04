@@ -1,4 +1,4 @@
-# Copyright 2019-2024 Michael Samoglyadov
+# Copyright 2019-2026 Michael Samoglyadov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ examples:
 
 
 class App(nested_diff.cli.App):
-    """Diff tool for nested data structures."""
+    """Diff tool for nested structures."""
 
     supported_ofmts = ('auto', 'html', 'json', 'term', 'toml', 'text', 'yaml')
 
@@ -201,8 +201,8 @@ class App(nested_diff.cli.App):
             '-R',
             choices=('0', '1', 'trim'),
             default=1,
-            help='Show removed items; enabled (1) by default. '
-            'Value will be replaced by null when "trim" used',
+            help='show removed items; enabled (1) by default; '
+            'value will be replaced by null when "trim" used',
         )
         parser.add_argument(
             '-U',
@@ -250,7 +250,7 @@ class App(nested_diff.cli.App):
         return super().get_dumper(fmt, **kwargs)
 
     def run(self):
-        """Diff app object entry point."""
+        """Diff app entry point."""
         exit_code = 0
 
         self.args.out.write(self.dumper.header)
