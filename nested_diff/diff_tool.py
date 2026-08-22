@@ -17,7 +17,6 @@
 import argparse
 import os
 import sys
-import warnings
 
 import nested_diff
 import nested_diff.cli
@@ -168,12 +167,11 @@ class App(nested_diff.cli.App):
         )
         parser.add_argument(
             '--values',
-            choices=('repr', 'none', 'json', 'pprint', 'yaml'),
+            choices=('repr', 'none', 'json', 'pprint'),
             default='repr',
             help='values format; "none" means no values printed, "repr" is a '
             'python representation of the object, rest are themselves; default'
-            ' is "%(default)s". NOTE: yaml is deprecated here due to explicit'
-            ' ends for scalar values in yaml v1.2',
+            ' is "%(default)s".',
         )
 
         parser.add_argument(
@@ -356,18 +354,6 @@ class FormatterDumper(nested_diff.cli.Dumper):
                     self.__val_encoder = nested_diff.cli.JsonDumper(indent=2)
                 elif values == 'pprint':
                     self.__val_encoder = nested_diff.cli.PprintDumper()
-                elif values == 'yaml':
-                    warnings.warn(
-                        (
-                            'YAML as diff values formatter is deprecated and'
-                            ' will be removed soon'
-                        ),
-                        FutureWarning,
-                        stacklevel=3,
-                    )
-                    self.__val_encoder = nested_diff.cli.YamlDumper(
-                        explicit_start=False,
-                    )
 
                 self.generate_value = self.generate_multiline_value
 

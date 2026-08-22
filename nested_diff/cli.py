@@ -551,15 +551,8 @@ class YamlDumper(Dumper):
         except ImportError:
             from yaml import SafeDumper as ImportedYamlDumper  # noqa: PLC0415
 
-        class _YamlDumper(ImportedYamlDumper):
-            def represent_scalar(self, tag, value, style=None):
-                if isinstance(value, str) and '\n' in value:
-                    return super().represent_scalar(tag, value, style='|')
-
-                return super().represent_scalar(tag, value, style=style)
-
         self.yaml = yaml
-        self.yaml_dumper = _YamlDumper
+        self.yaml_dumper = ImportedYamlDumper
         self.opts = self.get_opts(kwargs)
 
     def encode(self, data):

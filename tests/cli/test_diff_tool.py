@@ -732,46 +732,6 @@ def test_values_pprint(capsys, expected, rpath):
     assert captured.out == expected
 
 
-@pytest.mark.skipif(
-    sys.implementation.name == 'pypy',
-    reason='--values yaml is deprecated (produce explicit ends on pypy 3.8)',
-)
-def test_values_yaml(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(
-        args=(
-            rpath('shared.a.ini'),
-            rpath('shared.b.ini'),
-            '--values',
-            'yaml',
-        ),
-    ).run()
-
-    captured = capsys.readouterr()
-    assert captured.err == ''
-    assert exit_code == 1
-
-    assert captured.out == expected
-
-
-def test_values_yaml_multiline_strings(capsys, expected, rpath):
-    exit_code = nested_diff.diff_tool.App(
-        args=(
-            rpath('shared.multiline_strings.json'),
-            rpath('shared.multiline_strings.json'),
-            '-U',
-            '1',
-            '--values',
-            'yaml',
-        ),
-    ).run()
-
-    captured = capsys.readouterr()
-    assert captured.err == ''
-    assert exit_code == 0
-
-    assert captured.out == expected
-
-
 def test_yaml_custom_tags(capsys, expected, rpath):
     exit_code = nested_diff.diff_tool.App(
         args=(
